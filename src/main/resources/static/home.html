@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.0/css/bulma.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+</head>
+<body>
+<p> se chiamo la pagina statica mi chiede cmq il login e non nelle chiamate REST ma anche nell'accesso ai file statici.</p>
+    <a class="button is-primary is-outlined" id="actionButton">Make Request</a>
+    <p id="resultCall">Nothing</p>
+    <script>
+        $("#actionButton").click(function(e) {
+           e.preventDefault();
+           $.ajax({                                                        /* Ajax call to AccountMicroservice for login */
+              url: 'http://localhost:8384/hello',
+              type: "GET",
+              //data: {
+              //   email: $("#email").val(),
+              //   password: $("#password").val()
+              //},
+              success: function (data, status, xhr) {
+                 console.log(data);
+                 $("#resultCall").append(data);
+                 alert("succeed");
+              },
+              error: function(result) {
+                 alert("failed!");
+                 console.log(result);
+              }
+           });
+        });
+
+    </script>
+</body>
+</html>
