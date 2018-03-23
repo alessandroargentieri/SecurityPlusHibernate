@@ -17,12 +17,16 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/** DOCS:
+ * https://docs.spring.io/spring-security/site/docs/current/reference/html/jc.html
+ */
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
@@ -35,9 +39,7 @@ public class SecurityImpl extends WebSecurityConfigurerAdapter implements Authen
 
     @Autowired UtenteDao utenteDao;
 
-    /*
-    authentication provider part
-     */
+    /* authentication provider part */
 
     @Override
     public Authentication authenticate(Authentication auth) throws AuthenticationException {
@@ -72,29 +74,38 @@ public class SecurityImpl extends WebSecurityConfigurerAdapter implements Authen
 
 
 
-    /*
-    websecurity adapter part: erase it if you don't want login alert but default spring login web page
-     */
+    /* websecurity adapter part: erase it if you don't want login alert but default spring login web page */
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-
         auth.authenticationProvider(this); //this because it is either a WebSecurityAdapter than an AuthenticationProvider
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().anyRequest().authenticated()
+
+        http
+                .authorizeRequests()
+                .anyRequest().authenticated()
                 .and()
-                .httpBasic();
+                .formLogin()  //.loginPage("/signin.html")
+                .and()
+                .httpBasic()
+                .and()
+                .logout().clearAuthentication(true).logoutRequestMatcher(new AntPathRequestMatcher("/logout")) //puo' non esistere nel controller
+                .logoutSuccessUrl("/test")    //deve esistere nel controller
+                .deleteCookies("JSESSIONID")
+                .invalidateHttpSession(true);
+
+
     }
 
-    /*
-    per non filtrare con il login alcuni path
-     */
+    /*  per non filtrare con il login alcuni path  */
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/test");
+       // web.ignoring().antMatchers("/resources/**");
+       // web.ignoring().antMatchers("/test", "/signin.html");
     }
 
 

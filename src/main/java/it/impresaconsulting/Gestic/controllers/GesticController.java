@@ -11,12 +11,20 @@ import it.impresaconsulting.Gestic.entities.Utente;
 import it.impresaconsulting.Gestic.services.ClienteService;
 import it.impresaconsulting.Gestic.services.PraticaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
@@ -27,9 +35,9 @@ public class GesticController {
     private static final String PASSWORD_CAMBIATA = "Password modificata correttamente!";
     private static final String PASSWORD_NON_CAMBIATA = "Errore nella modifica della password!";
 
-    @Autowired UtenteDao utenteDao;
-    @Autowired ClienteDao clienteDao;
-    @Autowired PraticaDao praticaDao;
+    @Autowired UtenteDao    utenteDao;
+    @Autowired ClienteDao   clienteDao;
+    @Autowired PraticaDao   praticaDao;
     @Autowired DocumentoDao documentoDao;
 
     @Autowired ClienteService clienteService;
@@ -139,6 +147,7 @@ public class GesticController {
     //************************************************* DOCUMENTO
 
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @RequestMapping("get/documento")
     public List<Documento> getDocumenti(){
         return documentoDao.findAll();
@@ -154,6 +163,7 @@ public class GesticController {
         }
     }
 
+    @RequestMapping("/save/documento")
     public Documento saveDocumento(){
         return null;
     }
