@@ -36,6 +36,6 @@ public class Pratica {
     @PrePersist
     private void setCampi(){
         data = new Date();
-    //    idPratica = data.toInstant().toString() + cliente.getIdCliente(); TODO
+        idPratica = data.toInstant().toString() + cliente.getIdCliente();
     }
 }

@@ -19,13 +19,13 @@ import java.util.List;
 public class Cliente {
 
     @Id @Column(name="idcliente") @NotBlank
-    private String idCliente;              //P.IVA o CODICE FISCALE
+    private String idCliente;               //P.IVA o CODICE FISCALE
 
     @Column(name="ragionesociale")
-    private String ragioneSociale;  //VUOTO SE PERSONA FISICA
+    private String ragioneSociale;          //VUOTO SE PERSONA FISICA
 
     @Column(name="nominativo") @NotBlank
-    private String nominativo;      //NOME E COGNOME
+    private String nominativo;              //NOME E COGNOME
 
     @Column(name="indirizzo")
     private String indirizzo;
