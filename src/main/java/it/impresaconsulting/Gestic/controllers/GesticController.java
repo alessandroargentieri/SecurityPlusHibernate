@@ -112,6 +112,29 @@ public class GesticController {
        return clienteDao.save(cliente);
     }
 
+    @RequestMapping("delete/cliente")
+    public String deleteCliente(UsernamePasswordAuthenticationToken token, @PathVariable(name = "id") String id){
+        try {
+            Cliente cliente = clienteDao.getOne(id);
+            List<Pratica> pratiche = cliente.getPratiche();
+            if (pratiche != null) {
+                for (Pratica pratica : pratiche) {
+                    List<Documento> documenti = pratica.getDocumenti();
+                    if (documenti != null) {
+                        for (Documento documento : documenti) {
+                            documentoDao.delete(documento);
+                        }
+                    }
+                    praticaDao.delete(pratica);
+                }
+            }
+            clienteDao.delete(cliente);
+        } catch(Exception e){
+            return "C'è stato un errore. Contattare l'assistenza: " + e.toString();
+        }
+        return "Cliente, pratiche annesse e documenti sono stati eliminati con successo";
+    }
+
 
     //************************************************* PRATICA
 
