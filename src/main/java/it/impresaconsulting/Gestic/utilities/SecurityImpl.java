@@ -38,6 +38,7 @@ public class SecurityImpl extends WebSecurityConfigurerAdapter implements Authen
     public static final String ROLE_USER = "ROLE_USER";
 
     @Autowired UtenteDao utenteDao;
+    @Autowired EncryptionUtils encryptionUtils;
 
     /* authentication provider part */
 
@@ -48,7 +49,8 @@ public class SecurityImpl extends WebSecurityConfigurerAdapter implements Authen
         String password = auth.getCredentials().toString();
         String ruolo = "";
 
-        Optional<Utente> utenteOptional = utenteDao.findByCodiceFiscaleAndPassword(username, password);
+        String encryptedPwd = encryptionUtils.encrypt(password);
+        Optional<Utente> utenteOptional = utenteDao.findByCodiceFiscaleAndPassword(username, encryptedPwd);
 
         if(utenteOptional.isPresent()){
             ruolo = utenteOptional.get().getRuolo();

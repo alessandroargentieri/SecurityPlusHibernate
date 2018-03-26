@@ -114,7 +114,7 @@ public class GesticController {
 
     @RequestMapping("delete/cliente")
     public String deleteCliente(UsernamePasswordAuthenticationToken token, @PathVariable(name = "id") String id){
-        try {
+      /*  try {
             Cliente cliente = clienteDao.getOne(id);
             List<Pratica> pratiche = cliente.getPratiche();
             if (pratiche != null) {
@@ -131,7 +131,7 @@ public class GesticController {
             clienteDao.delete(cliente);
         } catch(Exception e){
             return "C'è stato un errore. Contattare l'assistenza: " + e.toString();
-        }
+        }*/
         return "Cliente, pratiche annesse e documenti sono stati eliminati con successo";
     }
 
@@ -162,7 +162,7 @@ public class GesticController {
 
     @RequestMapping("/save/pratica")
     public Pratica savePratica(UsernamePasswordAuthenticationToken token, @Valid Pratica pratica, String clienteId){
-        pratica.setCliente(clienteDao.getOne(clienteId));
+       // pratica.setCliente(clienteDao.getOne(clienteId));
         pratica.setRegistratoDa(token.getName());
         return praticaDao.save(pratica);
     }

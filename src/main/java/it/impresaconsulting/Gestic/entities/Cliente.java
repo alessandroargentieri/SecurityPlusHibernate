@@ -48,8 +48,8 @@ public class Cliente {
     @Column(name="interessatoa")
     private String interessatoA;
 
-    @OneToMany(mappedBy="cliente") @JsonManagedReference
-    private List<Pratica> pratiche;
+    //@OneToMany(mappedBy="cliente") @JsonManagedReference
+    //private List<Pratica> pratiche;
 
     @Column(name="registratoda")
     private String registratoDa;    //utente che ha registrato il cliente

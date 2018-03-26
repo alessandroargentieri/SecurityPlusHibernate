@@ -25,8 +25,11 @@ public class Documento {
     @Column(name="note")
     private String note;
 
-    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name="idpratica", nullable=false) @JsonBackReference
-    private Pratica pratica;
+    //@ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name="idpratica", nullable=false) @JsonBackReference
+    //private Pratica pratica;
+
+    @Column(name="fkpratica") @NotBlank
+    private String fkPratica;
 
     @Column(name="registratoda")
     private String registratoDa;
@@ -37,7 +40,7 @@ public class Documento {
     @PrePersist
     private void setCampi(){
         data = new Date();
-        idDocumento = data.toInstant().toString() + pratica.getIdPratica();
+        idDocumento = data.toInstant().toString() + fkPratica;
     }
 
 }
