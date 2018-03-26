@@ -2,6 +2,7 @@ package it.impresaconsulting.Gestic.utilities;
 
 import it.impresaconsulting.Gestic.daos.UtenteDao;
 import it.impresaconsulting.Gestic.entities.Utente;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -28,6 +29,7 @@ import java.util.Optional;
  * https://docs.spring.io/spring-security/site/docs/current/reference/html/jc.html
  */
 
+@Log
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 @Configuration
@@ -49,11 +51,12 @@ public class SecurityImpl extends WebSecurityConfigurerAdapter implements Authen
         String password = auth.getCredentials().toString();
         String ruolo = "";
 
-        String encryptedPwd = encryptionUtils.encrypt(password);
-        Optional<Utente> utenteOptional = utenteDao.findByCodiceFiscaleAndPassword(username, encryptedPwd);
-
+        Optional<Utente> utenteOptional = utenteDao.findById(username);
         if(utenteOptional.isPresent()){
-            ruolo = utenteOptional.get().getRuolo();
+            Utente utente = utenteOptional.get();
+            if(password.equals(encryptionUtils.decrypt(utente.getPassword()))) {
+                ruolo = utenteOptional.get().getRuolo();
+            }
         }
         if(ROLE_ADMIN.equals(ruolo)) {
             List<GrantedAuthority> grantedAuths = new ArrayList<>();

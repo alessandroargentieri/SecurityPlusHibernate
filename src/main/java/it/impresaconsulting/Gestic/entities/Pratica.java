@@ -1,14 +1,10 @@
 package it.impresaconsulting.Gestic.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
-import java.util.List;
 
 @Entity @Table(name="pratiche")
 @AllArgsConstructor@NoArgsConstructor @lombok.Data

@@ -8,22 +8,13 @@ import it.impresaconsulting.Gestic.entities.Cliente;
 import it.impresaconsulting.Gestic.entities.Documento;
 import it.impresaconsulting.Gestic.entities.Pratica;
 import it.impresaconsulting.Gestic.entities.Utente;
-import it.impresaconsulting.Gestic.services.ClienteService;
-import it.impresaconsulting.Gestic.services.PraticaService;
 import it.impresaconsulting.Gestic.utilities.EncryptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
@@ -36,14 +27,10 @@ public class GesticController {
     private static final String PASSWORD_CAMBIATA = "Password modificata correttamente!";
     private static final String PASSWORD_NON_CAMBIATA = "Errore nella modifica della password!";
 
-    @Autowired UtenteDao    utenteDao;
-    @Autowired ClienteDao   clienteDao;
-    @Autowired PraticaDao   praticaDao;
-    @Autowired DocumentoDao documentoDao;
-
-    @Autowired ClienteService clienteService;
-    @Autowired PraticaService praticaService;
-
+    @Autowired UtenteDao       utenteDao;
+    @Autowired ClienteDao      clienteDao;
+    @Autowired PraticaDao      praticaDao;
+    @Autowired DocumentoDao    documentoDao;
     @Autowired EncryptionUtils encryptionUtils;
 
     //************************************************* TEST
@@ -70,7 +57,7 @@ public class GesticController {
     public Utente getUtenteByCodFisc(@PathVariable(name = "codicefiscale") String codiceFiscale){
         Optional<Utente> utenteOptional = utenteDao.findById(codiceFiscale);
         if(utenteOptional.isPresent()){
-            return utenteOptional.get();  //TODO: oscurare le password
+            return utenteOptional.get();
         } else {
             return null;
         }

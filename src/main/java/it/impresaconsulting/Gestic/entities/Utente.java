@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity @Table(name="utenti")

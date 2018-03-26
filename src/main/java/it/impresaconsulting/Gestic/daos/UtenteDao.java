@@ -16,8 +16,6 @@ public interface UtenteDao extends JpaRepository<Utente, String> {
         specificate solo le query custom oltre a quelle gia' implementate da JpaRepository
      */
 
-    Optional<Utente> findByCodiceFiscaleAndPassword(String codiceFiscale, String password);
-
     @Query(value="UPDATE utenti SET password =:password WHERE codicefiscale =:codicefiscale", nativeQuery = true)
     Optional<Utente> updatePassword(@Param("codicefiscale") String codiceFiscale, @Param("password") String password);
 }
