@@ -10,16 +10,15 @@ import it.impresaconsulting.Gestic.entities.Pratica;
 import it.impresaconsulting.Gestic.entities.Utente;
 import it.impresaconsulting.Gestic.services.ClienteService;
 import it.impresaconsulting.Gestic.services.PraticaService;
+import it.impresaconsulting.Gestic.utilities.EncryptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -28,6 +27,8 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
+
+import static it.impresaconsulting.Gestic.utilities.SecurityImpl.ROLE_ADMIN;
 
 @RestController
 public class GesticController {
@@ -42,6 +43,8 @@ public class GesticController {
 
     @Autowired ClienteService clienteService;
     @Autowired PraticaService praticaService;
+
+    @Autowired EncryptionUtils encryptionUtils;
 
     //************************************************* TEST
 
@@ -60,7 +63,7 @@ public class GesticController {
 
     @RequestMapping("get/utente")
     public List<Utente> getUtenti(){
-        return utenteDao.findAll();   //TODO: oscurare le password
+        return utenteDao.findAll();
     }
 
     @RequestMapping("get/utente/{codicefiscale}")
@@ -83,6 +86,41 @@ public class GesticController {
         }
     }
 
+    @RequestMapping("/save/utente")
+    public String saveUtente(UsernamePasswordAuthenticationToken token, @Valid Utente utente){
+        if(token.getAuthorities().contains(new SimpleGrantedAuthority(ROLE_ADMIN))){
+            utente.setPassword(encryptionUtils.encrypt(utente.getPassword()));
+            utenteDao.save(utente);
+            return "Nuovo utente memorizzato con successo";
+        } else {
+            return "Non sei autorizzato/a ad effettuare questa operazione";
+        }
+    }
+
+    @RequestMapping("/delete/utente")
+    public String deleteUtente(UsernamePasswordAuthenticationToken token, @RequestParam(name="codicefiscale") String codicefiscale){
+        if(token.getAuthorities().contains(new SimpleGrantedAuthority(ROLE_ADMIN))){
+            utenteDao.deleteById(codicefiscale);
+            return "Utente eliminato";
+        } else {
+            return "Non sei autorizzato/a ad effettuare questa operazione";
+        }
+    }
+
+    @RequestMapping("/update/utente")
+    public String updateUtente(UsernamePasswordAuthenticationToken token, @Valid Utente utente){
+        if(token.getAuthorities().contains(new SimpleGrantedAuthority(ROLE_ADMIN))){
+            utenteDao.deleteById(utente.getCodiceFiscale());
+            utente.setPassword(encryptionUtils.encrypt(utente.getPassword()));
+            utenteDao.save(utente);
+            return "Informazioni utente aggiornate";
+        } else {
+            return "Non sei autorizzato/a ad effettuare questa operazione";
+        }
+    }
+
+
+
     //************************************************* CLIENTE
 
     @RequestMapping("/get/cliente")
@@ -103,7 +141,8 @@ public class GesticController {
     @RequestMapping("/update/cliente")
     public Cliente modificaCliente(UsernamePasswordAuthenticationToken token, @Valid Cliente cliente){
         cliente.setRegistratoDa(token.getName());
-        return clienteService.updateCliente(cliente);
+        clienteDao.deleteById(cliente.getIdCliente());
+        return clienteDao.save(cliente);
     }
 
     @RequestMapping("/save/cliente")
@@ -113,25 +152,17 @@ public class GesticController {
     }
 
     @RequestMapping("delete/cliente")
-    public String deleteCliente(UsernamePasswordAuthenticationToken token, @PathVariable(name = "id") String id){
-      /*  try {
-            Cliente cliente = clienteDao.getOne(id);
-            List<Pratica> pratiche = cliente.getPratiche();
-            if (pratiche != null) {
-                for (Pratica pratica : pratiche) {
-                    List<Documento> documenti = pratica.getDocumenti();
-                    if (documenti != null) {
-                        for (Documento documento : documenti) {
-                            documentoDao.delete(documento);
-                        }
-                    }
-                    praticaDao.delete(pratica);
-                }
+    public String deleteCliente(UsernamePasswordAuthenticationToken token, @PathVariable(name = "id") String idcliente){
+        if(token.getAuthorities().contains(new SimpleGrantedAuthority(ROLE_ADMIN))){
+            clienteDao.deleteById(idcliente);
+            List<Pratica> pratiche = praticaDao.findByFkCliente(idcliente);
+            for(Pratica pratica : pratiche){
+                documentoDao.deleteDocumentiPerPratica(pratica.getIdPratica());
             }
-            clienteDao.delete(cliente);
-        } catch(Exception e){
-            return "C'è stato un errore. Contattare l'assistenza: " + e.toString();
-        }*/
+            praticaDao.deletePraticaPerCliente(idcliente);
+        } else {
+            return "Non sei autorizzato/a ad effettuare questa operazione";
+        }
         return "Cliente, pratiche annesse e documenti sono stati eliminati con successo";
     }
 
@@ -154,17 +185,33 @@ public class GesticController {
         }
     }
 
+    @RequestMapping("get/pratica/cliente/{idcliente}")
+    public List<Pratica> getPratichePerCliente(){                       //TODO
+        return null;
+    }
+
     @RequestMapping("/update/pratica")
     public Pratica updatePratica(UsernamePasswordAuthenticationToken token, @Valid Pratica pratica){
         pratica.setRegistratoDa(token.getName());
-        return praticaService.updatePratica(pratica);
+        praticaDao.deleteById(pratica.getIdPratica());
+        return praticaDao.save(pratica);
     }
 
     @RequestMapping("/save/pratica")
-    public Pratica savePratica(UsernamePasswordAuthenticationToken token, @Valid Pratica pratica, String clienteId){
-       // pratica.setCliente(clienteDao.getOne(clienteId));
-        pratica.setRegistratoDa(token.getName());
-        return praticaDao.save(pratica);
+    public Pratica savePratica(UsernamePasswordAuthenticationToken token, @Valid Pratica pratica){
+       pratica.setRegistratoDa(token.getName());
+       return praticaDao.save(pratica);
+    }
+
+    @RequestMapping("/delete/pratica")
+    public String deletePratica(UsernamePasswordAuthenticationToken token, @RequestParam(name="idpratica") String idpratica){
+        if(token.getAuthorities().contains(new SimpleGrantedAuthority(ROLE_ADMIN))){
+            praticaDao.deleteById(idpratica);
+            documentoDao.deleteDocumentiPerPratica(idpratica);
+        } else {
+            return "Non sei autorizzato/a ad effettuare questa operazione";
+        }
+        return "Pratiche e documenti annessi sono stati eliminati con successo";
     }
 
     //************************************************* DOCUMENTO
@@ -186,10 +233,19 @@ public class GesticController {
         }
     }
 
-    @RequestMapping("/save/documento")
-    public Documento saveDocumento(){
+    @RequestMapping("get/documento/pratica/{idpratica}")
+    public List<Documento> getDocumentiPerPratica(){            //TODO
         return null;
     }
+
+    @RequestMapping("/save/documento")
+    public Documento saveDocumento(){                           //TODO
+        return null;
+    }
+
+    //TODO: UPDATE DOCUMENTO
+
+    //TODO: DELETEDOCUMENTO
 
 
 
