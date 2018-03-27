@@ -134,6 +134,8 @@ public class GesticController {
         }
     }
 
+    //TODO getClientePerRagioneSocialeONominativo()
+
     @RequestMapping("/update/cliente")
     public Cliente modificaCliente(UsernamePasswordAuthenticationToken token, @Valid Cliente cliente){
         cliente.setRegistratoDa(token.getName());

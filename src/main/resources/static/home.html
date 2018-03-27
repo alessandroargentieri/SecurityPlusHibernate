@@ -53,14 +53,26 @@
 </div>
 
 <div class="box has-text-centered" id="tabella_clienti">
+
+    <div class="field has-addons">
+        <div class="control">
+            <input class="input" type="text" placeholder="Cerca cliente per">
+        </div>
+        <div class="control">
+            <a class="button is-info">P.IVA/C.F.</a>
+            <a class="button is-success">Rag.Soc/Nominativo</a>
+        </div>
+    </div><br /><br />
+
     <h3 class="subtitle"><b>Clienti</b></h3>
-    <table class="table is-striped" style="margin: 0px auto;">
+    <table class="table is-striped has-text-centered" style="margin: 0px auto;">
         <thead>
             <tr>
                 <th>ID CLIENTE</th>
                 <td>RAGIONE SOCIALE</td>
                 <td>NOMINATIVO</td>
                 <td>ATTIVITA'</td>
+                <td>PRATICHE</td>
                 <td>ELIMINA</td>
             </tr>
         </thead>
@@ -70,6 +82,7 @@
                 <td>RAGIONE SOCIALE</td>
                 <td>NOME</td>
                 <td>ATTIVITA'</td>
+                <td>pratiche<td>
                 <td><a class="delete"></a></td>
             </tr>
         </tbody>
@@ -81,43 +94,24 @@
     <h3 class="subtitle"><b>Pratiche</b></h3>
     <table class="table is-striped" style="margin: 0px auto;">
         <thead>
-        <tr>
-            <th>ID</th>
-            <td>DESCRIPTION</td>
-            <td>PRIORITY</td>
-            <td>DATE</td>
-            <td>DELETE</td>
-        </tr>
+            <tr>
+                <th>DESCRIZIONE</th>
+                <td>DATA</td>
+                <td>CLIENTE</td>
+                <td>REGISTRATO DA</td>
+                <td>DOCUMENTI</td>
+                <td>ELIMINA</td>
+            </tr>
         </thead>
         <tbody id="body_tabella_pratiche">
-        <tr>
-            <th>1</th>
-            <td>First Description</td>
-            <td>high</td>
-            <td>12/03/2017</td>
-            <td><a class="delete"></a></td>
-        </tr>
-        <tr>
-            <th>2</th>
-            <td>Second Description</td>
-            <td>low</td>
-            <td>11/03/2017</td>
-            <td><a class="delete"></a></td>
-        </tr>
-        <tr>
-            <th>3</th>
-            <td>Third Description</td>
-            <td>low</td>
-            <td>10/03/2017</td>
-            <td><a class="delete"></a></td>
-        </tr>
-        <tr>
-            <th>4</th>
-            <td>Fourth Description</td>
-            <td>high</td>
-            <td>09/03/2017</td>
-            <td><a class="delete"></a></td>
-        </tr>
+            <tr>
+                <th>descrizione</th>
+                <td>12/03/2017</td>
+                <td>DDDDDDDDD</td>
+                <td>FFFFFFFFF</td>
+                <td>documenti</td>
+                <td><a class="delete"></a></td>
+            </tr>
         </tbody>
     </table>
     <br /><br />
@@ -128,42 +122,21 @@
     <table class="table is-striped" style="margin: 0px auto;">
         <thead>
         <tr>
-            <th>ID</th>
-            <td>DESCRIPTION</td>
-            <td>PRIORITY</td>
-            <td>DATE</td>
-            <td>DELETE</td>
+            <th>DESCRIZIONE</th>
+            <td>DATA</td>
+            <td>PRATICA</td>
+            <td>REGISTRATO DA</td>
+            <td>ELIMINA</td>
         </tr>
         </thead>
         <tbody id="body_tabella_documenti">
-        <tr>
-            <th>1</th>
-            <td>First Description</td>
-            <td>high</td>
-            <td>12/03/2017</td>
-            <td><a class="delete"></a></td>
-        </tr>
-        <tr>
-            <th>2</th>
-            <td>Second Description</td>
-            <td>low</td>
-            <td>11/03/2017</td>
-            <td><a class="delete"></a></td>
-        </tr>
-        <tr>
-            <th>3</th>
-            <td>Third Description</td>
-            <td>low</td>
-            <td>10/03/2017</td>
-            <td><a class="delete"></a></td>
-        </tr>
-        <tr>
-            <th>4</th>
-            <td>Fourth Description</td>
-            <td>high</td>
-            <td>09/03/2017</td>
-            <td><a class="delete"></a></td>
-        </tr>
+            <tr>
+                <th>descr</th>
+                <td>12/03/2017</td>
+                <td>WEW</td>
+                <td>DDDDDDDDDD</td>
+                <td><a class="delete"></a></td>
+            </tr>
         </tbody>
     </table>
     <br /><br />
@@ -208,7 +181,7 @@
 </div>
 
 <div class="box" id="form_pratiche">
-    <h3 class="subtitle  has-text-centered"><b>Form nuova pratica / modifica pratica</b></h3>
+    <h3 id="title_form_pratiche" class="subtitle  has-text-centered"><b>Form nuova pratica / modifica pratica</b></h3>
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Descrizione: </b></span><input type="text" id="descrizione_pratica" placeholder="Descrizione"><br />
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Note: </b></span><input type="text" id="note_pratica" placeholder="Note"><br />
     <!-- id, fkcliente, registrato da e data sono visualizzati dall'elenco e non dal form-->
@@ -222,18 +195,25 @@
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Note: </b></span><input type="text" id="note_documento" placeholder="Note"><br />
     <!-- id, fkcliente, registrato da e data sono visualizzati dall'elenco e non dal form-->
     <br /><a class="button is-primary is-medium" onclick="">Submit</a>
+
+
+    <span class="icon has-text-info">
+        <i class="fas fa-info-circle"></i>
+    </span>
+
 </div>
 <script>
         $(document).ready(function(){
             showUtenti();
             showClienti();
+          //  showPratiche();
+          //  showDocumenti();
         });
 
         function showUtenti(){
-           $.ajax({                                                                        /* Ajax call to AccountMicroservice */
+           $.ajax({
             url: 'http://localhost:8384/get/utente',
             type: "GET",
-            //dataType: 'jsonp',
             success: function (data, status, xhr) {
                 console.log(data);
                 $("#body_tabella_utenti").empty();
@@ -249,15 +229,14 @@
         }
 
         function showClienti(){
-           $.ajax({                                                                        /* Ajax call to AccountMicroservice */
+           $.ajax({
             url: 'http://localhost:8384/get/cliente',
             type: "GET",
-            //dataType: 'jsonp',
             success: function (data, status, xhr) {
                 console.log(data);
                 $("#body_tabella_clienti").empty();
                 jQuery.each(data, function(i, val) {
-                    $("#body_tabella_clienti").append("<tr><th>" + val.idCliente + "</th><td>" + val.ragioneSociale + "</td><td>" + val.nominativo + "</td><td>" + val.attivita + "</td><td><p class='delete' onclick='deleteToDo(" + val.idCliente + ")'></p></td></tr>");
+                    $("#body_tabella_clienti").append("<tr><th>" + val.idCliente + "</th><td>" + val.ragioneSociale + "</td><td>" + val.nominativo + "</td><td>" + val.attivita + "</td><td><a class='button is-outlined is-info is-small' onclick='showPratiche(\"" + val.idCliente + "\")'> </a></td><td><p class='delete' onclick='deleteCliente(\"" + val.idCliente + "\")'></p></td></tr>");
                 });
             },
             error: function(result) {
@@ -267,25 +246,89 @@
            });
         }
 
-        function homeTabClick(){
+        function showPratiche(idCliente){
+           console.log(idCliente);
+           $.ajax({
+            url: 'http://localhost:8384/get/pratica/cliente/' + idCliente,  //vedere se è giusto
+            type: "GET",
+            success: function (data, status, xhr) {
+                console.log(data);
+                $("#body_tabella_pratiche").empty();
+                jQuery.each(data, function(i, val) {
+                    $("#body_tabella_pratiche").append("<tr><th onclick='seePratica(" + val + ")'>" + val.descrizione + "</th><td>" + convertDate(val.data) + "</td><td>" + val.fkCliente + "</td><td>" + val.registratoDa + "</td><td><a class='button is-outlined is-success is-small' onclick='showDocumenti(\"" + val.idPratica + "\")'> </a></td><td><p class='delete' onclick='deletePratica(\"" + val.idPratica + "\")'></p></td></tr>");
+                });
+            },
+            error: function(result) {
+                alert("Error!");
+                console.log(result);
+            }
+           });
+        }
+
+        function showDocumenti(idPratica){
+           $.ajax({
+            url: 'http://localhost:8384/get/documento/pratica/' + idPratica,  //controllare se giusto
+            type: "GET",
+            success: function (data, status, xhr) {
+                console.log(data);
+                $("#body_tabella_documenti").empty();
+                jQuery.each(data, function(i, val) {
+                    $("#body_tabella_documenti").append("<tr><th onclick='seeDocumento(" + val + ")'>" + val.descrizione + "</th><td>" + convertDate(val.data) + "</td><td>" + val.fkPratica + "</td><td>" + val.registratoDa + "</td><td><p class='delete' onclick='deleteDocumento(\"" + val.idDocumento + "\")'></p></td></tr>");
+                });
+            },
+            error: function(result) {
+                alert("Error!");
+                console.log(result);
+            }
+           });
+        }
+
+        function seePratica(pratica){
+            emptyForms();
+            $("#title_form_pratiche").val("Pratica cliente: " + pratica.fkCliente);
+            $("#descrizione_pratica").val(pratica.descrizione);
+            $("#note_pratica").val(pratica.note);
+        }
+
+        function seeDocumento(documento){
+            emptyForms();
+            $("#title_form_documento").val("Documento pratica: " + documento.fkPratica);
+            $("#descrizione_documento").val(documento.descrizione);
+            $("#note_documento").val(documento.note);
+            $("#percorsofile_documento").val(documento.percorsofile);
+        }
+
+        function emptyForms(){
             $(".tab").removeClass("is-active");
+            $('.container input[type="text"]').val('');
+            $('.container input[type="password"]').val('');
+        }
+
+
+        function homeTabClick(){
+            emptyForms();
             $("#home_tab").addClass("is-active");
         }
         function utentiTabClick(){
-            $(".tab").removeClass("is-active");
+            emptyForms();
             $("#utenti_tab").addClass("is-active");
         }
         function clientiTabClick(){
-            $(".tab").removeClass("is-active");
+            emptyForms();
             $("#clienti_tab").addClass("is-active");
         }
         function contattiTabClick(){
-            $(".tab").removeClass("is-active");
+            emptyForms();
             $("#contatti_tab").addClass("is-active");
+        }
+        function convertDate(inputFormat) {
+            function pad(s) { return (s < 10) ? '0' + s : s; }
+            var d = new Date(inputFormat);
+            return [pad(d.getDate()), pad(d.getMonth()+1), d.getFullYear()].join('/');
         }
 
         function logoutClick(){
-            $.ajax({                                                                        /* Ajax call to AccountMicroservice */
+            $.ajax({
                 url: 'http://localhost:8384/logout',
                 type: "GET",
                 success: function (data, status, xhr) {
@@ -298,6 +341,15 @@
                 }
            });
         }
+
+        //al click su un ID di elemento di tabella deve visualizzare il form compilato e disabilitato.
+        //in corrispondenza del form ci deve essere un pulsantino che modifichi i dati per risalvarli
+
+        //se clicchiamo su elimina, invece, deve richiederne l'eliminazione.
+
+        //se clicchiamo sui figli deve richiamare la tabella con i figli di quel padre.
+
+
 
     </script>
 
