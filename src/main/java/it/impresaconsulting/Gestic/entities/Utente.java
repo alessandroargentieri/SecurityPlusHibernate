@@ -18,6 +18,10 @@ public class Utente {
     private String nominativo;
     @Column(name="indirizzo")
     private String indirizzo;
+    @Column(name="telefono")
+    private String telefono;
+    @Column(name="email")
+    private String email;
     @Column(name="natoil")
     private Date natoIl;
     @Column(name="ruolo")

@@ -1,38 +1,305 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Home</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.0/css/bulma.css">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
+    <title>Gestic</title>
+    <link rel="icon" href="https://cdn2.iconfinder.com/data/icons/web/512/Global_Connections-512.png">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.0/css/bulma.css">
+    <link rel="stylesheet" type="text/css" href="css/normalize.css" />
+    <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.2.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/demo.css" />
+    <link rel="stylesheet" type="text/css" href="css/set2.css" />
+
+
 </head>
-<body>
-<p> se chiamo la pagina statica mi chiede cmq il login e non nelle chiamate REST ma anche nell'accesso ai file statici.</p>
-    <a class="button is-primary is-outlined" id="actionButton">Make Request</a>
-    <p id="resultCall">Nothing</p>
-    <script>
-        $("#actionButton").click(function(e) {
-           e.preventDefault();
-           $.ajax({                                                        /* Ajax call to AccountMicroservice for login */
-              url: 'http://localhost:8384/hello',
-              type: "GET",
-              //data: {
-              //   email: $("#email").val(),
-              //   password: $("#password").val()
-              //},
-              success: function (data, status, xhr) {
-                 console.log(data);
-                 $("#resultCall").append(data);
-                 alert("succeed");
-              },
-              error: function(result) {
-                 alert("failed!");
-                 console.log(result);
-              }
-           });
+<body style="margin:20px;padding-top:20px" class="container">
+
+<a class="button is-outlined is-info" onclick="logoutClick()" style="float: right">Esci</a>
+
+<div id="tabs_processi" class="tabs">
+    <ul>
+        <li id="home_tab"     class="tab is-active"><a  onclick="homeTabClick()">Home</a></li>
+        <li id="utenti_tab"   class="tab"><a onclick="utentiTabClick()">Utenti</a></li>
+        <li id="clienti_tab"  class="tab"><a onclick="clientiTabClick()">Clienti</a></li>
+        <li id="contatti_tab" class="tab"><a onclick="contattiTabClick()">Contatti</a></li>
+    </ul>
+</div>
+
+
+<div class="box has-text-centered" id="tabella_utenti">
+    <h3 class="subtitle"><b>Utenti</b></h3>
+
+    <table class="table is-striped" style="margin: 0px auto;">
+        <thead>
+            <tr>
+                <th>CODICE FISCALE</th>
+                <td>NOMINATIVO</td>
+                <td>EMAIL</td>
+                <td>RUOLO</td>
+                <td>ELIMINA</td>
+            </tr>
+        </thead>
+        <tbody id="body_tabella_utenti">
+            <tr>
+                <th>CODFISC</th>
+                <td>NOME</td>
+                <td>nome@email.it</td>
+                <td>ADMIN</td>
+                <td><a class="delete"></a></td>
+            </tr>
+        </tbody>
+    </table>
+    <br /><br />
+</div>
+
+<div class="box has-text-centered" id="tabella_clienti">
+    <h3 class="subtitle"><b>Clienti</b></h3>
+    <table class="table is-striped" style="margin: 0px auto;">
+        <thead>
+            <tr>
+                <th>ID CLIENTE</th>
+                <td>RAGIONE SOCIALE</td>
+                <td>NOMINATIVO</td>
+                <td>ATTIVITA'</td>
+                <td>ELIMINA</td>
+            </tr>
+        </thead>
+        <tbody id="body_tabella_clienti">
+            <tr>
+                <th>ID</th>
+                <td>RAGIONE SOCIALE</td>
+                <td>NOME</td>
+                <td>ATTIVITA'</td>
+                <td><a class="delete"></a></td>
+            </tr>
+        </tbody>
+    </table>
+    <br /><br />
+</div>
+
+<div class="box has-text-centered" id="tabella_pratiche">
+    <h3 class="subtitle"><b>Pratiche</b></h3>
+    <table class="table is-striped" style="margin: 0px auto;">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <td>DESCRIPTION</td>
+            <td>PRIORITY</td>
+            <td>DATE</td>
+            <td>DELETE</td>
+        </tr>
+        </thead>
+        <tbody id="body_tabella_pratiche">
+        <tr>
+            <th>1</th>
+            <td>First Description</td>
+            <td>high</td>
+            <td>12/03/2017</td>
+            <td><a class="delete"></a></td>
+        </tr>
+        <tr>
+            <th>2</th>
+            <td>Second Description</td>
+            <td>low</td>
+            <td>11/03/2017</td>
+            <td><a class="delete"></a></td>
+        </tr>
+        <tr>
+            <th>3</th>
+            <td>Third Description</td>
+            <td>low</td>
+            <td>10/03/2017</td>
+            <td><a class="delete"></a></td>
+        </tr>
+        <tr>
+            <th>4</th>
+            <td>Fourth Description</td>
+            <td>high</td>
+            <td>09/03/2017</td>
+            <td><a class="delete"></a></td>
+        </tr>
+        </tbody>
+    </table>
+    <br /><br />
+</div>
+
+<div class="box has-text-centered" id="tabella_documenti">
+    <h3 class="subtitle"><b>Documenti</b></h3>
+    <table class="table is-striped" style="margin: 0px auto;">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <td>DESCRIPTION</td>
+            <td>PRIORITY</td>
+            <td>DATE</td>
+            <td>DELETE</td>
+        </tr>
+        </thead>
+        <tbody id="body_tabella_documenti">
+        <tr>
+            <th>1</th>
+            <td>First Description</td>
+            <td>high</td>
+            <td>12/03/2017</td>
+            <td><a class="delete"></a></td>
+        </tr>
+        <tr>
+            <th>2</th>
+            <td>Second Description</td>
+            <td>low</td>
+            <td>11/03/2017</td>
+            <td><a class="delete"></a></td>
+        </tr>
+        <tr>
+            <th>3</th>
+            <td>Third Description</td>
+            <td>low</td>
+            <td>10/03/2017</td>
+            <td><a class="delete"></a></td>
+        </tr>
+        <tr>
+            <th>4</th>
+            <td>Fourth Description</td>
+            <td>high</td>
+            <td>09/03/2017</td>
+            <td><a class="delete"></a></td>
+        </tr>
+        </tbody>
+    </table>
+    <br /><br />
+</div>
+
+<!--  ************************************************************* -->
+<div class="box" id="form_utente">
+    <h3 class="subtitle has-text-centered"><b>Form nuovo utente</b></h3>
+    <span style="display: inline-block;width:400px;padding-top:5px;"><b>Codice Fiscale: </b></span><input type="text" id="codicefiscale_utente" placeholder="Codice Fiscale"><br />
+    <span style="display: inline-block;width:400px;padding-top:5px;"><b>Nominativo: </b></span><input type="text" id="nominativo_utente" placeholder="Nominativo"><br />
+    <span style="display: inline-block;width:400px;padding-top:5px;"><b>Indirizzo: </b></span><input type="text" id="indirizzo_utente" placeholder="Indirizzo"><br />
+    <span style="display: inline-block;width:400px;padding-top:5px;"><b>Telefono: </b></span><input type="text" id="telefono_utente" placeholder="Telefono"><br />
+    <span style="display: inline-block;width:400px;padding-top:5px;"><b>E-mail: </b></span><input type="text" id="email_utente" placeholder="E-mail"><br />
+    <span style="display: inline-block;width:400px;padding-top:5px;"><b>Data di nascita: </b></span><input type="text" id="natoil_utente" placeholder="Data di nascita"><br />
+    <span style="display: inline-block;width:400px;padding-top:15px;"><b>Password: </b></span><input type="password" id="password_utente" placeholder="Password"><br />
+    <span style="display: inline-block;width:400px;padding-top:5px;"><b>Conferma password: </b></span><input type="password" id="confermapassword_utente" placeholder="Conferma password"><br />
+    <br /><a class="button is-primary is-medium" onclick="">Submit</a>
+</div>
+
+<div class="box" id="form_cambia_password_utente">
+    <h3 class="subtitle  has-text-centered"><b>Form cambia password</b></h3>
+    <span style="display: inline-block;width:400px;padding-top:5px;"><b>Password: </b></span><input type="password" id="cambiapwd_password_utente" placeholder="Password"><br />
+    <span style="display: inline-block;width:400px;padding-top:5px;"><b>Conferma password: </b></span><input type="password" id="cambiapwd_confermapassword_utente" placeholder="Conferma password"><br />
+    <br /><a class="button is-primary is-medium" onclick="">Submit</a>
+</div>
+
+<div class="box" id="form_clienti">
+    <h3 class="subtitle has-text-centered"><b>Form nuovo cliente / modifica cliente</b></h3>
+    <span style="display: inline-block;width:400px;padding-top:5px;"><b>P.Iva / Codice Fiscale: </b></span><input type="text" id="idcliente_cliente" placeholder="P. Iva / Codice Fiscale"><br />
+    <span style="display: inline-block;width:400px;padding-top:5px;"><b>Ragione sociale: </b></span><input type="text" id="ragionesociale_cliente" placeholder="Ragione sociale"><br />
+    <span style="display: inline-block;width:400px;padding-top:5px;"><b>Nominativo: </b></span><input type="text" id="nominativo_cliente" placeholder="Nominativo"><br />
+    <span style="display: inline-block;width:400px;padding-top:5px;"><b>Indirizzo: </b></span><input type="text" id="indirizzo_cliente" placeholder="Indirizzo"><br />
+    <span style="display: inline-block;width:400px;padding-top:5px;"><b>Telefono: </b></span><input type="text" id="telefono_cliente" placeholder="Telefono"><br />
+    <span style="display: inline-block;width:400px;padding-top:5px;"><b>E-mail: </b></span><input type="text" id="email_cliente" placeholder="E-mail"><br />
+    <span style="display: inline-block;width:400px;padding-top:5px;"><b>Sito: </b></span><input type="text" id="sito_cliente" placeholder="Sito"><br />
+    <span style="display: inline-block;width:400px;padding-top:5px;"><b>Segnalatore: </b></span><input type="text" id="segnalatore_cliente" placeholder="Segnalatore"><br />
+    <span style="display: inline-block;width:400px;padding-top:5px;"><b>Attivita': </b></span><input type="text" id="attivita_cliente" placeholder="Attivita"><br />
+    <span style="display: inline-block;width:400px;padding-top:5px;"><b>Interessato a: </b></span><input type="text" id="interessatoa_cliente" placeholder="Interessato a..."><br />
+    <span style="display: inline-block;width:400px;padding-top:5px;"><b>Note: </b></span><input type="text" id="note_cliente" placeholder="Note"><br />
+    <!-- registrato da e data sono visualizzati dall'elenco e non dal form-->
+    <br /><a class="button is-primary is-medium" onclick="">Submit</a>
+</div>
+
+<div class="box" id="form_pratiche">
+    <h3 class="subtitle  has-text-centered"><b>Form nuova pratica / modifica pratica</b></h3>
+    <span style="display: inline-block;width:400px;padding-top:5px;"><b>Descrizione: </b></span><input type="text" id="descrizione_pratica" placeholder="Descrizione"><br />
+    <span style="display: inline-block;width:400px;padding-top:5px;"><b>Note: </b></span><input type="text" id="note_pratica" placeholder="Note"><br />
+    <!-- id, fkcliente, registrato da e data sono visualizzati dall'elenco e non dal form-->
+    <br /><a class="button is-primary is-medium" onclick="">Submit</a>
+</div>
+
+<div class="box" id="form_documento">
+    <h3 class="subtitle has-text-centered"><b>Form nuovo documento / modifica documento</b></h3>
+    <span style="display: inline-block;width:400px;padding-top:5px;"><b>Descrizione: </b></span><input type="text" id="descrizione_documento" placeholder="Descrizione"><br />
+    <span style="display: inline-block;width:400px;padding-top:5px;"><a class="button is-info is-outlined" onclick="">Carica</a></span><input type="text" enabled="disabled" id="percorsofile_documento" value="/users/files/mydocument.pdf"/><br />
+    <span style="display: inline-block;width:400px;padding-top:5px;"><b>Note: </b></span><input type="text" id="note_documento" placeholder="Note"><br />
+    <!-- id, fkcliente, registrato da e data sono visualizzati dall'elenco e non dal form-->
+    <br /><a class="button is-primary is-medium" onclick="">Submit</a>
+</div>
+<script>
+        $(document).ready(function(){
+            showUtenti();
+            showClienti();
         });
 
+        function showUtenti(){
+           $.ajax({                                                                        /* Ajax call to AccountMicroservice */
+            url: 'http://localhost:8384/get/utente',
+            type: "GET",
+            //dataType: 'jsonp',
+            success: function (data, status, xhr) {
+                console.log(data);
+                $("#body_tabella_utenti").empty();
+                jQuery.each(data, function(i, val) {
+                    $("#body_tabella_utenti").append("<tr><th>" + val.codiceFiscale + "</th><td>" + val.nominativo + "</td><td>" + val.email + "</td><td>" + val.ruolo + "</td><td><p class='delete' onclick='deleteToDo(" + val.codiceFiscale + ")'></p></td></tr>");
+                });
+            },
+            error: function(result) {
+                alert("Error!");
+                console.log(result);
+            }
+           });
+        }
+
+        function showClienti(){
+           $.ajax({                                                                        /* Ajax call to AccountMicroservice */
+            url: 'http://localhost:8384/get/cliente',
+            type: "GET",
+            //dataType: 'jsonp',
+            success: function (data, status, xhr) {
+                console.log(data);
+                $("#body_tabella_clienti").empty();
+                jQuery.each(data, function(i, val) {
+                    $("#body_tabella_clienti").append("<tr><th>" + val.idCliente + "</th><td>" + val.ragioneSociale + "</td><td>" + val.nominativo + "</td><td>" + val.attivita + "</td><td><p class='delete' onclick='deleteToDo(" + val.idCliente + ")'></p></td></tr>");
+                });
+            },
+            error: function(result) {
+                alert("Error!");
+                console.log(result);
+            }
+           });
+        }
+
+        function homeTabClick(){
+            $(".tab").removeClass("is-active");
+            $("#home_tab").addClass("is-active");
+        }
+        function utentiTabClick(){
+            $(".tab").removeClass("is-active");
+            $("#utenti_tab").addClass("is-active");
+        }
+        function clientiTabClick(){
+            $(".tab").removeClass("is-active");
+            $("#clienti_tab").addClass("is-active");
+        }
+        function contattiTabClick(){
+            $(".tab").removeClass("is-active");
+            $("#contatti_tab").addClass("is-active");
+        }
+
+        function logoutClick(){
+            $.ajax({                                                                        /* Ajax call to AccountMicroservice */
+                url: 'http://localhost:8384/logout',
+                type: "GET",
+                success: function (data, status, xhr) {
+                  console.log(data);
+                  location.reload();
+                },
+                error: function(result) {
+                  alert("Error!");
+                  console.log(result);
+                }
+           });
+        }
+
     </script>
+
 </body>
 </html>
