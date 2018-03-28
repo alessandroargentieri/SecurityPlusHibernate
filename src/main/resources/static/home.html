@@ -238,6 +238,7 @@
            $("#istanza_cliente_" + idCliente).removeClass("generic_cliente");
            $(".generic_cliente").empty();
 
+           $("#tabella_pratiche").show();
 
            $.ajax({
             url: 'http://localhost:8384/get/pratica/cliente/' + idCliente,
@@ -258,9 +259,9 @@
 
         function showDocumenti(idPratica, i){
            $("#istanza_pratica_" + i).removeClass("generic_pratica");
-           console.log("#istanza_pratica_" + idPratica);
-
            $(".generic_pratica").empty();
+
+           $("#tabella_documenti").show();
 
            $.ajax({
             url: 'http://localhost:8384/get/documento/pratica/' + idPratica,  //controllare se giusto
@@ -341,8 +342,8 @@
             showClienti();
 
             $("#tabella_clienti").show();
-            $("#tabella_pratiche").show();
-            $("#tabella_documenti").show();
+            //$("#tabella_pratiche").show();
+            //$("#tabella_documenti").show();
 
             $("#form_cliente").show();
             $("#form_pratica").show();
