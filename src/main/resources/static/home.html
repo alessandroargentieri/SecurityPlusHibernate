@@ -224,7 +224,7 @@
                 console.log(data);
                 $("#body_tabella_clienti").empty();
                 jQuery.each(data, function(i, val) {
-                    $("#body_tabella_clienti").append("<tr><th>" + val.idCliente + "</th><td>" + val.ragioneSociale + "</td><td>" + val.nominativo + "</td><td>" + val.attivita + "</td><td style='text-align: center;'><i class='fa fa-folder fa-2x has-text-info' onclick='showPratiche(\"" + val.idCliente + "\")'></i></td><td><p class='delete' onclick='deleteCliente(\"" + val.idCliente + "\")'></p></td></tr>");
+                    $("#body_tabella_clienti").append("<tr id='istanza_cliente_" + val.idCliente + "' class='generic_cliente'><th>" + val.idCliente + "</th><td>" + val.ragioneSociale + "</td><td>" + val.nominativo + "</td><td>" + val.attivita + "</td><td style='text-align: center;'><i class='fa fa-folder fa-2x has-text-info' onclick='showPratiche(\"" + val.idCliente + "\")'></i></td><td><p class='delete' onclick='deleteCliente(\"" + val.idCliente + "\")'></p></td></tr>");
                 });
             },
             error: function(result) {
@@ -235,7 +235,9 @@
         }
 
         function showPratiche(idCliente){
-           console.log(idCliente);
+           $("#istanza_cliente_" + idCliente).removeClass("generic_cliente");
+           $(".generic_cliente").empty();
+
 
            $.ajax({
             url: 'http://localhost:8384/get/pratica/cliente/' + idCliente,
@@ -244,7 +246,7 @@
                 console.log(data);
                 $("#body_tabella_pratiche").empty();
                 jQuery.each(data, function(i, val) {
-                    $("#body_tabella_pratiche").append("<tr><th onclick='seePratica(" + val + ")'>" + val.descrizione + "</th><td>" + convertDate(val.data) + "</td><td>" + val.fkCliente + "</td><td>" + val.registratoDa + "</td><td style='text-align: center;'><i class='fa fa-folder fa-2x has-text-success' onclick='showDocumenti(\"" + val.idPratica + "\")'> </i></td><td><p class='delete' onclick='deletePratica(\"" + val.idPratica + "\")'></p></td></tr>");
+                    $("#body_tabella_pratiche").append("<tr id='istanza_pratica_" + i + "' class='generic_pratica'><th onclick='seePratica(" + val + ")'>" + val.descrizione + "</th><td>" + convertDate(val.data) + "</td><td>" + val.fkCliente + "</td><td>" + val.registratoDa + "</td><td style='text-align: center;'><i class='fa fa-folder fa-2x has-text-success' onclick='showDocumenti(\"" + val.idPratica + "\", \"" + i + "\")'> </i></td><td><p class='delete' onclick='deletePratica(\"" + val.idPratica + "\")'></p></td></tr>");
                 });
             },
             error: function(result) {
@@ -254,7 +256,12 @@
            });
         }
 
-        function showDocumenti(idPratica){
+        function showDocumenti(idPratica, i){
+           $("#istanza_pratica_" + i).removeClass("generic_pratica");
+           console.log("#istanza_pratica_" + idPratica);
+
+           $(".generic_pratica").empty();
+
            $.ajax({
             url: 'http://localhost:8384/get/documento/pratica/' + idPratica,  //controllare se giusto
             type: "GET",
