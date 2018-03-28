@@ -21,6 +21,30 @@
     </ul>
 </div>
 
+
+<div class="box has-text-centered" id="home_div">
+    <h3 class="title"><b>Gestic</b></h3>
+    <h3 class="subtitle"><b>il gestionale di</b></h3>
+    <img src="../img/logo_impresa_consulting.png" />
+</div>
+
+<div class="box has-text-centered" id="contatti_div">
+    <p> <b>NUOVA SEDE: </b></p><br />
+
+    <p>    VIA SALVO D'ACQUISTO 3 </p>
+    <p>    70014 CONVERSANO (BA)  </p>
+    <p>    CONTATTI:  080.8490902 </p>
+    <p>    EMAIL: <b>   <a href="mailto:info@icnews.it" target="_top">info@icnews.it</a></b></p>
+
+    <p>
+        <a class='fa fa-facebook fa-2x has-text-info' target="_blank" href="https://www.facebook.com/impresaconsulting/"></a>
+        SEGUICI SU FACEBOOK PER NEWS!
+    </p>
+
+
+</div>
+
+
 <div class="box has-text-centered" id="tabella_utenti">
     <h3 class="subtitle"><b>Utenti</b></h3>
 
@@ -297,8 +321,8 @@
 
         function emptyForms(){
 
-            //TODO: missing home e contatti DIV
-
+            $("#home_div").hide();
+            $("#contatti_div").hide();
             $("#tabella_utenti").hide();
             $("#tabella_clienti").hide();
             $("#tabella_pratiche").hide();
@@ -323,6 +347,7 @@
         function homeTabClick(){
             emptyForms();
             $("#home_tab").addClass("is-active");
+            $("#home_div").show();
         }
         function utentiTabClick(){
             emptyForms();
@@ -352,6 +377,7 @@
         function contattiTabClick(){
             emptyForms();
             $("#contatti_tab").addClass("is-active");
+            $("#contatti_div").show();
         }
         function convertDate(inputFormat) {
             function pad(s) { return (s < 10) ? '0' + s : s; }

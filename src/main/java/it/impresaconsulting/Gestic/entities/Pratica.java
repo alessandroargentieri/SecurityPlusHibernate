@@ -38,5 +38,6 @@ public class Pratica {
     private void setCampi(){
         data = new Date();
         idPratica = data.toInstant().toString() + fkCliente;
+        //this.setId(UUID.randomUUID().toString());
     }
 }

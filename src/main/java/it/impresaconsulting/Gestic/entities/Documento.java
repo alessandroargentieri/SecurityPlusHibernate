@@ -40,6 +40,7 @@ public class Documento {
     private void setCampi(){
         data = new Date();
         idDocumento = data.toInstant().toString() + fkPratica;
+        //this.setId(UUID.randomUUID().toString());
     }
 
 }
