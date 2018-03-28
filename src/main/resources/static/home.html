@@ -5,13 +5,9 @@
     <link rel="icon" href="https://cdn2.iconfinder.com/data/icons/web/512/Global_Connections-512.png">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.0/css/bulma.css">
-    <link rel="stylesheet" type="text/css" href="css/normalize.css" />
-    <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.2.0/css/font-awesome.min.css" />
-    <link rel="stylesheet" type="text/css" href="css/demo.css" />
-    <link rel="stylesheet" type="text/css" href="css/set2.css" />
-
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
+
 <body style="margin:20px;padding-top:20px" class="container">
 
 <a class="button is-outlined is-info" onclick="logoutClick()" style="float: right">Esci</a>
@@ -24,7 +20,6 @@
         <li id="contatti_tab" class="tab"><a onclick="contattiTabClick()">Contatti</a></li>
     </ul>
 </div>
-
 
 <div class="box has-text-centered" id="tabella_utenti">
     <h3 class="subtitle"><b>Utenti</b></h3>
@@ -41,10 +36,10 @@
         </thead>
         <tbody id="body_tabella_utenti">
             <tr>
-                <th>CODFISC</th>
-                <td>NOME</td>
-                <td>nome@email.it</td>
-                <td>ADMIN</td>
+                <th></th>
+                <td></td>
+                <td></td>
+                <td></td>
                 <td><a class="delete"></a></td>
             </tr>
         </tbody>
@@ -78,11 +73,11 @@
         </thead>
         <tbody id="body_tabella_clienti">
             <tr>
-                <th>ID</th>
-                <td>RAGIONE SOCIALE</td>
-                <td>NOME</td>
-                <td>ATTIVITA'</td>
-                <td>pratiche<td>
+                <th></th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><td>
                 <td><a class="delete"></a></td>
             </tr>
         </tbody>
@@ -105,11 +100,11 @@
         </thead>
         <tbody id="body_tabella_pratiche">
             <tr>
-                <th>descrizione</th>
-                <td>12/03/2017</td>
-                <td>DDDDDDDDD</td>
-                <td>FFFFFFFFF</td>
-                <td>documenti</td>
+                <th></th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
                 <td><a class="delete"></a></td>
             </tr>
         </tbody>
@@ -131,10 +126,10 @@
         </thead>
         <tbody id="body_tabella_documenti">
             <tr>
-                <th>descr</th>
-                <td>12/03/2017</td>
-                <td>WEW</td>
-                <td>DDDDDDDDDD</td>
+                <th></th>
+                <td></td>
+                <td></td>
+                <td></td>
                 <td><a class="delete"></a></td>
             </tr>
         </tbody>
@@ -163,7 +158,7 @@
     <br /><a class="button is-primary is-medium" onclick="">Submit</a>
 </div>
 
-<div class="box" id="form_clienti">
+<div class="box" id="form_cliente">
     <h3 class="subtitle has-text-centered"><b>Form nuovo cliente / modifica cliente</b></h3>
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>P.Iva / Codice Fiscale: </b></span><input type="text" id="idcliente_cliente" placeholder="P. Iva / Codice Fiscale"><br />
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Ragione sociale: </b></span><input type="text" id="ragionesociale_cliente" placeholder="Ragione sociale"><br />
@@ -180,8 +175,8 @@
     <br /><a class="button is-primary is-medium" onclick="">Submit</a>
 </div>
 
-<div class="box" id="form_pratiche">
-    <h3 id="title_form_pratiche" class="subtitle  has-text-centered"><b>Form nuova pratica / modifica pratica</b></h3>
+<div class="box" id="form_pratica">
+    <h3 id="title_form_pratica" class="subtitle  has-text-centered"><b>Form nuova pratica / modifica pratica</b></h3>
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Descrizione: </b></span><input type="text" id="descrizione_pratica" placeholder="Descrizione"><br />
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Note: </b></span><input type="text" id="note_pratica" placeholder="Note"><br />
     <!-- id, fkcliente, registrato da e data sono visualizzati dall'elenco e non dal form-->
@@ -195,19 +190,12 @@
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Note: </b></span><input type="text" id="note_documento" placeholder="Note"><br />
     <!-- id, fkcliente, registrato da e data sono visualizzati dall'elenco e non dal form-->
     <br /><a class="button is-primary is-medium" onclick="">Submit</a>
-
-
-    <span class="icon has-text-info">
-        <i class="fas fa-info-circle"></i>
-    </span>
-
 </div>
+
 <script>
         $(document).ready(function(){
-            showUtenti();
-            showClienti();
-          //  showPratiche();
-          //  showDocumenti();
+          homeTabClick();
+          alert("Ricorda: domani scade il termine ultimo per la presentazione del bilancio di MARINELLI S.r.l.");
         });
 
         function showUtenti(){
@@ -236,7 +224,7 @@
                 console.log(data);
                 $("#body_tabella_clienti").empty();
                 jQuery.each(data, function(i, val) {
-                    $("#body_tabella_clienti").append("<tr><th>" + val.idCliente + "</th><td>" + val.ragioneSociale + "</td><td>" + val.nominativo + "</td><td>" + val.attivita + "</td><td><a class='button is-outlined is-info is-small' onclick='showPratiche(\"" + val.idCliente + "\")'> </a></td><td><p class='delete' onclick='deleteCliente(\"" + val.idCliente + "\")'></p></td></tr>");
+                    $("#body_tabella_clienti").append("<tr><th>" + val.idCliente + "</th><td>" + val.ragioneSociale + "</td><td>" + val.nominativo + "</td><td>" + val.attivita + "</td><td style='text-align: center;'><i class='fa fa-folder fa-2x has-text-info' onclick='showPratiche(\"" + val.idCliente + "\")'></i></td><td><p class='delete' onclick='deleteCliente(\"" + val.idCliente + "\")'></p></td></tr>");
                 });
             },
             error: function(result) {
@@ -248,14 +236,15 @@
 
         function showPratiche(idCliente){
            console.log(idCliente);
+
            $.ajax({
-            url: 'http://localhost:8384/get/pratica/cliente/' + idCliente,  //vedere se è giusto
+            url: 'http://localhost:8384/get/pratica/cliente/' + idCliente,
             type: "GET",
             success: function (data, status, xhr) {
                 console.log(data);
                 $("#body_tabella_pratiche").empty();
                 jQuery.each(data, function(i, val) {
-                    $("#body_tabella_pratiche").append("<tr><th onclick='seePratica(" + val + ")'>" + val.descrizione + "</th><td>" + convertDate(val.data) + "</td><td>" + val.fkCliente + "</td><td>" + val.registratoDa + "</td><td><a class='button is-outlined is-success is-small' onclick='showDocumenti(\"" + val.idPratica + "\")'> </a></td><td><p class='delete' onclick='deletePratica(\"" + val.idPratica + "\")'></p></td></tr>");
+                    $("#body_tabella_pratiche").append("<tr><th onclick='seePratica(" + val + ")'>" + val.descrizione + "</th><td>" + convertDate(val.data) + "</td><td>" + val.fkCliente + "</td><td>" + val.registratoDa + "</td><td style='text-align: center;'><i class='fa fa-folder fa-2x has-text-success' onclick='showDocumenti(\"" + val.idPratica + "\")'> </i></td><td><p class='delete' onclick='deletePratica(\"" + val.idPratica + "\")'></p></td></tr>");
                 });
             },
             error: function(result) {
@@ -285,7 +274,7 @@
 
         function seePratica(pratica){
             emptyForms();
-            $("#title_form_pratiche").val("Pratica cliente: " + pratica.fkCliente);
+            $("#title_form_pratica").val("Pratica cliente: " + pratica.fkCliente);
             $("#descrizione_pratica").val(pratica.descrizione);
             $("#note_pratica").val(pratica.note);
         }
@@ -299,7 +288,25 @@
         }
 
         function emptyForms(){
+
+            //TODO: missing home e contatti DIV
+
+            $("#tabella_utenti").hide();
+            $("#tabella_clienti").hide();
+            $("#tabella_pratiche").hide();
+            $("#tabella_documenti").hide();
+
+            $("#form_utente").hide();
+            $("#form_cliente").hide();
+            $("#form_cambia_password_utente").hide();
+            $("#form_pratica").hide();
+            $("#form_documento").hide();
+
             $(".tab").removeClass("is-active");
+            $("#body_tabella_utenti").empty();
+            $("#body_tabella_clienti").empty();
+            $("#body_tabella_pratiche").empty();
+            $("#body_tabella_documenti").empty();
             $('.container input[type="text"]').val('');
             $('.container input[type="password"]').val('');
         }
@@ -312,10 +319,27 @@
         function utentiTabClick(){
             emptyForms();
             $("#utenti_tab").addClass("is-active");
+
+            showUtenti();
+
+            $("#tabella_utenti").show();
+            $("#form_cambia_password_utente").show();   //TODO: da rimuovere
+            $("#form_utente").show();                   //TODO: da rimuovere
+
         }
         function clientiTabClick(){
             emptyForms();
             $("#clienti_tab").addClass("is-active");
+
+            showClienti();
+
+            $("#tabella_clienti").show();
+            $("#tabella_pratiche").show();
+            $("#tabella_documenti").show();
+
+            $("#form_cliente").show();
+            $("#form_pratica").show();
+            $("#form_documento").show();
         }
         function contattiTabClick(){
             emptyForms();
