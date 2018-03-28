@@ -224,7 +224,7 @@
 
         function showUtenti(){
            $.ajax({
-            url: 'http://localhost:8384/get/utente',
+            url: '/get/utente',
             type: "GET",
             success: function (data, status, xhr) {
                 console.log(data);
@@ -242,7 +242,7 @@
 
         function showClienti(){
            $.ajax({
-            url: 'http://localhost:8384/get/cliente',
+            url: '/get/cliente',
             type: "GET",
             success: function (data, status, xhr) {
                 console.log(data);
@@ -265,7 +265,7 @@
            $("#tabella_pratiche").show();
 
            $.ajax({
-            url: 'http://localhost:8384/get/pratica/cliente/' + idCliente,
+            url: '/get/pratica/cliente/' + idCliente,
             type: "GET",
             success: function (data, status, xhr) {
                 console.log(data);
@@ -288,7 +288,7 @@
            $("#tabella_documenti").show();
 
            $.ajax({
-            url: 'http://localhost:8384/get/documento/pratica/' + idPratica,  //controllare se giusto
+            url: '/get/documento/pratica/' + idPratica,  //controllare se giusto
             type: "GET",
             success: function (data, status, xhr) {
                 console.log(data);
@@ -387,7 +387,7 @@
 
         function logoutClick(){
             $.ajax({
-                url: 'http://localhost:8384/logout',
+                url: '/logout',
                 type: "GET",
                 success: function (data, status, xhr) {
                   console.log(data);
