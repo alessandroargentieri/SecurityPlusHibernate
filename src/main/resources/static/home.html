@@ -176,15 +176,15 @@
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Telefono: </b></span><input type="text" id="telefono_utente" placeholder="Telefono"><br />
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>E-mail: </b></span><input type="text" id="email_utente" placeholder="E-mail"><br />
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Data di nascita: </b></span><input type="text" id="natoil_utente" placeholder="Data di nascita"><br />
-    <br /><a class="button is-primary is-medium" onclick="">Submit</a>
-    <a class="button is-primary is-warning is-medium hidden_form" onclick="">Modifica</a>
+    <br /><a class="button is-primary is-medium submit" onclick="">Submit</a>
+    <a class="button is-primary is-warning is-medium hidden_form modifica" onclick="modificaClick()">Modifica</a>
 </div>
 
 <div class="box" id="form_cambia_password_utente">
     <h3 class="subtitle  has-text-centered"><b>Cambia password</b></h3>
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Password: </b></span><input type="password" id="cambiapwd_password_utente" placeholder="Password"><br />
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Conferma password: </b></span><input type="password" id="cambiapwd_confermapassword_utente" placeholder="Conferma password"><br />
-    <br /><a class="button is-primary is-medium" onclick="">Submit</a>
+    <br /><a class="button is-primary is-medium submit" onclick="">Submit</a>
 </div>
 
 <div class="box" id="form_cliente">
@@ -204,8 +204,8 @@
         <span style="display: inline-block;width:400px;padding-top:5px;"><b>Registrato da: </b></span><input type="text" id="registratoda_cliente" placeholder="Registrato da"><br />
         <span style="display: inline-block;width:400px;padding-top:5px;"><b>Data: </b></span><input type="text" id="data_cliente" placeholder="Data"><br />
     </section>
-    <br /><a class="button is-primary is-medium" onclick="">Submit</a>
-    <a class="button is-primary is-warning is-medium hidden_form" onclick="">Modifica</a>
+    <br /><a class="button is-primary is-medium submit" onclick="">Submit</a>
+    <a class="button is-primary is-warning is-medium hidden_form  modifica" onclick="modificaClick()">Modifica</a>
 </div>
 
 <div class="box" id="form_pratica">
@@ -218,8 +218,8 @@
         <span style="display: inline-block;width:400px;padding-top:5px;"><b>Del cliente: </b></span><input type="text" id="fkcliente_pratica" placeholder="Cliente"><br />
         <span style="display: inline-block;width:400px;padding-top:5px;"><b>Registrato da: </b></span><input type="text" id="registratoda_pratica" placeholder="Registrato da"><br />
     </section>
-    <br /><a class="button is-primary is-medium" onclick="">Submit</a>
-    <a class="button is-primary is-warning is-medium hidden_form" onclick="">Modifica</a>
+    <br /><a class="button is-primary is-medium submit" onclick="">Submit</a>
+    <a class="button is-primary is-warning is-medium hidden_form modifica" onclick="modificaClick()">Modifica</a>
 </div>
 
 <div class="box" id="form_documento">
@@ -242,8 +242,8 @@
         <span style="display: inline-block;width:400px;padding-top:5px;"><b>Della pratica: </b></span><input type="text" id="fkpratica_documento" placeholder="Pratica"><br />
         <span style="display: inline-block;width:400px;padding-top:5px;"><b>Registrato da: </b></span><input type="text" id="registratoda_documento" placeholder="Registrato da"><br />
     </section>
-    <br /><a class="button is-primary is-medium" onclick="">Submit</a>
-    <a class="button is-primary is-warning is-medium hidden_form" onclick="">Modifica</a>
+    <br /><a class="button is-primary is-medium submit" onclick="">Submit</a>
+    <a class="button is-primary is-warning is-medium hidden_form modifica" onclick="modificaClick()">Modifica</a>
 </div>
 
 <script>
@@ -365,7 +365,7 @@
         function seeUtente(codiceFiscale, nominativo, indirizzo, telefono, email, natoIl, ruolo){
             emptyForms();
             $(".hidden_form").show();
-            //hide submit
+            $(".submit").hide();   //hide submit and show with modificaclick() con cui si riabilitano tutti gli input text
             $('.container input[type="text"]').prop('disabled', true);
             $("#form_utente").show();
             $("#codicefiscale_utente").val(codiceFiscale);
@@ -379,7 +379,7 @@
         function seeCliente(idCliente, ragioneSociale, nominativo, indirizzo, telefono, email, sito, segnalatore, attivita, interessatoA, registratoDa, data, note){
             emptyForms();
             $(".hidden_form").show();
-            //hide submit
+            $(".submit").hide();   //hide submit and show with modificaclick() con cui si riabilitano tutti gli input text
             $('.container input[type="text"]').prop('disabled', true);
             $("#form_cliente").show();
             $("#idcliente_cliente").val(idCliente);
@@ -401,7 +401,7 @@
         function seePratica(idPratica, descrizione, note, data, fkCliente, registratoDa){
             emptyForms();
             $(".hidden_form").show();
-            //hide submit
+            $(".submit").hide();   //hide submit and show with modificaclick() con cui si riabilitano tutti gli input text
             $('.container input[type="text"]').prop('disabled', true);
             $("#form_pratica").show();
 
@@ -416,7 +416,7 @@
         function seeDocumento(idDocumento, descrizione, percorsoFile, note, stepPratica, fkPratica, registratoDa, data){
             emptyForms();
             $(".hidden_form").show();
-            //hide submit
+            $(".submit").hide();   //hide submit and show with modificaclick() con cui si riabilitano tutti gli input text
             $('.container input[type="text"]').prop('disabled', true);
             $("#form_documento").show();
 
@@ -428,6 +428,12 @@
             $("#fkpratica_documento").val(fkPratica);
             $("#registratoda_documento").val(registratoDa);
             $("#data_documento").val(convertDate(data));
+        }
+
+        function modificaClick(){
+            $(".submit").show();
+            $(".modifica").hide();
+            $('.container input[type="text"]').prop('disabled', false);
         }
 
 
@@ -472,6 +478,8 @@
 
             $(".hidden_form").hide();
             $('.container input[type="text"]').prop('disabled', false);
+            $(".submit").show();
+
         }
         
         function emptyForms(){
@@ -485,6 +493,8 @@
             $('.container input[type="text"]').prop('disabled', false);
 
             $(".hidden_form").hide();
+            $(".submit").show();
+
         }
 
         
