@@ -24,6 +24,9 @@ public class Documento {
     @Column(name="note")
     private String note;
 
+    @Column(name="steppratica") @NotBlank
+    private String stepPratica;
+
     //@ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name="idpratica", nullable=false) @JsonBackReference
     //private Pratica pratica;
 

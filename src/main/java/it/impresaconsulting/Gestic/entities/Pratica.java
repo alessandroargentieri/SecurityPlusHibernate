@@ -10,6 +10,11 @@ import java.util.Date;
 @AllArgsConstructor@NoArgsConstructor @lombok.Data
 public class Pratica {
 
+    public static final String STEP_PRESENTAZIONE   = "presentazione";
+    public static final String STEP_AMMISSIONE      = "ammissione";
+    public static final String STEP_RENDICONTAZIONE = "rendicontazione";
+    public static final String STEP_COLLAUDO        = "collaudo";
+
     @Id @Column(name="idpratica")
     private String idPratica;
 
@@ -37,7 +42,7 @@ public class Pratica {
     @PrePersist
     private void setCampi(){
         data = new Date();
-        idPratica = data.toInstant().toString() + fkCliente;
+        //idPratica = data.toInstant().toString() + fkCliente;
         //this.setId(UUID.randomUUID().toString());
     }
 }

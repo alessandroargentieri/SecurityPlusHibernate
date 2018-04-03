@@ -54,12 +54,12 @@ public class GesticApplication {
 
 		//******
 
-		Pratica p1 = new Pratica(null, "DESCRIZIONE_1", "NOTE_1", null, "IDCLIENTE_1", "RGNLSN87H13D761R");
-		Pratica p2 = new Pratica(null, "DESCRIZIONE_2", "NOTE_2", null, "IDCLIENTE_1", "RGNLSN87H13D761R");
-		Pratica p3 = new Pratica(null, "DESCRIZIONE_3", "NOTE_3", null, "IDCLIENTE_2", "RGNLSN87H13D761R");
-		Pratica p4 = new Pratica(null, "DESCRIZIONE_4", "NOTE_4", null, "IDCLIENTE_2", "RGNLSN87H13D761R");
-		Pratica p5 = new Pratica(null, "DESCRIZIONE_5", "NOTE_5", null, "IDCLIENTE_3", "RGNLSN87H13D761R");
-		Pratica p6 = new Pratica(null, "DESCRIZIONE_6", "NOTE_6", null,"IDCLIENTE_3", "RGNLSN87H13D761R");
+		Pratica p1 = new Pratica("ID_PRATICA_1", "DESCRIZIONE_1", "NOTE_1", null, "IDCLIENTE_1", "RGNLSN87H13D761R");
+		Pratica p2 = new Pratica("ID_PRATICA_2", "DESCRIZIONE_2", "NOTE_2", null, "IDCLIENTE_1", "RGNLSN87H13D761R");
+		Pratica p3 = new Pratica("ID_PRATICA_3", "DESCRIZIONE_3", "NOTE_3", null, "IDCLIENTE_2", "RGNLSN87H13D761R");
+		Pratica p4 = new Pratica("ID_PRATICA_4", "DESCRIZIONE_4", "NOTE_4", null, "IDCLIENTE_2", "RGNLSN87H13D761R");
+		Pratica p5 = new Pratica("ID_PRATICA_5", "DESCRIZIONE_5", "NOTE_5", null, "IDCLIENTE_3", "RGNLSN87H13D761R");
+		Pratica p6 = new Pratica("ID_PRATICA_6", "DESCRIZIONE_6", "NOTE_6", null,"IDCLIENTE_3", "RGNLSN87H13D761R");
 
 		praticaDao.save(p1);
 		praticaDao.save(p2);
@@ -70,23 +70,23 @@ public class GesticApplication {
 
 		//******
 
-		documentoDao.save(new Documento(null, "DESCRIZIONE_1", "PATH_1", "NOTE_1", p1.getIdPratica(), "RGNLSN87H13D761R", null));
-		documentoDao.save(new Documento(null, "DESCRIZIONE_2", "PATH_2", "NOTE_2", p1.getIdPratica(), "RGNLSN87H13D761R", null));
+		documentoDao.save(new Documento(null, "DESCRIZIONE_1", "PATH_1", "NOTE_1", Pratica.STEP_AMMISSIONE, p1.getIdPratica(), "RGNLSN87H13D761R", null));
+		documentoDao.save(new Documento(null, "DESCRIZIONE_2", "PATH_2", "NOTE_2", Pratica.STEP_AMMISSIONE, p1.getIdPratica(), "RGNLSN87H13D761R", null));
 
-		documentoDao.save(new Documento(null, "DESCRIZIONE_3", "PATH_3", "NOTE_3", p2.getIdPratica(), "RGNLSN87H13D761R", null));
-		documentoDao.save(new Documento(null, "DESCRIZIONE_4", "PATH_4", "NOTE_4", p2.getIdPratica(), "RGNLSN87H13D761R", null));
+		documentoDao.save(new Documento(null, "DESCRIZIONE_3", "PATH_3", "NOTE_3", Pratica.STEP_COLLAUDO, p2.getIdPratica(), "RGNLSN87H13D761R", null));
+		documentoDao.save(new Documento(null, "DESCRIZIONE_4", "PATH_4", "NOTE_4", Pratica.STEP_PRESENTAZIONE,  p2.getIdPratica(), "RGNLSN87H13D761R", null));
 
-		documentoDao.save(new Documento(null, "DESCRIZIONE_5", "PATH_5", "NOTE_5", p3.getIdPratica(), "RGNLSN87H13D761R", null));
-		documentoDao.save(new Documento(null, "DESCRIZIONE_6", "PATH_6", "NOTE_6", p3.getIdPratica(), "RGNLSN87H13D761R", null));
+		documentoDao.save(new Documento(null, "DESCRIZIONE_5", "PATH_5", "NOTE_5", Pratica.STEP_RENDICONTAZIONE, p3.getIdPratica(), "RGNLSN87H13D761R", null));
+		documentoDao.save(new Documento(null, "DESCRIZIONE_6", "PATH_6", "NOTE_6", Pratica.STEP_COLLAUDO, p3.getIdPratica(), "RGNLSN87H13D761R", null));
 
-		documentoDao.save(new Documento(null, "DESCRIZIONE_7", "PATH_7", "NOTE_7", p4.getIdPratica(), "RGNLSN87H13D761R", null));
-		documentoDao.save(new Documento(null, "DESCRIZIONE_8", "PATH_8", "NOTE_8", p4.getIdPratica(), "RGNLSN87H13D761R", null));
+		documentoDao.save(new Documento(null, "DESCRIZIONE_7", "PATH_7", "NOTE_7", Pratica.STEP_RENDICONTAZIONE, p4.getIdPratica(), "RGNLSN87H13D761R", null));
+		documentoDao.save(new Documento(null, "DESCRIZIONE_8", "PATH_8", "NOTE_8", Pratica.STEP_PRESENTAZIONE, p4.getIdPratica(), "RGNLSN87H13D761R", null));
 
-		documentoDao.save(new Documento(null, "DESCRIZIONE_9", "PATH_9", "NOTE_9", p5.getIdPratica(), "RGNLSN87H13D761R", null));
-		documentoDao.save(new Documento(null, "DESCRIZIONE_10", "PATH_10", "NOTE_10", p5.getIdPratica(), "RGNLSN87H13D761R", null));
+		documentoDao.save(new Documento(null, "DESCRIZIONE_9", "PATH_9", "NOTE_9", Pratica.STEP_AMMISSIONE, p5.getIdPratica(), "RGNLSN87H13D761R", null));
+		documentoDao.save(new Documento(null, "DESCRIZIONE_10", "PATH_10", "NOTE_10", Pratica.STEP_COLLAUDO, p5.getIdPratica(), "RGNLSN87H13D761R", null));
 
-		documentoDao.save(new Documento(null, "DESCRIZIONE_11", "PATH_11", "NOTE_11", p6.getIdPratica(), "RGNLSN87H13D761R", null));
-		documentoDao.save(new Documento(null, "DESCRIZIONE_12", "PATH_12", "NOTE_12", p6.getIdPratica(), "RGNLSN87H13D761R", null));
+		documentoDao.save(new Documento(null, "DESCRIZIONE_11", "PATH_11", "NOTE_11", Pratica.STEP_PRESENTAZIONE, p6.getIdPratica(), "RGNLSN87H13D761R", null));
+		documentoDao.save(new Documento(null, "DESCRIZIONE_12", "PATH_12", "NOTE_12", Pratica.STEP_AMMISSIONE, p6.getIdPratica(), "RGNLSN87H13D761R", null));
 	}
 }
 

@@ -6,9 +6,13 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.0/css/bulma.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        input[type='text']{height:35px; width:500px;}
+        input[type='password']{height:35px; width:300px;}
+    </style>
 </head>
 
-<body style="margin:20px;padding-top:20px" class="container">
+<body style="margin:20px;padding-top:20px;" class="container">
 
 <a class="button is-outlined is-info" onclick="logoutClick()" style="float: right">Esci</a>
 
@@ -140,12 +144,14 @@
         <thead>
         <tr>
             <th>DESCRIZIONE</th>
+            <td>STEP</td>
             <td>DATA</td>
         </tr>
         </thead>
         <tbody id="body_tabella_documenti">
             <tr>
                 <th></th>
+                <td></td>
                 <td></td>
             </tr>
         </tbody>
@@ -193,6 +199,7 @@
 
 <div class="box" id="form_pratica">
     <h3 id="title_form_pratica" class="subtitle  has-text-centered"><b>Form nuova pratica / modifica pratica</b></h3>
+    <span style="display: inline-block;width:400px;padding-top:5px;"><b>ID Pratica: </b></span><input type="text" id="id_pratica" placeholder="Id pratica"><br />
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Descrizione: </b></span><input type="text" id="descrizione_pratica" placeholder="Descrizione"><br />
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Note: </b></span><input type="text" id="note_pratica" placeholder="Note"><br />
     <!-- id, fkcliente, registrato da e data sono visualizzati dall'elenco e non dal form-->
@@ -202,8 +209,15 @@
 <div class="box" id="form_documento">
     <h3 class="subtitle has-text-centered"><b>Form nuovo documento / modifica documento</b></h3>
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Descrizione: </b></span><input type="text" id="descrizione_documento" placeholder="Descrizione"><br />
-    <span style="display: inline-block;width:400px;padding-top:5px;"><a class="button is-info is-outlined" onclick="">Carica</a></span><input type="text" enabled="disabled" id="percorsofile_documento" value="/users/files/mydocument.pdf"/><br />
+    <span style="display: inline-block;width:400px;padding-top:5px;"><a class="button is-info is-outlined" onclick="">Carica</a></span><input type="text" enabled="disabled" id="percorsofile_documento" value="/users/files/mydocument.pdf"><br />
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Note: </b></span><input type="text" id="note_documento" placeholder="Note"><br />
+    <span style="display: inline-block;width:400px;padding-top:5px;"><b>Step pratica: </b></span>
+    <select id="stepPraticaDocumentoSelect" style="height:35px;">
+        <option value="presentazione">Presentazione</option>
+        <option value="ammissione">Ammissione</option>
+        <option value="rendicontazione">Rendicontazione</option>
+        <option value="collaudo">Collaudo</option>
+    </select><br />
     <!-- id, fkcliente, registrato da e data sono visualizzati dall'elenco e non dal form-->
     <br /><a class="button is-primary is-medium" onclick="">Submit</a>
 </div>
@@ -211,7 +225,6 @@
 <script>
         $(document).ready(function(){
           homeTabClick();
-          alert("Ricorda: domani scade il termine ultimo per la presentazione del bilancio di MARINELLI S.r.l.");
         });
 
         function showUtenti(){
@@ -222,7 +235,7 @@
                 console.log(data);
                 $("#body_tabella_utenti").empty();
                 jQuery.each(data, function(i, val) {
-                    $("#body_tabella_utenti").append("<tr><th>" + val.codiceFiscale + "</th><td>" + val.nominativo + "</td><td>" + val.email + "</td><td>" + val.ruolo + "</td><td><p class='delete' onclick='deleteToDo(" + val.codiceFiscale + ")'></p></td></tr>");
+                    $("#body_tabella_utenti").append("<tr><th>" + val.codiceFiscale + "</th><td>" + val.nominativo + "</td><td>" + val.email + "</td><td>" + val.ruolo + "</td></tr>");
                 });
             },
             error: function(result) {
@@ -306,7 +319,7 @@
                 console.log(data);
                 $("#body_tabella_documenti").empty();
                 jQuery.each(data, function(i, val) {
-                    $("#body_tabella_documenti").append("<tr><th onclick='seeDocumento(" + val + ")'>" + val.descrizione + "</th><td>" + convertDate(val.data) + "</td></tr>");
+                    $("#body_tabella_documenti").append("<tr><th onclick='seeDocumento(" + val + ")'>" + val.descrizione + "</th><td>" + val.stepPratica + "</td><td>" + convertDate(val.data) + "</td></tr>");
                 });
             },
             error: function(result) {
@@ -418,9 +431,9 @@
         // v----------- cercare nell'anagrafica per RAG.SOC, NOMINATIVO, ATTIVITA', SEGNALATORE (nominativo), INTERESSATOA tramite tendina
         // nella ricerca per segnalatore rendere possibile l'inversione del nome e del cognome
         // valutare se inserire una descrizione breve da visualizzare in tabella ed una lunga
-        // la pratica ha un ID da inserire manualmente e non è autogenerato
-        // quando inserisco un documento devo (tramite tendina) selezionare lo step della pratica
-        // aggiungere lo step pratica nel file Documento.class
+        // v----------- la pratica ha un ID da inserire manualmente e non è autogenerato
+        // v----------- quando inserisco un documento devo (tramite tendina) selezionare lo step della pratica
+        // v----------- aggiungere lo step pratica nel file Documento.class
         // quando carico un documento devo creare le cartelle dove salvarlo idcliente/idpratica/presentazione||ammissione||rendicontazione||collaudo
         // scadenziario: id, descrizione, scadenza, registratoda, fkCliente, quando (stesso giorno, giorno prima, 5 gg, 10 gg)
 
