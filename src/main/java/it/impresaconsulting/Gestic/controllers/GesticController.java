@@ -134,7 +134,32 @@ public class GesticController {
         }
     }
 
-    //TODO getClientePerRagioneSocialeONominativo()
+    @RequestMapping("get/cliente/ragionesociale/{ragionesociale}")
+    public List<Cliente> getClienteByRagioneSociale(@PathVariable(name = "ragionesociale") String ragioneSociale){
+        return clienteDao.findByRagioneSociale(ragioneSociale);
+    }
+
+    @RequestMapping("get/cliente/nominativo/{nominativo}")
+    public List<Cliente> getClienteByNominativo(@PathVariable(name = "nominativo") String nominativo){
+        return clienteDao.findByNominativo(nominativo);
+    }
+
+    @RequestMapping("get/cliente/attivita/{attivita}")
+    public List<Cliente> getClienteByAttivita(@PathVariable(name = "attivita") String attivita){
+        return clienteDao.findByAttivita(attivita);
+
+    }
+
+    @RequestMapping("get/cliente/segnalatore/{segnalatore}")
+    public List<Cliente> getClienteBySegnalatore(@PathVariable(name = "segnalatore") String segnalatore){
+        return clienteDao.findBySegnalatore(segnalatore);
+    }
+
+    @RequestMapping("get/cliente/interessatoa/{interessatoa}")
+    public List<Cliente> getClienteByInteressatoA(@PathVariable(name = "interessatoa") String interessatoA){
+        return clienteDao.findByInteressatoA(interessatoA);
+    }
+
 
     @RequestMapping("/update/cliente")
     public Cliente modificaCliente(UsernamePasswordAuthenticationToken token, @Valid Cliente cliente){

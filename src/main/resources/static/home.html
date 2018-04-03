@@ -16,7 +16,7 @@
     <ul>
         <li id="home_tab"     class="tab is-active"><a  onclick="homeTabClick()">Home</a></li>
         <li id="utenti_tab"   class="tab"><a onclick="utentiTabClick()">Utenti</a></li>
-        <li id="clienti_tab"  class="tab"><a onclick="clientiTabClick()">Clienti</a></li>
+        <li id="clienti_tab"  class="tab"><a onclick="clientiTabClick()">Anagrafica</a></li>
         <li id="contatti_tab" class="tab"><a onclick="contattiTabClick()">Contatti</a></li>
     </ul>
 </div>
@@ -55,7 +55,6 @@
                 <td>NOMINATIVO</td>
                 <td>EMAIL</td>
                 <td>RUOLO</td>
-                <td>ELIMINA</td>
             </tr>
         </thead>
         <tbody id="body_tabella_utenti">
@@ -64,7 +63,6 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td><a class="delete"></a></td>
             </tr>
         </tbody>
     </table>
@@ -74,25 +72,32 @@
 <div class="box has-text-centered" id="tabella_clienti">
 
     <div class="field has-addons">
+        <p style="padding-top:5px;"> Cerca in anagrafica per: &nbsp &nbsp &nbsp</p>
+        <select id="cercaClientiSelect" style="height:35px;">
+            <option value="nominativo">Nominativo</option>
+            <option value="ragionesociale">Ragione sociale</option>
+            <option value="attivita">Attivita'</option>
+            <option value="segnalatore">Segnalatore</option>
+            <option value="interessatoa">Interessato a</option>
+            <option value="tutti">Visualizza tutti</option>
+        </select>
         <div class="control">
-            <input class="input" type="text" placeholder="Cerca cliente per">
+            <input id="cercaClientiInput" class="input" type="text" placeholder="Parametro di ricerca">
         </div>
         <div class="control">
-            <a class="button is-info">P.IVA/C.F.</a>
-            <a class="button is-success">Rag.Soc/Nominativo</a>
+            <a id="cercaClientiButton" class="button is-info" onclick="cercaClienti()">Cerca</a>
         </div>
     </div><br /><br />
 
-    <h3 class="subtitle"><b>Clienti</b></h3>
+    <h3 class="subtitle"><b>Anagrafica</b></h3>
     <table class="table is-striped has-text-centered" style="margin: 0px auto;">
         <thead>
             <tr>
-                <th>ID CLIENTE</th>
+                <th>P.IVA/C.F.</th>
                 <td>RAGIONE SOCIALE</td>
                 <td>NOMINATIVO</td>
                 <td>ATTIVITA'</td>
                 <td>PRATICHE</td>
-                <td>ELIMINA</td>
             </tr>
         </thead>
         <tbody id="body_tabella_clienti">
@@ -102,7 +107,6 @@
                 <td></td>
                 <td></td>
                 <td><td>
-                <td><a class="delete"></a></td>
             </tr>
         </tbody>
     </table>
@@ -116,10 +120,7 @@
             <tr>
                 <th>DESCRIZIONE</th>
                 <td>DATA</td>
-                <td>CLIENTE</td>
-                <td>REGISTRATO DA</td>
                 <td>DOCUMENTI</td>
-                <td>ELIMINA</td>
             </tr>
         </thead>
         <tbody id="body_tabella_pratiche">
@@ -127,9 +128,6 @@
                 <th></th>
                 <td></td>
                 <td></td>
-                <td></td>
-                <td></td>
-                <td><a class="delete"></a></td>
             </tr>
         </tbody>
     </table>
@@ -143,18 +141,12 @@
         <tr>
             <th>DESCRIZIONE</th>
             <td>DATA</td>
-            <td>PRATICA</td>
-            <td>REGISTRATO DA</td>
-            <td>ELIMINA</td>
         </tr>
         </thead>
         <tbody id="body_tabella_documenti">
             <tr>
                 <th></th>
                 <td></td>
-                <td></td>
-                <td></td>
-                <td><a class="delete"></a></td>
             </tr>
         </tbody>
     </table>
@@ -240,15 +232,37 @@
            });
         }
 
-        function showClienti(){
+
+        function cercaClienti(){
+            var parametroRicerca = $("#cercaClientiInput").val();
+            var tipoRicerca = $("#cercaClientiSelect").val();
+            var urlComposto = '/get/cliente';
+
+            if(tipoRicerca == 'nominativo'){
+                urlComposto = '/get/cliente/nominativo/' + parametroRicerca;
+            }else if(tipoRicerca == 'ragionesociale'){
+                urlComposto = '/get/cliente/ragionesociale/' + parametroRicerca;
+            }else if(tipoRicerca == 'attivita'){
+                urlComposto = '/get/cliente/attivita/' + parametroRicerca;
+            }else if(tipoRicerca == 'segnalatore'){
+                urlComposto = '/get/cliente/segnalatore/' + parametroRicerca;
+            }else if(tipoRicerca == 'interessatoa'){
+                urlComposto = '/get/cliente/interessatoa/' + parametroRicerca;
+            }
+
+            showClienti(urlComposto);
+        }
+
+
+        function showClienti(urlComposto){
            $.ajax({
-            url: '/get/cliente',
+            url: urlComposto, //'/get/cliente',
             type: "GET",
             success: function (data, status, xhr) {
                 console.log(data);
                 $("#body_tabella_clienti").empty();
                 jQuery.each(data, function(i, val) {
-                    $("#body_tabella_clienti").append("<tr id='istanza_cliente_" + val.idCliente + "' class='generic_cliente'><th>" + val.idCliente + "</th><td>" + val.ragioneSociale + "</td><td>" + val.nominativo + "</td><td>" + val.attivita + "</td><td style='text-align: center;'><i class='fa fa-folder fa-2x has-text-info' onclick='showPratiche(\"" + val.idCliente + "\")'></i></td><td><p class='delete' onclick='deleteCliente(\"" + val.idCliente + "\")'></p></td></tr>");
+                    $("#body_tabella_clienti").append("<tr id='istanza_cliente_" + val.idCliente + "' class='generic_cliente'><th>" + val.idCliente + "</th><td>" + val.ragioneSociale + "</td><td>" + val.nominativo + "</td><td>" + val.attivita + "</td><td style='text-align: center;'><i class='fa fa-folder fa-2x has-text-info' onclick='showPratiche(\"" + val.idCliente + "\")'></i></td></tr>");
                 });
             },
             error: function(result) {
@@ -261,9 +275,7 @@
         function showPratiche(idCliente){
            $("#istanza_cliente_" + idCliente).removeClass("generic_cliente");
            $(".generic_cliente").empty();
-
            $("#tabella_pratiche").show();
-
            $.ajax({
             url: '/get/pratica/cliente/' + idCliente,
             type: "GET",
@@ -271,11 +283,11 @@
                 console.log(data);
                 $("#body_tabella_pratiche").empty();
                 jQuery.each(data, function(i, val) {
-                    $("#body_tabella_pratiche").append("<tr id='istanza_pratica_" + i + "' class='generic_pratica'><th onclick='seePratica(" + val + ")'>" + val.descrizione + "</th><td>" + convertDate(val.data) + "</td><td>" + val.fkCliente + "</td><td>" + val.registratoDa + "</td><td style='text-align: center;'><i class='fa fa-folder fa-2x has-text-success' onclick='showDocumenti(\"" + val.idPratica + "\", \"" + i + "\")'> </i></td><td><p class='delete' onclick='deletePratica(\"" + val.idPratica + "\")'></p></td></tr>");
+                    $("#body_tabella_pratiche").append("<tr id='istanza_pratica_" + i + "' class='generic_pratica'><th onclick='seePratica(" + val + ")'>" + val.descrizione + "</th><td>" + convertDate(val.data) + "</td><td style='text-align: center;'><i class='fa fa-folder fa-2x has-text-success' onclick='showDocumenti(\"" + val.idPratica + "\", \"" + i + "\")'> </i></td></tr>");
                 });
             },
             error: function(result) {
-                alert("Error!");
+                alert("Errore: " + result);
                 console.log(result);
             }
            });
@@ -294,7 +306,7 @@
                 console.log(data);
                 $("#body_tabella_documenti").empty();
                 jQuery.each(data, function(i, val) {
-                    $("#body_tabella_documenti").append("<tr><th onclick='seeDocumento(" + val + ")'>" + val.descrizione + "</th><td>" + convertDate(val.data) + "</td><td>" + val.fkPratica + "</td><td>" + val.registratoDa + "</td><td><p class='delete' onclick='deleteDocumento(\"" + val.idDocumento + "\")'></p></td></tr>");
+                    $("#body_tabella_documenti").append("<tr><th onclick='seeDocumento(" + val + ")'>" + val.descrizione + "</th><td>" + convertDate(val.data) + "</td></tr>");
                 });
             },
             error: function(result) {
@@ -339,6 +351,7 @@
             $("#body_tabella_clienti").empty();
             $("#body_tabella_pratiche").empty();
             $("#body_tabella_documenti").empty();
+            $("#cercaClientiInput").val('');
             $('.container input[type="text"]').val('');
             $('.container input[type="password"]').val('');
         }
@@ -363,13 +376,7 @@
         function clientiTabClick(){
             emptyForms();
             $("#clienti_tab").addClass("is-active");
-
-            showClienti();
-
             $("#tabella_clienti").show();
-            //$("#tabella_pratiche").show();
-            //$("#tabella_documenti").show();
-
             $("#form_cliente").show();
             $("#form_pratica").show();
             $("#form_documento").show();
@@ -386,6 +393,7 @@
         }
 
         function logoutClick(){
+            emptyForms();
             $.ajax({
                 url: '/logout',
                 type: "GET",
@@ -403,9 +411,22 @@
         //al click su un ID di elemento di tabella deve visualizzare il form compilato e disabilitato.
         //in corrispondenza del form ci deve essere un pulsantino che modifichi i dati per risalvarli
 
-        //se clicchiamo su elimina, invece, deve richiederne l'eliminazione.
+        // v----------- togliere elimina dalle tabelle
+        // v----------- togliere fk dalle tabelle visualizzate
+        // v----------- sostituire il termine "Clienti" con "Anagrafica"
+        // v----------- togliere registratoDa dalla visualizzazione tabelle
+        // v----------- cercare nell'anagrafica per RAG.SOC, NOMINATIVO, ATTIVITA', SEGNALATORE (nominativo), INTERESSATOA tramite tendina
+        // nella ricerca per segnalatore rendere possibile l'inversione del nome e del cognome
+        // valutare se inserire una descrizione breve da visualizzare in tabella ed una lunga
+        // la pratica ha un ID da inserire manualmente e non è autogenerato
+        // quando inserisco un documento devo (tramite tendina) selezionare lo step della pratica
+        // aggiungere lo step pratica nel file Documento.class
+        // quando carico un documento devo creare le cartelle dove salvarlo idcliente/idpratica/presentazione||ammissione||rendicontazione||collaudo
+        // scadenziario: id, descrizione, scadenza, registratoda, fkCliente, quando (stesso giorno, giorno prima, 5 gg, 10 gg)
 
-        //se clicchiamo sui figli deve richiamare la tabella con i figli di quel padre.
+
+
+
 
 
 
