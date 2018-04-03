@@ -73,6 +73,7 @@
     </table>
     <br /><br />
     <br /><a class="button is-primary is-medium" href="#form_utente" onclick="nuovoUtente()">Nuovo Utente</a>
+          <a class="button is-warning is-medium" href="#form_cambia_password_utente" onclick="cambioPassword()">Cambio Password</a>
 </div>
 
 <div class="box has-text-centered" id="tabella_clienti">
@@ -168,27 +169,26 @@
 
 <!--  ************************************************************* -->
 <div class="box" id="form_utente">
-    <h3 class="subtitle has-text-centered"><b>Form nuovo utente</b></h3>
+    <h3 class="subtitle has-text-centered"><b>Utente</b></h3>
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Codice Fiscale: </b></span><input type="text" id="codicefiscale_utente" placeholder="Codice Fiscale"><br />
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Nominativo: </b></span><input type="text" id="nominativo_utente" placeholder="Nominativo"><br />
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Indirizzo: </b></span><input type="text" id="indirizzo_utente" placeholder="Indirizzo"><br />
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Telefono: </b></span><input type="text" id="telefono_utente" placeholder="Telefono"><br />
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>E-mail: </b></span><input type="text" id="email_utente" placeholder="E-mail"><br />
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Data di nascita: </b></span><input type="text" id="natoil_utente" placeholder="Data di nascita"><br />
-    <span style="display: inline-block;width:400px;padding-top:15px;"><b>Password: </b></span><input type="password" id="password_utente" placeholder="Password"><br />
-    <span style="display: inline-block;width:400px;padding-top:5px;"><b>Conferma password: </b></span><input type="password" id="confermapassword_utente" placeholder="Conferma password"><br />
     <br /><a class="button is-primary is-medium" onclick="">Submit</a>
+    <a class="button is-primary is-warning is-medium hidden_form" onclick="">Modifica</a>
 </div>
 
 <div class="box" id="form_cambia_password_utente">
-    <h3 class="subtitle  has-text-centered"><b>Form cambia password</b></h3>
+    <h3 class="subtitle  has-text-centered"><b>Cambia password</b></h3>
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Password: </b></span><input type="password" id="cambiapwd_password_utente" placeholder="Password"><br />
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Conferma password: </b></span><input type="password" id="cambiapwd_confermapassword_utente" placeholder="Conferma password"><br />
     <br /><a class="button is-primary is-medium" onclick="">Submit</a>
 </div>
 
 <div class="box" id="form_cliente">
-    <h3 class="subtitle has-text-centered"><b>Form nuovo cliente / modifica cliente</b></h3>
+    <h3 class="subtitle has-text-centered"><b>Contatto</b></h3>
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>P.Iva / Codice Fiscale: </b></span><input type="text" id="idcliente_cliente" placeholder="P. Iva / Codice Fiscale"><br />
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Ragione sociale: </b></span><input type="text" id="ragionesociale_cliente" placeholder="Ragione sociale"><br />
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Nominativo: </b></span><input type="text" id="nominativo_cliente" placeholder="Nominativo"><br />
@@ -200,21 +200,33 @@
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Attivita': </b></span><input type="text" id="attivita_cliente" placeholder="Attivita"><br />
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Interessato a: </b></span><input type="text" id="interessatoa_cliente" placeholder="Interessato a..."><br />
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Note: </b></span><input type="text" id="note_cliente" placeholder="Note"><br />
-    <!-- registrato da e data sono visualizzati dall'elenco e non dal form-->
+    <section class="hidden_form">
+        <span style="display: inline-block;width:400px;padding-top:5px;"><b>Registrato da: </b></span><input type="text" id="registratoda_cliente" placeholder="Registrato da"><br />
+        <span style="display: inline-block;width:400px;padding-top:5px;"><b>Data: </b></span><input type="text" id="data_cliente" placeholder="Data"><br />
+    </section>
     <br /><a class="button is-primary is-medium" onclick="">Submit</a>
+    <a class="button is-primary is-warning is-medium hidden_form" onclick="">Modifica</a>
 </div>
 
 <div class="box" id="form_pratica">
-    <h3 id="title_form_pratica" class="subtitle  has-text-centered"><b>Form nuova pratica / modifica pratica</b></h3>
-    <span style="display: inline-block;width:400px;padding-top:5px;"><b>ID Pratica: </b></span><input type="text" id="id_pratica" placeholder="Id pratica"><br />
+    <h3 id="title_form_pratica" class="subtitle  has-text-centered"><b>Pratica</b></h3>
+    <span style="display: inline-block;width:400px;padding-top:5px;"><b>ID Pratica: </b></span><input type="text" id="idpratica_pratica" placeholder="Id pratica"><br />
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Descrizione: </b></span><input type="text" id="descrizione_pratica" placeholder="Descrizione"><br />
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Note: </b></span><input type="text" id="note_pratica" placeholder="Note"><br />
-    <!-- id, fkcliente, registrato da e data sono visualizzati dall'elenco e non dal form-->
+    <section class="hidden_form">
+        <span style="display: inline-block;width:400px;padding-top:5px;"><b>Data: </b></span><input type="text" id="data_pratica" placeholder="Data pratica"><br />
+        <span style="display: inline-block;width:400px;padding-top:5px;"><b>Del cliente: </b></span><input type="text" id="fkcliente_pratica" placeholder="Cliente"><br />
+        <span style="display: inline-block;width:400px;padding-top:5px;"><b>Registrato da: </b></span><input type="text" id="registratoda_pratica" placeholder="Registrato da"><br />
+    </section>
     <br /><a class="button is-primary is-medium" onclick="">Submit</a>
+    <a class="button is-primary is-warning is-medium hidden_form" onclick="">Modifica</a>
 </div>
 
 <div class="box" id="form_documento">
-    <h3 class="subtitle has-text-centered"><b>Form nuovo documento / modifica documento</b></h3>
+    <h3 class="subtitle has-text-centered"><b>Documento</b></h3>
+    <section class="hidden_form">
+        <span style="display: inline-block;width:400px;padding-top:5px;"><b>ID Documento: </b></span><input type="text" id="iddocumento_documento" placeholder="Id documento"><br />
+    </section>
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Descrizione: </b></span><input type="text" id="descrizione_documento" placeholder="Descrizione"><br />
     <span style="display: inline-block;width:400px;padding-top:5px;"><a class="button is-info is-outlined" onclick="">Carica</a></span><input type="text" enabled="disabled" id="percorsofile_documento" value="/users/files/mydocument.pdf"><br />
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Note: </b></span><input type="text" id="note_documento" placeholder="Note"><br />
@@ -225,8 +237,13 @@
         <option value="rendicontazione">Rendicontazione</option>
         <option value="collaudo">Collaudo</option>
     </select><br />
-    <!-- id, fkcliente, registrato da e data sono visualizzati dall'elenco e non dal form-->
+    <section class="hidden_form">
+        <span style="display: inline-block;width:400px;padding-top:5px;"><b>Data: </b></span><input type="text" id="data_documento" placeholder="Data documento"><br />
+        <span style="display: inline-block;width:400px;padding-top:5px;"><b>Della pratica: </b></span><input type="text" id="fkpratica_documento" placeholder="Pratica"><br />
+        <span style="display: inline-block;width:400px;padding-top:5px;"><b>Registrato da: </b></span><input type="text" id="registratoda_documento" placeholder="Registrato da"><br />
+    </section>
     <br /><a class="button is-primary is-medium" onclick="">Submit</a>
+    <a class="button is-primary is-warning is-medium hidden_form" onclick="">Modifica</a>
 </div>
 
 <script>
@@ -340,35 +357,77 @@
         }
 
 
-        function seeUtente(codiceFiscale, nominativo, indirizzo, telefono, email, natoIl, ruolo){
-            emptyForms();  //TODO: svuotare solo QUEL form e rendere visibili i campi nascosti
+        function cambioPassword(){
+            emptyForms();
             $("#form_cambia_password_utente").show();
+        }
+
+        function seeUtente(codiceFiscale, nominativo, indirizzo, telefono, email, natoIl, ruolo){
+            emptyForms();
+            $(".hidden_form").show();
+            //hide submit
+            $('.container input[type="text"]').prop('disabled', true);
             $("#form_utente").show();
+            $("#codicefiscale_utente").val(codiceFiscale);
+            $("#nominativo_utente").val(nominativo);
+            $("#indirizzo_utente").val(indirizzo);
+            $("#telefono_utente").val(telefono);
+            $("#email_utente").val(email);
+            $("#natoil_utente").val(convertDate(natoIl));
         }
 
         function seeCliente(idCliente, ragioneSociale, nominativo, indirizzo, telefono, email, sito, segnalatore, attivita, interessatoA, registratoDa, data, note){
-            emptyForms();  //TODO: svuotare solo QUEL form e rendere visibili i campi nascosti
+            emptyForms();
+            $(".hidden_form").show();
+            //hide submit
+            $('.container input[type="text"]').prop('disabled', true);
             $("#form_cliente").show();
+            $("#idcliente_cliente").val(idCliente);
+            $("#ragionesociale_cliente").val(ragioneSociale);
+            $("#nominativo_cliente").val(nominativo);
+            $("#indirizzo_cliente").val(indirizzo);
+            $("#telefono_cliente").val(telefono);
+            $("#email_cliente").val(email);
+            $("#sito_cliente").val(sito);
+            $("#segnalatore_cliente").val(segnalatore);
+            $("#attivita_cliente").val(attivita);
+            $("#interessatoa_cliente").val(interessatoA);
+            $("#registratoda_cliente").val(registratoDa);
+            $("#data_cliente").val(convertDate(data));
+            $("#note_cliente").val(note);
         }
 
 
         function seePratica(idPratica, descrizione, note, data, fkCliente, registratoDa){
-            emptyForms();  //TODO: svuotare solo QUEL form
-
+            emptyForms();
+            $(".hidden_form").show();
+            //hide submit
+            $('.container input[type="text"]').prop('disabled', true);
             $("#form_pratica").show();
 
+            $("#idpratica_pratica").val(idPratica);
             $("#descrizione_pratica").val(descrizione);
             $("#note_pratica").val(note);
+            $("#data_pratica").val(convertDate(data));
+            $("#fkcliente_pratica").val(fkCliente);
+            $("#registratoda_pratica").val(registratoDa);
         }
 
         function seeDocumento(idDocumento, descrizione, percorsoFile, note, stepPratica, fkPratica, registratoDa, data){
             emptyForms();
+            $(".hidden_form").show();
+            //hide submit
+            $('.container input[type="text"]').prop('disabled', true);
             $("#form_documento").show();
 
+            $("#iddocumento_documento").val(idDocumento);
             $("#descrizione_documento").val(descrizione);
             $("#note_documento").val(note);
             $("#percorsofile_documento").val(percorsoFile);
             $("#stepPraticaDocumentoSelect").val(stepPratica);
+            $("#fkpratica_documento").val(fkPratica);
+            $("#registratoda_documento").val(registratoDa);
+            $("#data_documento").val(convertDate(data));
         }
 
 
@@ -410,6 +469,9 @@
             $("#cercaClientiInput").val('');
             $('.container input[type="text"]').val('');
             $('.container input[type="password"]').val('');
+
+            $(".hidden_form").hide();
+            $('.container input[type="text"]').prop('disabled', false);
         }
         
         function emptyForms(){
@@ -420,6 +482,9 @@
             $("#form_documento").hide();
             $('.container input[type="text"]').val('');
             $('.container input[type="password"]').val('');
+            $('.container input[type="text"]').prop('disabled', false);
+
+            $(".hidden_form").hide();
         }
 
         
@@ -433,8 +498,6 @@
             $("#utenti_tab").addClass("is-active");
             showUtenti();
             $("#tabella_utenti").show();
-          //  $("#form_cambia_password_utente").show();   //TODO: da rimuovere
-          //  $("#form_utente").show();                   //TODO: da rimuovere
         }
         function clientiTabClick(){
             resetFormsAndTables();

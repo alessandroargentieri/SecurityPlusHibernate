@@ -14,6 +14,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import javax.annotation.PostConstruct;
+import java.util.Calendar;
 import java.util.Date;
 
 @SpringBootApplication
@@ -38,9 +39,9 @@ public class GesticApplication {
 		//******
 
 		String encryptedPwd = encryptionUtils.encrypt("kungfu");
-		utenteDao.save(new Utente("RGNLSN87H13D761R", "Alessandro Argentieri", "VIA RIVIERA 1 27100 PAVIA (PV)", "435324367", "alessandro.argentieri@gestic.it", new Date("13/06/1987"), "ROLE_ADMIN", encryptedPwd));
+		utenteDao.save(new Utente("RGNLSN87H13D761R", "Alessandro Argentieri", "VIA RIVIERA 1 27100 PAVIA (PV)", "435324367", "alessandro.argentieri@gestic.it", new Date("06/13/1987"), "ROLE_ADMIN", encryptedPwd));
 		encryptedPwd = encryptionUtils.encrypt("musica");
-		utenteDao.save(new Utente("RSSDBR87S67C741M", "Debora Rossini", "VIA RIVIERA 1 27100 PAVIA (PV)", "423236543", "debora.rossini@gestic.it", new Date("27/11/1987"), "ROLE_USER", encryptedPwd));
+		utenteDao.save(new Utente("RSSDBR87S67C741M", "Debora Rossini", "VIA RIVIERA 1 27100 PAVIA (PV)", "423236543", "debora.rossini@gestic.it", new Date("11/27/1987"), "ROLE_USER", encryptedPwd));
 
 		//******
 
