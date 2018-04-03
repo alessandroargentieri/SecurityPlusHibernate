@@ -72,6 +72,7 @@
         </tbody>
     </table>
     <br /><br />
+    <br /><a class="button is-primary is-medium" href="#form_utente" onclick="nuovoUtente()">Nuovo Utente</a>
 </div>
 
 <div class="box has-text-centered" id="tabella_clienti">
@@ -116,6 +117,7 @@
         </tbody>
     </table>
     <br /><br />
+    <br /><a class="button is-primary is-medium" href="#form_cliente" onclick="nuovoCliente()">Nuovo Contatto</a>
 </div>
 
 <div class="box has-text-centered" id="tabella_pratiche">
@@ -139,6 +141,7 @@
         </tbody>
     </table>
     <br /><br />
+    <br /><a class="button is-primary is-medium" href="#form_pratica" onclick="nuovaPratica()">Nuova Pratica</a>
 </div>
 
 <div class="box has-text-centered" id="tabella_documenti">
@@ -160,6 +163,7 @@
         </tbody>
     </table>
     <br /><br />
+    <br /><a class="button is-primary is-medium" href="#form_documento" onclick="nuovoDocumento()">Nuovo Documento</a>
 </div>
 
 <!--  ************************************************************* -->
@@ -238,7 +242,7 @@
                 console.log(data);
                 $("#body_tabella_utenti").empty();
                 jQuery.each(data, function(i, val) {
-                    $("#body_tabella_utenti").append("<tr><th class='finger'><a href='#form_utente'>" + val.codiceFiscale + "</a></th><td>" + val.nominativo + "</td><td>" + val.email + "</td><td>" + val.ruolo + "</td></tr>");
+                    $("#body_tabella_utenti").append("<tr><th class='finger' onclick='seeUtente(\"" + val.codiceFiscale + "\", \"" + val.nominativo + "\", \"" + val.indirizzo + "\", \"" + val.telefono + "\", \"" + val.email + "\", \"" + val.natoIl + "\", \"" + val.ruolo + "\")'><a href='#form_utente'>" + val.codiceFiscale + "</a></th><td>" + val.nominativo + "</td><td>" + val.email + "</td><td>" + val.ruolo + "</td></tr>");
                 });
             },
             error: function(result) {
@@ -250,6 +254,7 @@
 
 
         function cercaClienti(){
+            emptyForms();
             $("#tabella_pratiche").hide();
             $("#tabella_documenti").hide();
             var parametroRicerca = $("#cercaClientiInput").val();
@@ -280,7 +285,7 @@
                 console.log(data);
                 $("#body_tabella_clienti").empty();
                 jQuery.each(data, function(i, val) {
-                    $("#body_tabella_clienti").append("<tr id='istanza_cliente_" + val.idCliente + "' class='generic_cliente'><th  class='finger'><a href='#form_cliente'>" + val.idCliente + "</a></th><td>" + val.ragioneSociale + "</td><td>" + val.nominativo + "</td><td>" + val.attivita + "</td><td class='finger' style='text-align: center;'><i class='fa fa-folder fa-2x has-text-info' onclick='showPratiche(\"" + val.idCliente + "\")'></i></td></tr>");
+                    $("#body_tabella_clienti").append("<tr id='istanza_cliente_" + val.idCliente + "' class='generic_cliente'><th  class='finger' onclick='seeCliente(\"" + val.idCliente + "\", \"" + val.ragioneSociale + "\", \"" + val.nominativo + "\", \"" + val.indirizzo + "\", \"" + val.telefono + "\", \"" + val.email + "\", \"" + val.sito + "\", \"" + val.segnalatore + "\", \"" + val.attivita + "\", \"" + val.interessatoA + "\", \"" + val.registratoDa + "\", \"" + val.data + "\", \"" + val.note + "\")'><a href='#form_cliente'>" + val.idCliente + "</a></th><td>" + val.ragioneSociale + "</td><td>" + val.nominativo + "</td><td>" + val.attivita + "</td><td class='finger' style='text-align: center;'><i class='fa fa-folder fa-2x has-text-info' onclick='showPratiche(\"" + val.idCliente + "\")'></i></td></tr>");
                 });
             },
             error: function(result) {
@@ -291,6 +296,7 @@
         }
 
         function showPratiche(idCliente){
+           emptyForms();
            $("#istanza_cliente_" + idCliente).removeClass("generic_cliente");
            $(".generic_cliente").empty();
            $("#tabella_pratiche").show();
@@ -312,6 +318,7 @@
         }
 
         function showDocumenti(idPratica, i){
+           emptyForms();
            $("#istanza_pratica_" + i).removeClass("generic_pratica");
            $(".generic_pratica").empty();
            $("#tabella_documenti").show();
@@ -322,7 +329,7 @@
                 console.log(data);
                 $("#body_tabella_documenti").empty();
                 jQuery.each(data, function(i, val) {
-                    $("#body_tabella_documenti").append("<tr><th  class='finger' onclick='seeDocumento(" + val + ")'><a href='#form_documento'>" + val.descrizione + "</a></th><td>" + val.stepPratica + "</td><td>" + convertDate(val.data) + "</td></tr>");
+                    $("#body_tabella_documenti").append("<tr><th  class='finger' onclick='seeDocumento(\"" + val.idDocumento + "\", \"" + val.descrizione + "\", \"" + val.percorsoFile + "\", \"" + val.note + "\", \"" + val.stepPratica + "\", \"" + val.fkPratica + "\", \"" + val.registratoDa + "\", \"" + val.data + "\")'><a href='#form_documento'>" + val.descrizione + "</a></th><td>" + val.stepPratica + "</td><td>" + convertDate(val.data) + "</td></tr>");
                 });
             },
             error: function(result) {
@@ -333,50 +340,57 @@
         }
 
 
-        //this function is an object definition (it's a constructor)
-         function Pratica(idPratica, descrizione, note, data, fkCliente, registratoDa){
-             this.idPratica = idPratica;
-             this.descrizione = descrizione;
-             this.note = note;
-             this.data = data;
-             this.fkCliente = fkCliente;
-             this.registratoDa = registratoDa;
-         }
+        function seeUtente(codiceFiscale, nominativo, indirizzo, telefono, email, natoIl, ruolo){
+            emptyForms();  //TODO: svuotare solo QUEL form e rendere visibili i campi nascosti
+            $("#form_cambia_password_utente").show();
+            $("#form_utente").show();
+        }
 
-         //this function is an object definition (it's a constructor)
-         function Documento(idDocumento, descrizione, percorsoFile, note, stepPratica, fkPratica, registratoDa, data){
-             this.idDocumento = idDocumento;
-             this.descrizione = descrizione;
-             this.percorsoFile = percorsoFile;
-             this.stepPratica = stepPratica;
-             this.fkPratica = fkPratica;
-             this.note = note;
-             this.data = data;
-             this.registratoDa = registratoDa;
-         }
-
+        function seeCliente(idCliente, ragioneSociale, nominativo, indirizzo, telefono, email, sito, segnalatore, attivita, interessatoA, registratoDa, data, note){
+            emptyForms();  //TODO: svuotare solo QUEL form e rendere visibili i campi nascosti
+            $("#form_cliente").show();
+        }
 
 
         function seePratica(idPratica, descrizione, note, data, fkCliente, registratoDa){
-            //console.log(pratica);
-            //emptyForms();  //TODO: svuotare solo QUEL form
-            //$("#title_form_pratica").val("Pratica cliente: " + fkCliente);
+            emptyForms();  //TODO: svuotare solo QUEL form
+
+            $("#form_pratica").show();
+
             $("#descrizione_pratica").val(descrizione);
             $("#note_pratica").val(note);
         }
 
-        function seeDocumento(documento){
-            console.log(documento);
-            //emptyForms();         //TODO: svuotare solo QUEL form
-            //$("#title_form_documento").val("Documento pratica: " + documento.fkPratica);
-            $("#descrizione_documento").val(documento.descrizione);
-            $("#note_documento").val(documento.note);
-            $("#percorsofile_documento").val(documento.percorsofile);
+        function seeDocumento(idDocumento, descrizione, percorsoFile, note, stepPratica, fkPratica, registratoDa, data){
+            emptyForms();
+            $("#form_documento").show();
+
+            $("#descrizione_documento").val(descrizione);
+            $("#note_documento").val(note);
+            $("#percorsofile_documento").val(percorsoFile);
+            $("#stepPraticaDocumentoSelect").val(stepPratica);
         }
 
 
 
-        function emptyForms(){
+        function nuovoUtente(){
+            emptyForms();
+            $("#form_utente").show();
+        }
+        function nuovoCliente(){
+            emptyForms();
+            $("#form_cliente").show();
+        }
+        function nuovaPratica(){
+            emptyForms();
+            $("#form_pratica").show();
+        }
+        function nuovoDocumento(){
+            emptyForms();
+            $("#form_documento").show();
+        }
+
+        function resetFormsAndTables(){
             $("#home_div").hide();
             $("#contatti_div").hide();
             $("#tabella_utenti").hide();
@@ -397,29 +411,38 @@
             $('.container input[type="text"]').val('');
             $('.container input[type="password"]').val('');
         }
+        
+        function emptyForms(){
+            $("#form_utente").hide();
+            $("#form_cliente").hide();
+            $("#form_cambia_password_utente").hide();
+            $("#form_pratica").hide();
+            $("#form_documento").hide();
+            $('.container input[type="text"]').val('');
+            $('.container input[type="password"]').val('');
+        }
+
+        
         function homeTabClick(){
-            emptyForms();
+            resetFormsAndTables();
             $("#home_tab").addClass("is-active");
             $("#home_div").show();
         }
         function utentiTabClick(){
-            emptyForms();
+            resetFormsAndTables();
             $("#utenti_tab").addClass("is-active");
             showUtenti();
             $("#tabella_utenti").show();
-            $("#form_cambia_password_utente").show();   //TODO: da rimuovere
-            $("#form_utente").show();                   //TODO: da rimuovere
+          //  $("#form_cambia_password_utente").show();   //TODO: da rimuovere
+          //  $("#form_utente").show();                   //TODO: da rimuovere
         }
         function clientiTabClick(){
-            emptyForms();
+            resetFormsAndTables();
             $("#clienti_tab").addClass("is-active");
             $("#tabella_clienti").show();
-            $("#form_cliente").show();
-            $("#form_pratica").show();
-            $("#form_documento").show();
         }
         function contattiTabClick(){
-            emptyForms();
+            resetFormsAndTables();
             $("#contatti_tab").addClass("is-active");
             $("#contatti_div").show();
         }
@@ -429,7 +452,7 @@
             return [pad(d.getDate()), pad(d.getMonth()+1), d.getFullYear()].join('/');
         }
         function logoutClick(){
-            emptyForms();
+            resetFormsAndTables();
             $.ajax({
                 url: '/logout',
                 type: "GET",
