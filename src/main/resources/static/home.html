@@ -176,7 +176,7 @@
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Telefono: </b></span><input type="text" id="telefono_utente" placeholder="Telefono"><br />
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>E-mail: </b></span><input type="text" id="email_utente" placeholder="E-mail"><br />
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Data di nascita: </b></span><input type="text" id="natoil_utente" placeholder="Data di nascita"><br />
-    <br /><a class="button is-primary is-medium submit" onclick="">Submit</a>
+    <br /><a class="button is-primary is-medium submit" onclick="submitUtente()">Submit</a>
     <a class="button is-primary is-warning is-medium hidden_form modifica" onclick="modificaClick()">Modifica</a>
 </div>
 
@@ -184,7 +184,7 @@
     <h3 class="subtitle  has-text-centered"><b>Cambia password</b></h3>
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Password: </b></span><input type="password" id="cambiapwd_password_utente" placeholder="Password"><br />
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Conferma password: </b></span><input type="password" id="cambiapwd_confermapassword_utente" placeholder="Conferma password"><br />
-    <br /><a class="button is-primary is-medium submit" onclick="">Submit</a>
+    <br /><a class="button is-primary is-medium submit" onclick="submitPasswordUtente()">Submit</a>
 </div>
 
 <div class="box" id="form_cliente">
@@ -204,7 +204,7 @@
         <span style="display: inline-block;width:400px;padding-top:5px;"><b>Registrato da: </b></span><input type="text" id="registratoda_cliente" placeholder="Registrato da"><br />
         <span style="display: inline-block;width:400px;padding-top:5px;"><b>Data: </b></span><input type="text" id="data_cliente" placeholder="Data"><br />
     </section>
-    <br /><a class="button is-primary is-medium submit" onclick="">Submit</a>
+    <br /><a class="button is-primary is-medium submit" onclick="submitCliente()">Submit</a>
     <a class="button is-primary is-warning is-medium hidden_form  modifica" onclick="modificaClick()">Modifica</a>
 </div>
 
@@ -218,7 +218,7 @@
         <span style="display: inline-block;width:400px;padding-top:5px;"><b>Del cliente: </b></span><input type="text" id="fkcliente_pratica" placeholder="Cliente"><br />
         <span style="display: inline-block;width:400px;padding-top:5px;"><b>Registrato da: </b></span><input type="text" id="registratoda_pratica" placeholder="Registrato da"><br />
     </section>
-    <br /><a class="button is-primary is-medium submit" onclick="">Submit</a>
+    <br /><a class="button is-primary is-medium submit" onclick="submitPratica()">Submit</a>
     <a class="button is-primary is-warning is-medium hidden_form modifica" onclick="modificaClick()">Modifica</a>
 </div>
 
@@ -242,7 +242,7 @@
         <span style="display: inline-block;width:400px;padding-top:5px;"><b>Della pratica: </b></span><input type="text" id="fkpratica_documento" placeholder="Pratica"><br />
         <span style="display: inline-block;width:400px;padding-top:5px;"><b>Registrato da: </b></span><input type="text" id="registratoda_documento" placeholder="Registrato da"><br />
     </section>
-    <br /><a class="button is-primary is-medium submit" onclick="">Submit</a>
+    <br /><a class="button is-primary is-medium submit" onclick="submitDocumento()">Submit</a>
     <a class="button is-primary is-warning is-medium hidden_form modifica" onclick="modificaClick()">Modifica</a>
 </div>
 
@@ -436,6 +436,31 @@
             $('.container input[type="text"]').prop('disabled', false);
         }
 
+
+        function submitUtente(){
+            alert("utente");
+            //raccolta dati e chiamata AJAX
+        }
+
+        function submitPasswordUtente(){
+            alert("password");
+            //raccolta dati e chiamata AJAX
+        }
+
+        function submitCliente(){
+            alert("cliente");
+            //raccolta dati e chiamata AJAX
+        }
+
+        function submitPratica(){
+            alert("pratica");
+            //raccolta dati e chiamata AJAX
+        }
+
+        function submitDocumento(){
+            alert("documento");
+            //raccolta dati e chiamata AJAX
+        }
 
 
         function nuovoUtente(){
