@@ -10,6 +10,7 @@
         input[type='text']{height:35px; width:500px;}
         input[type='password']{height:35px; width:300px;}
         th.finger { cursor: pointer; }
+        label { font: normal 12px courier !important;}
     </style>
 </head>
 
@@ -217,7 +218,7 @@
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Note: </b></span><input type="text" id="note_pratica" placeholder="Note"><br />
     <section class="hidden_form">
         <span style="display: inline-block;width:400px;padding-top:5px;"><b>Data: </b></span><input type="text" id="data_pratica" placeholder="Data pratica"><br />
-        <span style="display: inline-block;width:400px;padding-top:5px;"><b>Del cliente: </b></span><input type="text" id="fkcliente_pratica" placeholder="Cliente"><br />
+        <span style="display: inline-block;width:400px;padding-top:5px;"><b>Del cliente: </b></span><label id="fkcliente_pratica" /><br />
         <span style="display: inline-block;width:400px;padding-top:5px;"><b>Registrato da: </b></span><input type="text" id="registratoda_pratica" placeholder="Registrato da"><br />
     </section>
     <br /><a class="button is-primary is-medium submit" onclick="submitPratica()">Submit</a>
@@ -227,7 +228,7 @@
 <div class="box" id="form_documento">
     <h3 class="subtitle has-text-centered"><b>Documento</b></h3>
     <section class="hidden_form">
-        <span style="display: inline-block;width:400px;padding-top:5px;"><b>ID Documento: </b></span><input type="text" id="iddocumento_documento" placeholder="Id documento"><br />
+        <span style="display: inline-block;width:400px;padding-top:5px;"><b>ID Documento: </b></span><label id="iddocumento_documento" /><br />
     </section>
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Descrizione: </b></span><input type="text" id="descrizione_documento" placeholder="Descrizione"><br />
     <span style="display: inline-block;width:400px;padding-top:5px;"><a class="button is-info is-outlined" onclick="">Carica</a></span><input type="text" enabled="disabled" id="percorsofile_documento" value="/users/files/mydocument.pdf"><br />
@@ -241,7 +242,7 @@
     </select><br />
     <section class="hidden_form">
         <span style="display: inline-block;width:400px;padding-top:5px;"><b>Data: </b></span><input type="text" id="data_documento" placeholder="Data documento"><br />
-        <span style="display: inline-block;width:400px;padding-top:5px;"><b>Della pratica: </b></span><input type="text" id="fkpratica_documento" placeholder="Pratica"><br />
+        <span style="display: inline-block;width:400px;padding-top:5px;"><b>Della pratica: </b></span><label id="fkpratica_documento"/><br />
         <span style="display: inline-block;width:400px;padding-top:5px;"><b>Registrato da: </b></span><input type="text" id="registratoda_documento" placeholder="Registrato da"><br />
     </section>
     <br /><a class="button is-primary is-medium submit" onclick="submitDocumento()">Submit</a>
@@ -438,7 +439,7 @@
             $("#descrizione_pratica").val(descrizione);
             $("#note_pratica").val(note);
             $("#data_pratica").val(convertDate(data));
-            $("#fkcliente_pratica").val(fkCliente);
+            $("#fkcliente_pratica").text(fkCliente);
             $("#registratoda_pratica").val(registratoDa);
         }
 
@@ -449,12 +450,12 @@
             $('.container input[type="text"]').prop('disabled', true);
             $("#form_documento").show();
 
-            $("#iddocumento_documento").val(idDocumento);
+            $("#iddocumento_documento").text(idDocumento);
             $("#descrizione_documento").val(descrizione);
             $("#note_documento").val(note);
             $("#percorsofile_documento").val(percorsoFile);
             $("#stepPraticaDocumentoSelect").val(stepPratica);
-            $("#fkpratica_documento").val(fkPratica);
+            $("#fkpratica_documento").text(fkPratica);
             $("#registratoda_documento").val(registratoDa);
             $("#data_documento").val(convertDate(data));
         }
@@ -591,7 +592,7 @@
                  idPratica:         $("#idpratica_pratica").val(),
                  note:              $("#note_pratica").val(),
                  descrizione:       $("#descrizione_pratica").val(),
-                 fkCliente:         $("#fkcliente_pratica").val()
+                 fkCliente:         $("#fkcliente_pratica").text()
                },
                success: function (data, status, xhr) {
                   console.log(data);
@@ -612,12 +613,12 @@
                url: '/update/documento',
                type: "POST",
                data: {
-                 idDocumento:       $("#iddocumento_documento").val(),
+                 idDocumento:       $("#iddocumento_documento").text(),
                  descrizione:       $("#descrizione_documento").val(),
                  percorsoFile:      $("#percorsofile_documento").val(),
                  note:              $("#note_documento").val(),
                  stepPratica:       $("#stepPraticaDocumentoSelect").val(),
-                 fkPratica:         $("#fkpratica_documento").val(),
+                 fkPratica:         $("#fkpratica_documento").text(),
                },
                success: function (data, status, xhr) {
                   console.log(data);
@@ -646,14 +647,14 @@
             //var fkCliente = fk;
             emptyForms();
             $("#form_pratica").show();
-            $("#fkcliente_pratica").val(fkcliente);
+            $("#fkcliente_pratica").text(fkcliente);
             console.log("FKCLIENTE: " + fkcliente);
         }
         function nuovoDocumento(){
             //var fkPratica = fk;
             emptyForms();
             $("#form_documento").show();
-            $("#fkpratica_documento").val(fkpratica);
+            $("#fkpratica_documento").text(fkpratica);
             console.log("FKPRATICA: " + fkpratica);
         }
 
@@ -677,6 +678,7 @@
             $("#cercaClientiInput").val('');
             $('.container input[type="text"]').val('');
             $('.container input[type="password"]').val('');
+            $('.container label').text('');
 
             $(".hidden_form").hide();
             $('.container input[type="text"]').prop('disabled', false);
@@ -695,6 +697,8 @@
             $("#form_documento").hide();
             $('.container input[type="text"]').val('');
             $('.container input[type="password"]').val('');
+            $('.container label').text('');
+
             $('.container input[type="text"]').prop('disabled', false);
 
             $(".hidden_form").hide();
