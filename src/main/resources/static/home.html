@@ -231,7 +231,7 @@
         <span style="display: inline-block;width:400px;padding-top:5px;"><b>ID Documento: </b></span><label id="iddocumento_documento" /><br />
     </section>
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Descrizione: </b></span><input type="text" id="descrizione_documento" placeholder="Descrizione"><br />
-    <span style="display: inline-block;width:400px;padding-top:5px;"><a class="button is-info is-outlined" onclick="">Carica</a></span><input type="text" enabled="disabled" id="percorsofile_documento" value="/users/files/mydocument.pdf"><br />
+    <span style="display: inline-block;width:400px;padding-top:5px;"><a class="button is-info is-outlined" onclick="">Carica</a></span><label id="percorsofile_documento" ></label><br />
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Note: </b></span><input type="text" id="note_documento" placeholder="Note"><br />
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Step pratica: </b></span>
     <select id="stepPraticaDocumentoSelect" style="height:35px;">
@@ -453,7 +453,7 @@
             $("#iddocumento_documento").text(idDocumento);
             $("#descrizione_documento").val(descrizione);
             $("#note_documento").val(note);
-            $("#percorsofile_documento").val(percorsoFile);
+            $("#percorsofile_documento").text(percorsoFile);
             $("#stepPraticaDocumentoSelect").val(stepPratica);
             $("#fkpratica_documento").text(fkPratica);
             $("#registratoda_documento").val(registratoDa);
@@ -615,7 +615,7 @@
                data: {
                  idDocumento:       $("#iddocumento_documento").text(),
                  descrizione:       $("#descrizione_documento").val(),
-                 percorsoFile:      $("#percorsofile_documento").val(),
+                 percorsoFile:      $("#percorsofile_documento").text(),
                  note:              $("#note_documento").val(),
                  stepPratica:       $("#stepPraticaDocumentoSelect").val(),
                  fkPratica:         $("#fkpratica_documento").text(),
