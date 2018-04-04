@@ -86,9 +86,11 @@ public class SecurityImpl extends WebSecurityConfigurerAdapter implements Authen
         auth.authenticationProvider(this); //this because it is either a WebSecurityAdapter than an AuthenticationProvider
     }
 
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
+        http.csrf().disable();   //con Spring Security bisognerebbe inserire il cookie csrf nelle richieste POST con Ajax, altrimenti da 403 Forbidden
         http
                 .authorizeRequests()
                 .anyRequest().authenticated()

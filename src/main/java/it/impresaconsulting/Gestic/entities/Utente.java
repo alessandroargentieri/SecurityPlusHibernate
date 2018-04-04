@@ -1,16 +1,20 @@
 package it.impresaconsulting.Gestic.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import it.impresaconsulting.Gestic.utilities.EncryptionUtils;
+import it.impresaconsulting.Gestic.utilities.SecurityImpl;
+import lombok.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Past;
 import java.util.Date;
 
 @Entity @Table(name="utenti")
-@AllArgsConstructor @NoArgsConstructor @Data
+@NoArgsConstructor @Data
 public class Utente {
+
+    @Autowired @Transient EncryptionUtils encryptionUtils;
 
     @Id @Column(name="codicefiscale") @NotBlank
     private String codiceFiscale;
@@ -22,17 +26,31 @@ public class Utente {
     private String telefono;
     @Column(name="email")
     private String email;
-    @Column(name="natoil")
+    @Column(name="natoil") @Past
     private Date natoIl;
     @Column(name="ruolo")
     private String ruolo; //USER_ROLE  / ADMIN_ROLE
-    @Column(name="password")
+    @Column(name="password") @NotBlank
     private String password;
+
+    public Utente(@NotBlank String codiceFiscale, @NotBlank String nominativo, String indirizzo, String telefono, String email, @Past Date natoIl, String ruolo, @NotBlank String password) {
+        this.codiceFiscale = codiceFiscale;
+        this.nominativo = nominativo;
+        this.indirizzo = indirizzo;
+        this.telefono = telefono;
+        this.email = email;
+        this.natoIl = natoIl;
+        this.ruolo = ruolo;
+        this.password = password;
+    }
 
     @PrePersist
     private void setRole(){
         if(ruolo == null){
-            ruolo="USER_ROLE";
+           ruolo = SecurityImpl.ROLE_USER;
+        }
+        if(password == null){
+           encryptionUtils.encrypt("1234");
         }
     }
 }

@@ -9,6 +9,7 @@ import it.impresaconsulting.Gestic.entities.Documento;
 import it.impresaconsulting.Gestic.entities.Pratica;
 import it.impresaconsulting.Gestic.entities.Utente;
 import it.impresaconsulting.Gestic.utilities.EncryptionUtils;
+import it.impresaconsulting.Gestic.utilities.SecurityImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -55,6 +56,15 @@ public class GesticController {
         return String.format(LOGGATO, token.getName());
     }
 
+    @RequestMapping("/user/or/admin")
+    public String isAdminOrIsUser(UsernamePasswordAuthenticationToken token){
+        if(token.getAuthorities().contains(new SimpleGrantedAuthority(ROLE_ADMIN))){
+            return SecurityImpl.ROLE_ADMIN;
+        }else{
+            return SecurityImpl.ROLE_USER;
+        }
+    }
+
     //************************************************* UTENTE
 
     @RequestMapping("get/utente")
@@ -73,13 +83,18 @@ public class GesticController {
     }
 
     @RequestMapping("/password")
-    public String cambiaPassword(UsernamePasswordAuthenticationToken token, @RequestAttribute(name = "nuovapassword") String nuovaPassword){
-        Optional<Utente> utenteOptional = utenteDao.updatePassword(token.getName(), nuovaPassword);
+    public String cambiaPassword(UsernamePasswordAuthenticationToken token, @RequestParam(name = "vecchiapassword") String vecchiaPassword, @RequestParam(name = "nuovapassword") String nuovaPassword) throws RuntimeException{
+        Optional<Utente> utenteOptional = utenteDao.findById(token.getName());
         if(utenteOptional.isPresent()){
-            return PASSWORD_CAMBIATA;
-        } else {
-            return PASSWORD_NON_CAMBIATA;
+            Utente utente = utenteOptional.get();
+            if(vecchiaPassword.equals(encryptionUtils.decrypt(utente.getPassword()))){
+                utenteDao.deleteById(token.getName());
+                utente.setPassword(encryptionUtils.encrypt(nuovaPassword));
+                utenteDao.save(utente);
+                return PASSWORD_CAMBIATA;
+            }
         }
+        throw new RuntimeException(PASSWORD_NON_CAMBIATA);
     }
 
     @RequestMapping("/save/utente")
@@ -103,10 +118,13 @@ public class GesticController {
         }
     }
 
+    //@PreAuthorize("hasRole('ROLE_ADMIN')")
     @RequestMapping("/update/utente")
     public String updateUtente(UsernamePasswordAuthenticationToken token, @Valid Utente utente){
         if(token.getAuthorities().contains(new SimpleGrantedAuthority(ROLE_ADMIN))){
-            utenteDao.deleteById(utente.getCodiceFiscale());
+            if(utenteDao.findById(utente.getCodiceFiscale()).isPresent()){
+                utenteDao.deleteById(utente.getCodiceFiscale());
+            }
             utente.setPassword(encryptionUtils.encrypt(utente.getPassword()));
             utenteDao.save(utente);
             return UTENTE_AGGIORNATO;

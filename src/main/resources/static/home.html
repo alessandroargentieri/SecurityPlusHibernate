@@ -72,7 +72,7 @@
         </tbody>
     </table>
     <br /><br />
-    <br /><a class="button is-primary is-medium" href="#form_utente" onclick="nuovoUtente()">Nuovo Utente</a>
+    <br /><a class="button is-primary is-medium only_admin" href="#form_utente" onclick="nuovoUtente()">Nuovo Utente</a>
           <a class="button is-warning is-medium" href="#form_cambia_password_utente" onclick="cambioPassword()">Cambio Password</a>
 </div>
 
@@ -177,12 +177,14 @@
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>E-mail: </b></span><input type="text" id="email_utente" placeholder="E-mail"><br />
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Data di nascita: </b></span><input type="text" id="natoil_utente" placeholder="Data di nascita"><br />
     <br /><a class="button is-primary is-medium submit" onclick="submitUtente()">Submit</a>
-    <a class="button is-primary is-warning is-medium hidden_form modifica" onclick="modificaClick()">Modifica</a>
+    <a class="button is-primary is-warning is-medium hidden_form only_admin modifica" onclick="modificaClick()">Modifica</a>
 </div>
 
 <div class="box" id="form_cambia_password_utente">
     <h3 class="subtitle  has-text-centered"><b>Cambia password</b></h3>
-    <span style="display: inline-block;width:400px;padding-top:5px;"><b>Password: </b></span><input type="password" id="cambiapwd_password_utente" placeholder="Password"><br />
+    <span style="display: inline-block;width:400px;padding-top:5px;"><b>Vecchia password: </b></span><input type="password" id="vecchia_password_utente" placeholder="Vecchia password"><br />
+
+    <span style="display: inline-block;width:400px;padding-top:15px;"><b>Password: </b></span><input type="password" id="cambiapwd_password_utente" placeholder="Password"><br />
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Conferma password: </b></span><input type="password" id="cambiapwd_confermapassword_utente" placeholder="Conferma password"><br />
     <br /><a class="button is-primary is-medium submit" onclick="submitPasswordUtente()">Submit</a>
 </div>
@@ -249,7 +251,25 @@
 <script>
         $(document).ready(function(){
           homeTabClick();
+          userOrAdmin();
         });
+
+        function userOrAdmin(){
+            $.ajax({
+            url: '/user/or/admin',
+            type: "GET",
+            success: function (data, status, xhr) {
+                console.log(data);
+                if(data == 'ROLE_USER'){
+                    $(".only_admin").remove();
+                }
+            },
+            error: function(result) {
+                alert("Errore: " + result.responseJSON.error);
+                console.log(result);
+            }
+           });
+        }
 
         function showUtenti(){
            $.ajax({
@@ -263,7 +283,7 @@
                 });
             },
             error: function(result) {
-                alert("Error!");
+                alert("Errore: " + result.responseJSON.error);
                 console.log(result);
             }
            });
@@ -271,12 +291,14 @@
 
 
         function cercaClienti(){
-            emptyForms();
-            $("#tabella_pratiche").hide();
-            $("#tabella_documenti").hide();
+
             var parametroRicerca = $("#cercaClientiInput").val();
             var tipoRicerca = $("#cercaClientiSelect").val();
             var urlComposto = '/get/cliente';
+
+            emptyForms();
+            $("#tabella_pratiche").hide();
+            $("#tabella_documenti").hide();
 
             if(tipoRicerca == 'nominativo'){
                 urlComposto = '/get/cliente/nominativo/' + parametroRicerca;
@@ -306,7 +328,7 @@
                 });
             },
             error: function(result) {
-                alert("Errore: " + result);
+                alert("Errore: " + result.responseJSON.error);
                 console.log(result);
             }
            });
@@ -328,7 +350,7 @@
                 });
             },
             error: function(result) {
-                alert("Errore: " + result);
+                alert("Errore: " + result.responseJSON.error);
                 console.log(result);
             }
            });
@@ -350,7 +372,7 @@
                 });
             },
             error: function(result) {
-                alert("Errore: " + result);
+                alert("Errore: " + result.responseJSON.error);
                 console.log(result);
             }
            });
@@ -438,13 +460,75 @@
 
 
         function submitUtente(){
-            alert("utente");
             //raccolta dati e chiamata AJAX
+
+            console.log("------------------------");
+            console.log($("#codicefiscale_utente").val());
+            console.log($("#nominativo_utente").val());
+            console.log($("#indirizzo_utente").val());
+            console.log($("#telefono_utente").val());
+            console.log($("#email_utente").val());
+            console.log($("#natoil_utente").val());
+            console.log('1234');
+            console.log("------------------------");
+
+
+            $.ajax({                                                                        /* Ajax call to AccountMicroservice */
+               url: '/update/utente',
+               type: "POST",
+               data: {
+                 codiceFiscale: $("#codicefiscale_utente").val(),
+                 nominativo:    $("#nominativo_utente").val(),
+                 indirizzo:     $("#indirizzo_utente").val(),
+                 telefono:      $("#telefono_utente").val(),
+                 email:         $("#email_utente").val(),
+                 natoIl:        $("#natoil_utente").val(),
+                 password:      '1234'
+               },
+               success: function (data, status, xhr) {
+                  console.log(data);
+                  emptyForms();
+                  $("#form_utente").hide();
+                  showUtenti();
+               },
+               error: function(result) {
+                  alert("Errore: " + result.responseJSON.error);
+                  console.log(result);
+               }
+           });
         }
 
         function submitPasswordUtente(){
-            alert("password");
             //raccolta dati e chiamata AJAX
+            var vecchiaPassword = $("#vecchia_password_utente").val();
+            var nuovaPassword = $("#cambiapwd_password_utente").val();
+            var confermaPassword = $("#cambiapwd_confermapassword_utente").val();
+            if(nuovaPassword == confermaPassword){
+                $.ajax({                                                                        /* Ajax call to AccountMicroservice */
+               url: '/password',
+               type: "POST",
+               data: {
+                 vecchiapassword: $("#vecchia_password_utente").val(),
+                 nuovapassword:   $("#cambiapwd_password_utente").val()
+               },
+               success: function (data, status, xhr) {
+                  console.log(data);
+                  showUtenti();
+                  alert("La tua password e' stata modificata con successo.");
+                  $("#vecchia_password_utente").val('');
+                  $("#cambiapwd_password_utente").val('');
+                  $("#cambiapwd_confermapassword_utente").val('');
+                  $("#form_cambia_password_utente").hide();
+               },
+               error: function(result) {
+                  alert("Errore: " + result.responseJSON.message);
+                  console.log(result);
+               }
+           });
+            } else {
+                alert("Le due password non coincidono!");
+            }
+
         }
 
         function submitCliente(){
@@ -466,6 +550,7 @@
         function nuovoUtente(){
             emptyForms();
             $("#form_utente").show();
+            alert("ATTENZIONE: quando un nuovo utente del sistema e' generato, viene impostata la password di base 1234");
         }
         function nuovoCliente(){
             emptyForms();
@@ -559,7 +644,7 @@
                   location.reload();
                 },
                 error: function(result) {
-                  alert("Errore: " + result);
+                  alert("Errore: " + result.responseJSON.error);
                   console.log(result);
                 }
            });
