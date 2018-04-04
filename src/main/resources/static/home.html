@@ -492,7 +492,7 @@
                   showUtenti();
                },
                error: function(result) {
-                  alert("Errore: " + result.responseJSON.error);
+                  alert("Errore: " + result.responseJSON.message);
                   console.log(result);
                }
            });
@@ -532,8 +532,37 @@
         }
 
         function submitCliente(){
-            alert("cliente");
+
             //raccolta dati e chiamata AJAX
+
+            $.ajax({                                                                        /* Ajax call to AccountMicroservice */
+               url: '/update/cliente',
+               type: "POST",
+               data: {
+                 idCliente:         $("#idcliente_cliente").val(),
+                 ragioneSociale:    $("#ragionesociale_cliente").val(),
+                 nominativo:        $("#nominativo_cliente").val(),
+                 indirizzo:         $("#indirizzo_cliente").val(),
+                 telefono:          $("#telefono_cliente").val(),
+                 email:             $("#email_cliente").val(),
+                 sito:              $("#sito_cliente").val(),
+                 segnalatore:       $("#segnalatore_cliente").val(),
+                 attivita:          $("#attivita_cliente").val(),
+                 interessatoA:      $("#interessatoa_cliente").val(),
+                 note:              $("#note_cliente").val()
+               },
+               success: function (data, status, xhr) {
+                  console.log(data);
+                  alert("Aggiornamento contatti avvenuto con successo!");
+                  resetFormsAndTables();
+                  clientiTabClick();
+               },
+               error: function(result) {
+                  alert("Errore: " + result.responseJSON.message);
+                  console.log(result);
+               }
+           });
+
         }
 
         function submitPratica(){
