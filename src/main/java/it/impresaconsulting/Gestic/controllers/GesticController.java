@@ -391,14 +391,14 @@ public class GesticController {
 
 
     @PostMapping("/api/upload")
-    public ResponseEntity<?> uploadFileMulti(@RequestParam("files") MultipartFile[] uploadfiles) {
+    public ResponseEntity<?> uploadFileMulti(@RequestParam("cliente") String cliente, @RequestParam("pratica") String pratica, @RequestParam("step") String step, @RequestParam("documento") String documento, @RequestParam("files") MultipartFile[] uploadfiles) {
         String uploadedFileName = Arrays.stream(uploadfiles).map(x -> x.getOriginalFilename())
                 .filter(x -> !StringUtils.isEmpty(x)).collect(Collectors.joining(" , "));
         if (StringUtils.isEmpty(uploadedFileName)) {
             return new ResponseEntity(SELEZIONA_UN_FILE, HttpStatus.OK);
         }
         try {
-            saveUploadedFiles(Arrays.asList(uploadfiles));
+            saveUploadedFiles(Arrays.asList(uploadfiles), cliente, pratica, step, documento);
         } catch (IOException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -406,21 +406,32 @@ public class GesticController {
     }
 
     //save file
-    private void saveUploadedFiles(List<MultipartFile> files) throws IOException {
+    private void saveUploadedFiles(List<MultipartFile> files, String cliente, String pratica, String step, String documento) throws IOException {
         for (MultipartFile file : files) {
             if (file.isEmpty()) {
                 continue; //next pls
             }
             byte[] bytes = file.getBytes();
-
-
-            String dinamicFolder = UPLOADED_FOLDER + "/paleozoico/";
+            String dinamicFolder = UPLOADED_FOLDER + cliente + "/";
             File directory = new File(String.valueOf(dinamicFolder));
             if(!directory.exists()) {
                 directory.mkdir();
             }
-
-
+            dinamicFolder = dinamicFolder + pratica + "/";
+            directory = new File(String.valueOf(dinamicFolder));
+            if(!directory.exists()) {
+                directory.mkdir();
+            }
+            dinamicFolder = dinamicFolder + step + "/";
+            directory = new File(String.valueOf(dinamicFolder));
+            if(!directory.exists()) {
+                directory.mkdir();
+            }
+            dinamicFolder = dinamicFolder + documento + "/";
+            directory = new File(String.valueOf(dinamicFolder));
+            if(!directory.exists()) {
+                directory.mkdir();
+            }
 
             Path path = Paths.get(dinamicFolder + file.getOriginalFilename());
             Files.write(path, bytes);

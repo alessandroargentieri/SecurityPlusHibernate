@@ -255,8 +255,11 @@
     <h1>Spring Boot - Multiple file upload example - AJAX</h1>
 
     <form method="POST" enctype="multipart/form-data" id="fileUploadForm">
-        <input type="text" name="extraField"/><br/><br/>
-        <input type="file" name="files"/><br/><br/>
+        <input type="text" name="cliente"/><br/>
+        <input type="text" name="pratica"/><br/>
+        <input type="text" name="step"/><br/>
+        <input type="text" name="documento"/><br/>
+        <input type="file" name="files"/><br/>
         <input type="submit" value="Submit" id="btnSubmit"/>
     </form>
 
@@ -286,9 +289,16 @@ $("#btnSubmit").click(function (event) {
 
 
 function fire_ajax_submit() {
+
     var form = $('#fileUploadForm')[0];
     var data = new FormData(form);
+
+    data.append("idCliente", "Maurizio");
+    data.append("idPratica", "Pratica11");
+    data.append("stepPratica", "Presentazione");
+
     $("#btnSubmit").prop("disabled", true);
+
     $.ajax({
         type: "POST",
         enctype: 'multipart/form-data',
@@ -299,6 +309,7 @@ function fire_ajax_submit() {
         cache: false,
         timeout: 600000,
         success: function (data) {
+
             $("#result").text(data);
             console.log("SUCCESS : ", data);
             $("#btnSubmit").prop("disabled", false);
