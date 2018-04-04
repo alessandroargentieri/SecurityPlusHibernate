@@ -13,4 +13,6 @@ public interface DocumentoDao extends JpaRepository<Documento, String> {
     void deleteDocumentiPerPratica(@Param("fkpratica") String fkpratica);
 
     List<Documento> findByFkPratica(String fkPratica);
+    List<Documento> findByRegistratoDa(String registratoDa);
+
 }

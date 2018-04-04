@@ -12,4 +12,6 @@ public interface PraticaDao extends JpaRepository<Pratica, String> {
 
     @Query(value="DELETE FROM pratiche WHERE fkcliente =:fkcliente", nativeQuery = true)
     void deletePraticaPerCliente(@Param("fkcliente") String fkcliente);
+
+    List<Pratica> findByRegistratoDa(String registratoDa);
 }

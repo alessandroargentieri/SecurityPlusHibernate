@@ -177,7 +177,7 @@
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>E-mail: </b></span><input type="text" id="email_utente" placeholder="E-mail"><br />
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Data di nascita: </b></span><input type="text" id="natoil_utente" placeholder="Data di nascita"><br />
     <br /><a class="button is-primary is-medium submit" onclick="submitUtente()">Submit</a>
-    <a class="button is-primary is-warning is-medium hidden_form only_admin modifica" onclick="modificaClick()">Modifica</a>
+    <a class="button is-primary is-warning is-medium hidden_form only_admin modifica" onclick="modificaClick('utente')">Modifica</a>
 </div>
 
 <div class="box" id="form_cambia_password_utente">
@@ -207,7 +207,7 @@
         <span style="display: inline-block;width:400px;padding-top:5px;"><b>Data: </b></span><input type="text" id="data_cliente" placeholder="Data"><br />
     </section>
     <br /><a class="button is-primary is-medium submit" onclick="submitCliente()">Submit</a>
-    <a class="button is-primary is-warning is-medium hidden_form  modifica" onclick="modificaClick()">Modifica</a>
+    <a class="button is-primary is-warning is-medium hidden_form  modifica" onclick="modificaClick('cliente')">Modifica</a>
 </div>
 
 <div class="box" id="form_pratica">
@@ -221,7 +221,7 @@
         <span style="display: inline-block;width:400px;padding-top:5px;"><b>Registrato da: </b></span><input type="text" id="registratoda_pratica" placeholder="Registrato da"><br />
     </section>
     <br /><a class="button is-primary is-medium submit" onclick="submitPratica()">Submit</a>
-    <a class="button is-primary is-warning is-medium hidden_form modifica" onclick="modificaClick()">Modifica</a>
+    <a class="button is-primary is-warning is-medium hidden_form modifica" onclick="modificaClick('pratica')">Modifica</a>
 </div>
 
 <div class="box" id="form_documento">
@@ -245,10 +245,15 @@
         <span style="display: inline-block;width:400px;padding-top:5px;"><b>Registrato da: </b></span><input type="text" id="registratoda_documento" placeholder="Registrato da"><br />
     </section>
     <br /><a class="button is-primary is-medium submit" onclick="submitDocumento()">Submit</a>
-    <a class="button is-primary is-warning is-medium hidden_form modifica" onclick="modificaClick()">Modifica</a>
+    <a class="button is-primary is-warning is-medium hidden_form modifica" onclick="modificaClick('documento')">Modifica</a>
 </div>
 
 <script>
+
+        var updatingId='';
+        var fkcliente='';
+        var fkpratica='';
+
         $(document).ready(function(){
           homeTabClick();
           userOrAdmin();
@@ -339,6 +344,7 @@
            $("#istanza_cliente_" + idCliente).removeClass("generic_cliente");
            $(".generic_cliente").empty();
            $("#tabella_pratiche").show();
+           fkcliente=idCliente;
            $.ajax({
             url: '/get/pratica/cliente/' + idCliente,
             type: "GET",
@@ -361,6 +367,7 @@
            $("#istanza_pratica_" + i).removeClass("generic_pratica");
            $(".generic_pratica").empty();
            $("#tabella_documenti").show();
+           fkpratica=idPratica;
            $.ajax({
             url: '/get/documento/pratica/' + idPratica,
             type: "GET",
@@ -452,10 +459,17 @@
             $("#data_documento").val(convertDate(data));
         }
 
-        function modificaClick(){
+        function modificaClick(caller){
             $(".submit").show();
             $(".modifica").hide();
             $('.container input[type="text"]').prop('disabled', false);
+            if(caller == 'utente'){
+                updatingId = $("#codicefiscale_utente").val();
+            }else if(caller == 'cliente'){
+                updatingId = $("#idcliente_cliente").val();
+            }else if(caller == 'pratica'){
+                updatingId = $("#idpratica_pratica").val();
+            }
         }
 
 
@@ -477,6 +491,7 @@
                url: '/update/utente',
                type: "POST",
                data: {
+                 oldId:         updatingId,
                  codiceFiscale: $("#codicefiscale_utente").val(),
                  nominativo:    $("#nominativo_utente").val(),
                  indirizzo:     $("#indirizzo_utente").val(),
@@ -539,6 +554,7 @@
                url: '/update/cliente',
                type: "POST",
                data: {
+                 oldId:             updatingId,
                  idCliente:         $("#idcliente_cliente").val(),
                  ragioneSociale:    $("#ragionesociale_cliente").val(),
                  nominativo:        $("#nominativo_cliente").val(),
@@ -566,13 +582,54 @@
         }
 
         function submitPratica(){
-            alert("pratica");
             //raccolta dati e chiamata AJAX
+            $.ajax({
+               url: '/update/pratica',
+               type: "POST",
+               data: {
+                 oldId:             updatingId,
+                 idPratica:         $("#idpratica_pratica").val(),
+                 note:              $("#note_pratica").val(),
+                 descrizione:       $("#descrizione_pratica").val(),
+                 fkCliente:         $("#fkcliente_pratica").val()
+               },
+               success: function (data, status, xhr) {
+                  console.log(data);
+                  alert("Aggiornamento pratiche avvenuto con successo!");
+                  resetFormsAndTables();
+                  clientiTabClick();
+               },
+               error: function(result) {
+                  alert("Errore: " + result.responseJSON.message);
+                  console.log(result);
+               }
+            });
         }
 
         function submitDocumento(){
-            alert("documento");
             //raccolta dati e chiamata AJAX
+            $.ajax({
+               url: '/update/documento',
+               type: "POST",
+               data: {
+                 idDocumento:       $("#iddocumento_documento").val(),
+                 descrizione:       $("#descrizione_documento").val(),
+                 percorsoFile:      $("#percorsofile_documento").val(),
+                 note:              $("#note_documento").val(),
+                 stepPratica:       $("#stepPraticaDocumentoSelect").val(),
+                 fkPratica:         $("#fkpratica_documento").val(),
+               },
+               success: function (data, status, xhr) {
+                  console.log(data);
+                  alert("Aggiornamento pratiche avvenuto con successo!");
+                  resetFormsAndTables();
+                  clientiTabClick();
+               },
+               error: function(result) {
+                  alert("Errore: " + result.responseJSON.message);
+                  console.log(result);
+               }
+            });
         }
 
 
@@ -586,12 +643,18 @@
             $("#form_cliente").show();
         }
         function nuovaPratica(){
+            //var fkCliente = fk;
             emptyForms();
             $("#form_pratica").show();
+            $("#fkcliente_pratica").val(fkcliente);
+            console.log("FKCLIENTE: " + fkcliente);
         }
         function nuovoDocumento(){
+            //var fkPratica = fk;
             emptyForms();
             $("#form_documento").show();
+            $("#fkpratica_documento").val(fkpratica);
+            console.log("FKPRATICA: " + fkpratica);
         }
 
         function resetFormsAndTables(){
@@ -618,6 +681,9 @@
             $(".hidden_form").hide();
             $('.container input[type="text"]').prop('disabled', false);
             $(".submit").show();
+            updatingId='';
+            fkcliente='';
+            fkpratica='';
 
         }
         
@@ -633,6 +699,8 @@
 
             $(".hidden_form").hide();
             $(".submit").show();
+            updatingId='';
+            //fk='';
 
         }
 

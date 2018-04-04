@@ -36,6 +36,10 @@ public class GesticController {
     private static final String CLIENTE_ELIMINATO       = "Cliente, pratiche annesse e documenti sono stati eliminati con successo";
     private static final String LOGGATO                 = "Benvenuto/a! Ti sei loggato/a correttamente come %s! <br/>";
     private static final String TEST                    = "<h1>Benvenuti in Gestic</h1><p>Il gestionale di Impresa Consulting s.r.l.</p>";
+    private static final String PRATICA_AGGIORNATA      = "Aggiornamento pratiche avvenuto con successo!";
+    private static final String CLIENTE_AGGIORNATO      = "Aggiornamento contatti avvenuto con successo!";
+    private static final String DOCUMENTO_AGGIORNATO    = "Aggiornamento documentazione avvenuto con successo!";
+
 
     @Autowired UtenteDao       utenteDao;
     @Autowired ClienteDao      clienteDao;
@@ -83,7 +87,7 @@ public class GesticController {
     }
 
     @RequestMapping("/password")
-    public String cambiaPassword(UsernamePasswordAuthenticationToken token, @RequestParam(name = "vecchiapassword") String vecchiaPassword, @RequestParam(name = "nuovapassword") String nuovaPassword) throws RuntimeException{
+    public String cambiaPassword(UsernamePasswordAuthenticationToken token, @RequestParam(name = "vecchiapassword") String vecchiaPassword, @RequestParam(name = "nuovapassword") String nuovaPassword) {
         Optional<Utente> utenteOptional = utenteDao.findById(token.getName());
         if(utenteOptional.isPresent()){
             Utente utente = utenteOptional.get();
@@ -108,8 +112,9 @@ public class GesticController {
         }
     }
 
-    @RequestMapping("/delete/utente")
-    public String deleteUtente(UsernamePasswordAuthenticationToken token, @RequestParam(name="codicefiscale") String codicefiscale){
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @RequestMapping("/delete/utente/{codicefiscale}")
+    public String deleteUtente(UsernamePasswordAuthenticationToken token, @PathVariable(name="codicefiscale") String codicefiscale){
         if(token.getAuthorities().contains(new SimpleGrantedAuthority(ROLE_ADMIN))){
             utenteDao.deleteById(codicefiscale);
             return UTENTE_ELIMINATO;
@@ -120,11 +125,38 @@ public class GesticController {
 
     //@PreAuthorize("hasRole('ROLE_ADMIN')")
     @RequestMapping("/update/utente")
-    public String updateUtente(UsernamePasswordAuthenticationToken token, @Valid Utente utente) throws RuntimeException{
+    public String updateUtente(UsernamePasswordAuthenticationToken token, @RequestParam(name = "oldId") String oldId, @Valid Utente utente) throws RuntimeException{
         if(token.getAuthorities().contains(new SimpleGrantedAuthority(ROLE_ADMIN))){
+
+            if(oldId !=null && !"".equals(oldId) && !utente.getCodiceFiscale().equals(oldId)){
+                //stiamo aggiornando l'utente cambiandogli proprio la primary Key!
+                List<Cliente> clienti = clienteDao.findByRegistratoDa(oldId);
+                for(Cliente c : clienti){
+                    c.setRegistratoDa(utente.getCodiceFiscale());  //setto il nuovo profilo
+                    clienteDao.deleteById(c.getIdCliente());       //elimino il vecchio dal DB
+                    clienteDao.save(c);                            //salvo il nuovo
+                }
+                List<Pratica> pratiche = praticaDao.findByRegistratoDa(oldId);
+                for(Pratica p : pratiche){
+                    p.setRegistratoDa(utente.getCodiceFiscale());  //setto il nuovo profilo
+                    praticaDao.deleteById(p.getIdPratica());       //elimino il vecchio dal DB
+                    praticaDao.save(p);                            //salvo il nuovo
+                }
+                List<Documento> documenti = documentoDao.findByRegistratoDa(oldId);
+                for(Documento d : documenti){
+                    d.setRegistratoDa(utente.getCodiceFiscale());  //setto il nuovo profilo
+                    documentoDao.deleteById(d.getIdDocumento());       //elimino il vecchio dal DB
+                    documentoDao.save(d);                            //salvo il nuovo
+                }
+                if(utenteDao.findById(oldId).isPresent()){
+                    utenteDao.deleteById(oldId);
+                }
+            }
+
             if(utenteDao.findById(utente.getCodiceFiscale()).isPresent()){
                 utenteDao.deleteById(utente.getCodiceFiscale());
             }
+
             utente.setPassword(encryptionUtils.encrypt(utente.getPassword()));
             utenteDao.save(utente);
             return UTENTE_AGGIORNATO;
@@ -180,12 +212,28 @@ public class GesticController {
 
 
     @RequestMapping("/update/cliente")
-    public Cliente updateCliente(UsernamePasswordAuthenticationToken token, @Valid Cliente cliente){
+    public String updateCliente(UsernamePasswordAuthenticationToken token,  @RequestParam(name = "oldId") String oldId, @Valid Cliente cliente){
         cliente.setRegistratoDa(token.getName());
+
+        if(oldId !=null && !"".equals(oldId) && !cliente.getIdCliente().equals(oldId)) {
+            //stiamo aggiornando il cliente cambiandogli proprio la primary Key!
+            List<Pratica> pratiche = praticaDao.findByFkCliente(oldId);
+            for(Pratica p : pratiche){
+                p.setFkCliente(cliente.getIdCliente());
+                praticaDao.deleteById(p.getIdPratica());
+                praticaDao.save(p);
+            }
+            if(clienteDao.findById(oldId).isPresent()){
+                clienteDao.deleteById(oldId);
+            }
+        }
+
         if(clienteDao.findById(cliente.getIdCliente()).isPresent()){
             clienteDao.deleteById(cliente.getIdCliente());
         }
-        return clienteDao.save(cliente);
+
+        clienteDao.save(cliente);
+        return CLIENTE_AGGIORNATO;
     }
 
     @RequestMapping("/save/cliente")
@@ -194,8 +242,9 @@ public class GesticController {
        return clienteDao.save(cliente);
     }
 
-    @RequestMapping("delete/cliente")
-    public String deleteCliente(UsernamePasswordAuthenticationToken token, @PathVariable(name = "id") String idcliente){
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @RequestMapping("delete/cliente/{idcliente}")
+    public String deleteCliente(UsernamePasswordAuthenticationToken token, @PathVariable(name = "idcliente") String idcliente){
         if(token.getAuthorities().contains(new SimpleGrantedAuthority(ROLE_ADMIN))){
             clienteDao.deleteById(idcliente);
             List<Pratica> pratiche = praticaDao.findByFkCliente(idcliente);
@@ -234,12 +283,27 @@ public class GesticController {
     }
 
     @RequestMapping("/update/pratica")
-    public Pratica updatePratica(UsernamePasswordAuthenticationToken token, @Valid Pratica pratica){
+    public String updatePratica(UsernamePasswordAuthenticationToken token,  @RequestParam(name = "oldId") String oldId, @Valid Pratica pratica){
         pratica.setRegistratoDa(token.getName());
+
+        if(oldId !=null && !"".equals(oldId) && !pratica.getIdPratica().equals(oldId)) {
+            //stiamo aggiornando il cliente cambiandogli proprio la primary Key!
+            List<Documento> documenti = documentoDao.findByFkPratica(oldId);
+            for(Documento d : documenti){
+                d.setFkPratica(pratica.getIdPratica());
+                documentoDao.deleteById(d.getIdDocumento());
+                documentoDao.save(d);
+            }
+            if(praticaDao.findById(oldId).isPresent()){
+                praticaDao.deleteById(oldId);
+            }
+        }
+
         if(praticaDao.findById(pratica.getIdPratica()).isPresent()){
             praticaDao.deleteById(pratica.getIdPratica());
         }
-        return praticaDao.save(pratica);
+        praticaDao.save(pratica);
+        return PRATICA_AGGIORNATA;
     }
 
     @RequestMapping("/save/pratica")
@@ -248,8 +312,9 @@ public class GesticController {
        return praticaDao.save(pratica);
     }
 
-    @RequestMapping("/delete/pratica")
-    public String deletePratica(UsernamePasswordAuthenticationToken token, @RequestParam(name="idpratica") String idpratica){
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @RequestMapping("/delete/pratica/{idpratica}")
+    public String deletePratica(UsernamePasswordAuthenticationToken token, @PathVariable(name="idpratica") String idpratica){
         if(token.getAuthorities().contains(new SimpleGrantedAuthority(ROLE_ADMIN))){
             praticaDao.deleteById(idpratica);
             documentoDao.deleteDocumentiPerPratica(idpratica);
@@ -291,17 +356,18 @@ public class GesticController {
     }
 
     @RequestMapping("/update/documento")
-    public Documento updateDocumento(UsernamePasswordAuthenticationToken token, @Valid Documento documento){
+    public String updateDocumento(UsernamePasswordAuthenticationToken token, @Valid Documento documento){
         documento.setRegistratoDa(token.getName());
         if(documentoDao.findById(documento.getIdDocumento()).isPresent()){
             documentoDao.deleteById(documento.getIdDocumento());
         }
-        return documentoDao.save(documento);
+        documentoDao.save(documento);
+        return DOCUMENTO_AGGIORNATO;
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @RequestMapping("/delete/documento")
-    public void deleteDocumento(@RequestParam(name="iddocumento") String id){
+    @RequestMapping("/delete/documento/{iddocumento}")
+    public void deleteDocumento(@PathVariable(name="iddocumento") String id){
         documentoDao.deleteById(id);
     }
 
