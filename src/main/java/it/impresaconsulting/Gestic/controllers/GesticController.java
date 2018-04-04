@@ -11,14 +11,26 @@ import it.impresaconsulting.Gestic.entities.Utente;
 import it.impresaconsulting.Gestic.utilities.EncryptionUtils;
 import it.impresaconsulting.Gestic.utilities.SecurityImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static it.impresaconsulting.Gestic.utilities.SecurityImpl.ROLE_ADMIN;
 
@@ -39,7 +51,10 @@ public class GesticController {
     private static final String PRATICA_AGGIORNATA      = "Aggiornamento pratiche avvenuto con successo!";
     private static final String CLIENTE_AGGIORNATO      = "Aggiornamento contatti avvenuto con successo!";
     private static final String DOCUMENTO_AGGIORNATO    = "Aggiornamento documentazione avvenuto con successo!";
+    private static final String SELEZIONA_UN_FILE       = "Seleziona il file da allegare";
+    private static final String CARICAMENTO_AVVENUTO    = "Documento caricato: ";
 
+    private static String UPLOADED_FOLDER = "/Users/alessandroargentieri/Desktop/logback/";//"./documentazione";
 
     @Autowired UtenteDao       utenteDao;
     @Autowired ClienteDao      clienteDao;
@@ -370,5 +385,52 @@ public class GesticController {
     public void deleteDocumento(@PathVariable(name="iddocumento") String id){
         documentoDao.deleteById(id);
     }
+
+
+    //**************** UPLOAD FILE ********************************************
+
+
+    @PostMapping("/api/upload")
+    public ResponseEntity<?> uploadFileMulti(@RequestParam("files") MultipartFile[] uploadfiles) {
+        String uploadedFileName = Arrays.stream(uploadfiles).map(x -> x.getOriginalFilename())
+                .filter(x -> !StringUtils.isEmpty(x)).collect(Collectors.joining(" , "));
+        if (StringUtils.isEmpty(uploadedFileName)) {
+            return new ResponseEntity(SELEZIONA_UN_FILE, HttpStatus.OK);
+        }
+        try {
+            saveUploadedFiles(Arrays.asList(uploadfiles));
+        } catch (IOException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity(CARICAMENTO_AVVENUTO + uploadedFileName, HttpStatus.OK);
+    }
+
+    //save file
+    private void saveUploadedFiles(List<MultipartFile> files) throws IOException {
+        for (MultipartFile file : files) {
+            if (file.isEmpty()) {
+                continue; //next pls
+            }
+            byte[] bytes = file.getBytes();
+
+
+            String dinamicFolder = UPLOADED_FOLDER + "/paleozoico/";
+            File directory = new File(String.valueOf(dinamicFolder));
+            if(!directory.exists()) {
+                directory.mkdir();
+            }
+
+
+
+            Path path = Paths.get(dinamicFolder + file.getOriginalFilename());
+            Files.write(path, bytes);
+        }
+    }
+
+
+
+
+
+
 
 }
