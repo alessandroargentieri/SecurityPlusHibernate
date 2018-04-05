@@ -248,7 +248,10 @@
         <span style="display: inline-block;width:400px;padding-top:5px;"><input type="file" name="files" class="button is-info is-outlined"/></span>
         <input type="submit" value="Carica file" id="btnSubmit" class="button is-info is-outlined" style="margin-top:5px;"/>
     </form>
-    <pre><label id="result_caricamento"></label><label id="percorsofile_documento"></label></pre>
+    <pre>
+        <label id="result_caricamento"></label><label id="percorsofile_documento"></label>
+        <a id="download_documento" class="button is-primary" href="#" target="_blank" onclick="">Download</a>
+    </pre>
 
     <section class="hidden_form">
         <span style="display: inline-block;width:400px;padding-top:5px;"><b>Data: </b></span><input type="text" id="data_documento" placeholder="Data documento"><br />
@@ -270,40 +273,59 @@
          fire_ajax_submit();
     });
 
+    function fire_ajax_submit() {
+        $("#result_caricamento").text("");
+        $("#percorsofile_documento").text("");
+        $("#download_documento").prop('href', '#');
+        var form = $('#fileUploadForm')[0];
+        var data = new FormData(form);
+        $("#btnSubmit").prop("disabled", true);
+        $.ajax({
+            type: "POST",
+            enctype: 'multipart/form-data',
+            url: "/api/upload",
+            data: data,
+            processData: false, //prevent jQuery from automatically transforming the data into a query string
+            contentType: false,
+            cache: false,
+            timeout: 600000,
+            success: function (data) {
+                $("#result_caricamento").text("Documento caricato: ");
+                $("#percorsofile_documento").text(data);
+                $("#download_documento").prop('href', '/getpdf?filename=' + data);
+                console.log("SUCCESS : ", data);
+                $("#btnSubmit").prop("disabled", false);
+            },
+            error: function (e) {
+                alert(e.responseText);
+                console.log("ERROR : ", e);
+                $("#btnSubmit").prop("disabled", false);
+            }
+        });
 
+    }
 
-
-function fire_ajax_submit() {
-    $("#result_caricamento").text("");
-    $("#percorsofile_documento").text("");
-    var form = $('#fileUploadForm')[0];
-    var data = new FormData(form);
-    $("#btnSubmit").prop("disabled", true);
-    $.ajax({
-        type: "POST",
-        enctype: 'multipart/form-data',
-        url: "/api/upload",
-        data: data,
-        processData: false, //prevent jQuery from automatically transforming the data into a query string
-        contentType: false,
-        cache: false,
-        timeout: 600000,
-        success: function (data) {
-            $("#result_caricamento").text("Documento caricato: ");
-            $("#percorsofile_documento").text(data);
-            console.log("SUCCESS : ", data);
-            $("#btnSubmit").prop("disabled", false);
-        },
-        error: function (e) {
-            alert(e.responseText);
-            console.log("ERROR : ", e);
-            $("#btnSubmit").prop("disabled", false);
+    function downloadClick(){
+        var file = $("#percorsofile_documento").text();
+        if( file == '' || file == null){
+            alert("Nessun percorso file selezionato!");
+        }else{
+            $.ajax({                                                                        /* Ajax call to AccountMicroservice */
+               url: '/getpdf',
+               type: "GET",
+               data: {
+                 filename:         file
+               },
+               success: function (data, status, xhr) {
+                  console.log(data);
+               },
+               error: function(result) {
+                  alert("Errore: " + result.responseJSON.message);
+                  console.log(result);
+               }
+           });
         }
-    });
-
-}
-
-
+    }
 
 
 
@@ -514,6 +536,7 @@ function fire_ajax_submit() {
             $("#descrizione_documento").val(descrizione);
             $("#note_documento").val(note);
             $("#percorsofile_documento").text(percorsoFile);
+            $("#download_documento").prop('href', '/getpdf?filename=' + percorsoFile);
             $("#stepPraticaDocumentoSelect").val(stepPratica);
             $("#file_upload_step").val(stepPratica);
             $("#fkpratica_documento").text(fkPratica);

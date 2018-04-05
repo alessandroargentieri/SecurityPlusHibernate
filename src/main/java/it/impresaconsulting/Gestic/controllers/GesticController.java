@@ -13,6 +13,7 @@ import it.impresaconsulting.Gestic.utilities.SecurityImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -432,6 +433,20 @@ public class GesticController {
         }
     }
 
+    //*************************** DOWNLOAD FILE *******************************
+
+    @RequestMapping(value="/getpdf", method=RequestMethod.GET)
+    public ResponseEntity<byte[]> getPDF(@RequestParam("filename") String filename) throws IOException{
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.parseMediaType("application/pdf"));
+        headers.add("content-disposition", "inline;filename=" + filename);
+        headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+
+        Path path = Paths.get(filename);
+        byte[] data = Files.readAllBytes(path);
+        ResponseEntity<byte[]> response = new ResponseEntity<byte[]>(data, headers, HttpStatus.OK);
+        return response;
+    }
 
 
 
