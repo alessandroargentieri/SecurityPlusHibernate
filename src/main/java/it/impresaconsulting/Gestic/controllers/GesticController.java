@@ -194,6 +194,16 @@ public class GesticController {
         }
     }
 
+    @RequestMapping("get/cliente/id/{id}")
+    public List<Cliente> getPseudoListClienteById(@PathVariable(name = "id") String id){
+        List<Cliente> pseudoList = new ArrayList<>();
+        Optional<Cliente> clienteOptional = clienteDao.findById(id);
+        if(clienteOptional.isPresent()){
+            pseudoList.add(clienteOptional.get());
+        }
+        return pseudoList;
+    }
+
     @RequestMapping("get/cliente/ragionesociale/{ragionesociale}")
     public List<Cliente> getClienteByRagioneSociale(@PathVariable(name = "ragionesociale") String ragioneSociale){
         return clienteDao.findByRagioneSociale(ragioneSociale);

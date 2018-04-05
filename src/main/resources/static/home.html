@@ -24,6 +24,7 @@
         <li id="home_tab"     class="tab is-active"><a  onclick="homeTabClick()">Home</a></li>
         <li id="utenti_tab"   class="tab"><a onclick="utentiTabClick()">Utenti</a></li>
         <li id="clienti_tab"  class="tab"><a onclick="clientiTabClick()">Anagrafica</a></li>
+        <li id="scadenze_tab" class="tab"><a onclick="scadenzeTabClick()">Scadenze</a></li>
         <li id="contatti_tab" class="tab"><a onclick="contattiTabClick()">Contatti</a></li>
     </ul>
 </div>
@@ -88,6 +89,7 @@
             <option value="attivita">Attivita'</option>
             <option value="segnalatore">Segnalatore</option>
             <option value="interessatoa">Interessato a</option>
+            <option value="id">P.IVA/C.F.</option>
             <option value="tutti">Visualizza tutti</option>
         </select>
         <div class="control">
@@ -170,6 +172,9 @@
     <br /><br />
     <br /><a class="button is-primary is-medium" href="#form_documento" onclick="nuovoDocumento()">Nuovo Documento</a>
 </div>
+
+
+
 
 <!--  ************************************************************* -->
 <div class="box" id="form_utente">
@@ -429,6 +434,8 @@
                 urlComposto = '/get/cliente/segnalatore/' + parametroRicerca;
             }else if(tipoRicerca == 'interessatoa'){
                 urlComposto = '/get/cliente/interessatoa/' + parametroRicerca;
+            }else if(tipoRicerca == 'id'){
+                urlComposto = '/get/cliente/id/' + parametroRicerca;
             }
 
             showClienti(urlComposto);
@@ -931,6 +938,7 @@
         // aumentare limite upload file
         // cancellazione scadenze vecchie automatiche
         // modificare le date a date e non a input="text"
+        // inserire l'aggiornamento di registratoDa anche per le scadenze
 
 
 
