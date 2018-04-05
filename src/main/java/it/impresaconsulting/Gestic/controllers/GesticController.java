@@ -435,10 +435,24 @@ public class GesticController {
 
     //*************************** DOWNLOAD FILE *******************************
 
-    @RequestMapping(value="/getpdf", method=RequestMethod.GET)
+    @RequestMapping(value="/getfile", method=RequestMethod.GET)
     public ResponseEntity<byte[]> getPDF(@RequestParam("filename") String filename) throws IOException{
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.parseMediaType("application/pdf"));
+        if(filename.endsWith(".pdf")) {
+            headers.setContentType(MediaType.parseMediaType("application/pdf"));
+        }else if(filename.endsWith(".docx")) {
+            headers.setContentType(MediaType.parseMediaType("application/docx"));
+        }else if(filename.endsWith(".doc")) {
+            headers.setContentType(MediaType.parseMediaType("application/doc"));
+        }else if(filename.endsWith(".xlsx")) {
+            headers.setContentType(MediaType.parseMediaType("application/xlsx"));
+        }else if(filename.endsWith(".xls")) {
+            headers.setContentType(MediaType.parseMediaType("application/xls"));
+        }else if(filename.endsWith(".ppt")) {
+            headers.setContentType(MediaType.parseMediaType("application/ppt"));
+        }else if(filename.endsWith(".pptx")) {
+            headers.setContentType(MediaType.parseMediaType("application/pptx"));
+        }
         headers.add("content-disposition", "inline;filename=" + filename);
         headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
 

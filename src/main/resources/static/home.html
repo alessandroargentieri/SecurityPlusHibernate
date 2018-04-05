@@ -292,7 +292,7 @@
             success: function (data) {
                 $("#result_caricamento").text("Documento caricato: ");
                 $("#percorsofile_documento").text(data);
-                $("#download_documento").prop('href', '/getpdf?filename=' + data);
+                $("#download_documento").prop('href', '/getfile?filename=' + data);
                 console.log("SUCCESS : ", data);
                 $("#btnSubmit").prop("disabled", false);
             },
@@ -311,7 +311,7 @@
             alert("Nessun percorso file selezionato!");
         }else{
             $.ajax({                                                                        /* Ajax call to AccountMicroservice */
-               url: '/getpdf',
+               url: '/getfile',
                type: "GET",
                data: {
                  filename:         file
@@ -536,7 +536,7 @@
             $("#descrizione_documento").val(descrizione);
             $("#note_documento").val(note);
             $("#percorsofile_documento").text(percorsoFile);
-            $("#download_documento").prop('href', '/getpdf?filename=' + percorsoFile);
+            $("#download_documento").prop('href', '/getfile?filename=' + percorsoFile);
             $("#stepPraticaDocumentoSelect").val(stepPratica);
             $("#file_upload_step").val(stepPratica);
             $("#fkpratica_documento").text(fkPratica);
