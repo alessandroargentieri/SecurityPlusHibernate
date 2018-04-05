@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
@@ -31,7 +32,7 @@ public class Cliente {
     @Column(name="telefono")
     private String telefono;
 
-    @Column(name="email")
+    @Column(name="email") @Email
     private String email;
 
     @Column(name="sito")

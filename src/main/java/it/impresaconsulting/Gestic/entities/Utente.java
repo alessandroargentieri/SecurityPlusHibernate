@@ -6,6 +6,8 @@ import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Past;
 import java.util.Date;
@@ -24,12 +26,12 @@ public class Utente {
     private String indirizzo;
     @Column(name="telefono")
     private String telefono;
-    @Column(name="email")
+    @Column(name="email") @Email
     private String email;
     @Column(name="natoil") @Past
     private Date natoIl;
     @Column(name="ruolo")
-    private String ruolo; //USER_ROLE  / ADMIN_ROLE
+    private String ruolo;               //USER_ROLE  / ADMIN_ROLE
     @Column(name="password") @NotBlank
     private String password;
 

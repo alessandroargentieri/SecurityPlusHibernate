@@ -1,13 +1,7 @@
 package it.impresaconsulting.Gestic.controllers;
 
-import it.impresaconsulting.Gestic.daos.ClienteDao;
-import it.impresaconsulting.Gestic.daos.DocumentoDao;
-import it.impresaconsulting.Gestic.daos.PraticaDao;
-import it.impresaconsulting.Gestic.daos.UtenteDao;
-import it.impresaconsulting.Gestic.entities.Cliente;
-import it.impresaconsulting.Gestic.entities.Documento;
-import it.impresaconsulting.Gestic.entities.Pratica;
-import it.impresaconsulting.Gestic.entities.Utente;
+import it.impresaconsulting.Gestic.daos.*;
+import it.impresaconsulting.Gestic.entities.*;
 import it.impresaconsulting.Gestic.utilities.EncryptionUtils;
 import it.impresaconsulting.Gestic.utilities.SecurityImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +22,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static it.impresaconsulting.Gestic.utilities.SecurityImpl.ROLE_ADMIN;
@@ -60,7 +53,9 @@ public class GesticController {
     @Autowired ClienteDao      clienteDao;
     @Autowired PraticaDao      praticaDao;
     @Autowired DocumentoDao    documentoDao;
+    @Autowired ScadenzaDao     scadenzaDao;
     @Autowired EncryptionUtils encryptionUtils;
+
 
     //************************************************* TEST
 
@@ -463,8 +458,61 @@ public class GesticController {
     }
 
 
+    //*************************** SCADENZE *******************************
 
+    @RequestMapping("save/scadenza")
+    public Scadenza creaNuovaScadenza(UsernamePasswordAuthenticationToken token, @Valid Scadenza scadenza){
+        scadenza.setRegistratoDa(token.getName());
+        return scadenzaDao.save(scadenza);
+    }
 
+    @RequestMapping("delete/scadenza/{idscadenza}")
+    public void deleteScadenza(@PathVariable("idscadenza") Integer id){
+        scadenzaDao.deleteById(id);
+    }
+
+    @RequestMapping("delete/old/scadenza")
+    public void deleteScadenzeVecchie(){
+        Calendar now = Calendar.getInstance();
+        List<Scadenza> scadenze = scadenzaDao.findAll();
+        for(Scadenza s: scadenze){
+            if(now.after(s.getDataScadenza())){
+                scadenzaDao.delete(s);
+            }
+        }
+    }
+
+    @RequestMapping("get/scadenza")
+    public List<Scadenza> ciSonoScadenze(){
+        Date now = new Date();
+        List<Scadenza> scadenze = scadenzaDao.findAll();
+        List<Scadenza> tabellaScadenze = new ArrayList<>();
+        for(Scadenza s: scadenze){
+            if(Scadenza.DIECI_GIORNI.equals(s.getAvvisoDa())){
+                if(getDifferenceDays(s.getDataScadenza(), now) <= 10){
+                    tabellaScadenze.add(s);
+                }
+            }else if(Scadenza.CINQUE_GIORNI.equals(s.getAvvisoDa())){
+                if(getDifferenceDays(s.getDataScadenza(), now) <= 5){
+                    tabellaScadenze.add(s);
+                }
+            }else if(Scadenza.GIORNO_PRIMA.equals(s.getAvvisoDa())){
+                if(getDifferenceDays(s.getDataScadenza(), now) <= 1){
+                    tabellaScadenze.add(s);
+                }
+            }else if(Scadenza.GIORNO_STESSO.equals(s.getAvvisoDa())){
+                if(getDifferenceDays(s.getDataScadenza(), now) < 1){
+                    tabellaScadenze.add(s);
+                }
+            }
+        }
+        return tabellaScadenze;
+    }
+
+    public static long getDifferenceDays(Date d1, Date d2) {
+        long diff = d2.getTime() - d1.getTime();
+        return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+    }
 
 
 }

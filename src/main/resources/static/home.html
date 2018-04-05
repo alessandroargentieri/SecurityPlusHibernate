@@ -4,6 +4,7 @@
     <title>Gestic</title>
     <link rel="icon" href="https://cdn2.iconfinder.com/data/icons/web/512/Global_Connections-512.png">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.0/css/bulma.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
@@ -106,6 +107,7 @@
                 <td>NOMINATIVO</td>
                 <td>ATTIVITA'</td>
                 <td>PRATICHE</td>
+                <td>+SCADENZA</td>
             </tr>
         </thead>
         <tbody id="body_tabella_clienti">
@@ -114,6 +116,7 @@
                 <td></td>
                 <td></td>
                 <td></td>
+                <td><td>
                 <td><td>
             </tr>
         </tbody>
@@ -262,6 +265,37 @@
     <a class="button is-primary is-warning is-medium hidden_form modifica" onclick="modificaClick('documento')">Modifica</a>
 </div>
 
+
+
+<div id="modal_nuova_scadenza" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-content" style="background-color:#FFFFFF; width:100%; padding:40px;">
+
+        <h3 class="subtitle has-text-centered"><b>Crea nuova scadenza</b></h3>
+
+        <span style="display: inline-block;width:400px;padding-top:5px;"><b>Descrizione: </b></span><input type="text" id="descrizione_scadenza" placeholder="Descrizione"><br />
+        <span style="display: inline-block;width:400px;padding-top:5px;"><b>Scadenza: </b></span><input type="text" id="datascadenza_scadenza" placeholder="dd/mm/aaaa"><br />
+        <span style="display: inline-block;width:400px;padding-top:5px;"><b>Avviso a partire da: </b></span>
+        <select id="avvisoDaSelect" style="height:35px;">
+           <option value="giorno stesso">Giorno stesso</option>
+           <option value="giorno prima">Giorno prima</option>
+           <option value="cinque giorni prima">5 giorni prima</option>
+           <option value="dieci giorni prima">10 giorni prima</option>
+        </select><br />
+        <span style="display: inline-block;width:400px;padding-top:5px;"><b>Per il contatto: </b></span>
+        <label id="fkcliente_scadenza"></label>
+        <br />
+
+        <br /><a class="button is-primary is-medium" onclick="submitScadenza()">Submit</a>
+    </div>
+
+    <button class="modal-close is-large" aria-label="close" onclick="chiudiModalNuovaScadenza()"></button>
+
+</div>
+
+
+
+
 <script>
 
 
@@ -409,7 +443,7 @@
                 console.log(data);
                 $("#body_tabella_clienti").empty();
                 jQuery.each(data, function(i, val) {
-                    $("#body_tabella_clienti").append("<tr id='istanza_cliente_" + val.idCliente + "' class='generic_cliente'><th  class='finger' onclick='seeCliente(\"" + val.idCliente + "\", \"" + val.ragioneSociale + "\", \"" + val.nominativo + "\", \"" + val.indirizzo + "\", \"" + val.telefono + "\", \"" + val.email + "\", \"" + val.sito + "\", \"" + val.segnalatore + "\", \"" + val.attivita + "\", \"" + val.interessatoA + "\", \"" + val.registratoDa + "\", \"" + val.data + "\", \"" + val.note + "\")'><a href='#form_cliente'>" + val.idCliente + "</a></th><td>" + val.ragioneSociale + "</td><td>" + val.nominativo + "</td><td>" + val.attivita + "</td><td class='finger' style='text-align: center;'><i class='fa fa-folder fa-2x has-text-info' onclick='showPratiche(\"" + val.idCliente + "\")'></i></td></tr>");
+                    $("#body_tabella_clienti").append("<tr id='istanza_cliente_" + val.idCliente + "' class='generic_cliente'><th  class='finger' onclick='seeCliente(\"" + val.idCliente + "\", \"" + val.ragioneSociale + "\", \"" + val.nominativo + "\", \"" + val.indirizzo + "\", \"" + val.telefono + "\", \"" + val.email + "\", \"" + val.sito + "\", \"" + val.segnalatore + "\", \"" + val.attivita + "\", \"" + val.interessatoA + "\", \"" + val.registratoDa + "\", \"" + val.data + "\", \"" + val.note + "\")'><a href='#form_cliente'>" + val.idCliente + "</a></th><td>" + val.ragioneSociale + "</td><td>" + val.nominativo + "</td><td>" + val.attivita + "</td><td class='finger' style='text-align: center;'><i class='fa fa-folder fa-2x has-text-info' onclick='showPratiche(\"" + val.idCliente + "\")'></i></td><td class='finger' style='text-align: center;'><i class='far fa-calendar-alt fa-2x has-text-warning' onclick='nuovaScadenza(\"" + val.idCliente + "\")'></i></td></tr>");
                 });
             },
             error: function(result) {
@@ -691,10 +725,8 @@
             });
         }
 
-        function submitDocumento(){                     //TODO è proprio questo il famigerato multiform!
+        function submitDocumento(){
             //raccolta dati e chiamata AJAX
-
-
             $.ajax({
                url: '/update/documento',
                type: "POST",
@@ -709,6 +741,31 @@
                success: function (data, status, xhr) {
                   console.log(data);
                   alert("Aggiornamento pratiche avvenuto con successo!");
+                  resetFormsAndTables();
+                  clientiTabClick();
+               },
+               error: function(result) {
+                  alert("Errore: " + result.responseJSON.message);
+                  console.log(result);
+               }
+            });
+        }
+
+        function submitScadenza(){
+            //raccolta dati e chiamata AJAX
+            $.ajax({
+               url: '/save/scadenza',
+               type: "POST",
+               data: {
+                 descrizione:       $("#descrizione_scadenza").val(),
+                 dataScadenza:      $("#datascadenza_scadenza").val(),
+                 fkCliente:         $("#fkcliente_scadenza").text(),
+                 avvisoDa:          $("#avvisoDaSelect").val()
+               },
+               success: function (data, status, xhr) {
+                  console.log(data);
+                  alert("Scadenza inserita con successo!");
+                  chiudiModalNuovaScadenza();
                   resetFormsAndTables();
                   clientiTabClick();
                },
@@ -740,6 +797,16 @@
             $("#form_documento").show();
             $("#fkpratica_documento").text(fkpratica);
             console.log("FKPRATICA: " + fkpratica);
+        }
+
+        function nuovaScadenza(fkCliente){      //apre il modal per inserire la nuova scadenza
+            $("#fkcliente_scadenza").text(fkCliente);
+            $("#modal_nuova_scadenza").addClass("is-active");
+        }
+
+        function chiudiModalNuovaScadenza(){    //chiude il modal per inserire la nuova scadenza
+            $("#fkcliente_scadenza").text('');
+            $("#modal_nuova_scadenza").removeClass("is-active");
         }
 
         function resetFormsAndTables(){
@@ -854,8 +921,16 @@
         // v----------- la pratica ha un ID da inserire manualmente e non è autogenerato
         // v----------- quando inserisco un documento devo (tramite tendina) selezionare lo step della pratica
         // v----------- aggiungere lo step pratica nel file Documento.class
-        // quando carico un documento devo creare le cartelle dove salvarlo idcliente/idpratica/presentazione||ammissione||rendicontazione||collaudo
+        // v----------- quando carico un documento devo creare le cartelle dove salvarlo idcliente/idpratica/presentazione||ammissione||rendicontazione||collaudo
         // scadenziario: id, descrizione, scadenza, registratoda, fkCliente, quando (stesso giorno, giorno prima, 5 gg, 10 gg)
+        // controllare le date se sono salvate e visualizzate correttamente
+        // aggiustare il path del salvataggio file
+        // inserire un piccolo sistema di log
+        // inserire le dipendenze per mysql
+        // aggiustare le application.properties
+        // aumentare limite upload file
+        // cancellazione scadenze vecchie automatiche
+        // modificare le date a date e non a input="text"
 
 
 
