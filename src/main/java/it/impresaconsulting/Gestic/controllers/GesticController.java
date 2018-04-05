@@ -52,7 +52,6 @@ public class GesticController {
     private static final String CLIENTE_AGGIORNATO      = "Aggiornamento contatti avvenuto con successo!";
     private static final String DOCUMENTO_AGGIORNATO    = "Aggiornamento documentazione avvenuto con successo!";
     private static final String SELEZIONA_UN_FILE       = "Seleziona il file da allegare";
-    private static final String CARICAMENTO_AVVENUTO    = "Documento caricato: ";
 
     private static String UPLOADED_FOLDER = "/Users/alessandroargentieri/Desktop/logback/";//"./documentazione";
 
@@ -391,25 +390,25 @@ public class GesticController {
 
 
     @PostMapping("/api/upload")
-    public ResponseEntity<?> uploadFileMulti(@RequestParam("cliente") String cliente, @RequestParam("pratica") String pratica, @RequestParam("step") String step, @RequestParam("documento") String documento, @RequestParam("files") MultipartFile[] uploadfiles) {
+    public ResponseEntity<?> uploadFileMulti(@RequestParam("cliente") String cliente, @RequestParam("pratica") String pratica, @RequestParam("step") String step, @RequestParam("files") MultipartFile[] uploadfiles) {
         String uploadedFileName = Arrays.stream(uploadfiles).map(x -> x.getOriginalFilename())
                 .filter(x -> !StringUtils.isEmpty(x)).collect(Collectors.joining(" , "));
         if (StringUtils.isEmpty(uploadedFileName)) {
             return new ResponseEntity(SELEZIONA_UN_FILE, HttpStatus.OK);
         }
         try {
-            saveUploadedFiles(Arrays.asList(uploadfiles), cliente, pratica, step, documento);
+            saveUploadedFiles(Arrays.asList(uploadfiles), cliente, pratica, step);
         } catch (IOException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity(CARICAMENTO_AVVENUTO + uploadedFileName, HttpStatus.OK);
+        return new ResponseEntity(UPLOADED_FOLDER + cliente + "/" + pratica + "/" + step + "/" + uploadedFileName, HttpStatus.OK);
     }
 
     //save file
-    private void saveUploadedFiles(List<MultipartFile> files, String cliente, String pratica, String step, String documento) throws IOException {
+    private void saveUploadedFiles(List<MultipartFile> files, String cliente, String pratica, String step) throws IOException {
         for (MultipartFile file : files) {
             if (file.isEmpty()) {
-                continue; //next pls
+                continue;
             }
             byte[] bytes = file.getBytes();
             String dinamicFolder = UPLOADED_FOLDER + cliente + "/";
@@ -423,11 +422,6 @@ public class GesticController {
                 directory.mkdir();
             }
             dinamicFolder = dinamicFolder + step + "/";
-            directory = new File(String.valueOf(dinamicFolder));
-            if(!directory.exists()) {
-                directory.mkdir();
-            }
-            dinamicFolder = dinamicFolder + documento + "/";
             directory = new File(String.valueOf(dinamicFolder));
             if(!directory.exists()) {
                 directory.mkdir();

@@ -42,7 +42,7 @@ public class Documento {
     @PrePersist
     private void setCampi(){
         data = new Date();
-        if(idDocumento == null) {
+        if(idDocumento == null || "".equals(idDocumento)) {
             idDocumento = data.toInstant().toString() + fkPratica;
         }
         //this.setId(UUID.randomUUID().toString());

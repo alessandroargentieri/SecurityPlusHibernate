@@ -227,11 +227,11 @@
 
 <div class="box" id="form_documento">
     <h3 class="subtitle has-text-centered"><b>Documento</b></h3>
+
     <section class="hidden_form">
         <span style="display: inline-block;width:400px;padding-top:5px;"><b>ID Documento: </b></span><label id="iddocumento_documento" /><br />
     </section>
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Descrizione: </b></span><input type="text" id="descrizione_documento" placeholder="Descrizione"><br />
-    <span style="display: inline-block;width:400px;padding-top:5px;"><a class="button is-info is-outlined" onclick="">Carica</a></span><label id="percorsofile_documento" ></label><br />
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Note: </b></span><input type="text" id="note_documento" placeholder="Note"><br />
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Step pratica: </b></span>
     <select id="stepPraticaDocumentoSelect" style="height:35px;">
@@ -240,35 +240,23 @@
         <option value="rendicontazione">Rendicontazione</option>
         <option value="collaudo">Collaudo</option>
     </select><br />
+
+    <form method="POST" enctype="multipart/form-data" id="fileUploadForm">
+        <input id="file_upload_cliente" type="hidden" name="cliente"/>
+        <input id="file_upload_pratica" type="hidden" name="pratica"/>
+        <input id="file_upload_step" type="hidden" name="step"/>
+        <span style="display: inline-block;width:400px;padding-top:5px;"><input type="file" name="files" class="button is-info is-outlined"/></span>
+        <input type="submit" value="Carica file" id="btnSubmit" class="button is-info is-outlined" style="margin-top:5px;"/>
+    </form>
+    <pre><label id="result_caricamento"></label><label id="percorsofile_documento"></label></pre>
+
     <section class="hidden_form">
         <span style="display: inline-block;width:400px;padding-top:5px;"><b>Data: </b></span><input type="text" id="data_documento" placeholder="Data documento"><br />
         <span style="display: inline-block;width:400px;padding-top:5px;"><b>Della pratica: </b></span><label id="fkpratica_documento"/><br />
         <span style="display: inline-block;width:400px;padding-top:5px;"><b>Registrato da: </b></span><input type="text" id="registratoda_documento" placeholder="Registrato da"><br />
     </section>
-    <br /><a class="button is-primary is-medium submit" onclick="submitDocumento()">Submit</a>
+    <br /><a class="button is-primary is-medium submit" onclick="submitDocumento()">Salva dati documento</a>
     <a class="button is-primary is-warning is-medium hidden_form modifica" onclick="modificaClick('documento')">Modifica</a>
-</div>
-
-
-<div>
-
-    <h1>Spring Boot - Multiple file upload example - AJAX</h1>
-
-    <form method="POST" enctype="multipart/form-data" id="fileUploadForm">
-        <input type="text" name="cliente"/><br/>
-        <input type="text" name="pratica"/><br/>
-        <input type="text" name="step"/><br/>
-        <input type="text" name="documento"/><br/>
-        <input type="file" name="files"/><br/>
-        <input type="submit" value="Submit" id="btnSubmit"/>
-    </form>
-
-    <h1>Ajax Post Result</h1>
-    <pre>
-    <span id="result"></span>
-</pre>
-
-
 </div>
 
 <script>
@@ -276,29 +264,21 @@
 
 
 
-$("#btnSubmit").click(function (event) {
-
-     //stop submit the form, we will post it manually.
-     event.preventDefault();
-
-     fire_ajax_submit();
-
-});
+    $("#btnSubmit").click(function (event) {
+         event.preventDefault();
+         $("#file_upload_step").val( $("#stepPraticaDocumentoSelect").val() );
+         fire_ajax_submit();
+    });
 
 
 
 
 function fire_ajax_submit() {
-
+    $("#result_caricamento").text("");
+    $("#percorsofile_documento").text("");
     var form = $('#fileUploadForm')[0];
     var data = new FormData(form);
-
-    data.append("idCliente", "Maurizio");
-    data.append("idPratica", "Pratica11");
-    data.append("stepPratica", "Presentazione");
-
     $("#btnSubmit").prop("disabled", true);
-
     $.ajax({
         type: "POST",
         enctype: 'multipart/form-data',
@@ -309,18 +289,15 @@ function fire_ajax_submit() {
         cache: false,
         timeout: 600000,
         success: function (data) {
-
-            $("#result").text(data);
+            $("#result_caricamento").text("Documento caricato: ");
+            $("#percorsofile_documento").text(data);
             console.log("SUCCESS : ", data);
             $("#btnSubmit").prop("disabled", false);
-
         },
         error: function (e) {
-
-            $("#result").text(e.responseText);
+            alert(e.responseText);
             console.log("ERROR : ", e);
             $("#btnSubmit").prop("disabled", false);
-
         }
     });
 
@@ -426,6 +403,7 @@ function fire_ajax_submit() {
            $(".generic_cliente").empty();
            $("#tabella_pratiche").show();
            fkcliente=idCliente;
+           $("#file_upload_cliente").val(fkcliente);
            $.ajax({
             url: '/get/pratica/cliente/' + idCliente,
             type: "GET",
@@ -449,6 +427,7 @@ function fire_ajax_submit() {
            $(".generic_pratica").empty();
            $("#tabella_documenti").show();
            fkpratica=idPratica;
+           $("#file_upload_pratica").val(fkpratica);
            $.ajax({
             url: '/get/documento/pratica/' + idPratica,
             type: "GET",
@@ -524,6 +503,7 @@ function fire_ajax_submit() {
         }
 
         function seeDocumento(idDocumento, descrizione, percorsoFile, note, stepPratica, fkPratica, registratoDa, data){
+            console.log("IDDOCUMENTO: " + idDocumento);
             emptyForms();
             $(".hidden_form").show();
             $(".submit").hide();   //hide submit and show with modificaclick() con cui si riabilitano tutti gli input text
@@ -535,6 +515,7 @@ function fire_ajax_submit() {
             $("#note_documento").val(note);
             $("#percorsofile_documento").text(percorsoFile);
             $("#stepPraticaDocumentoSelect").val(stepPratica);
+            $("#file_upload_step").val(stepPratica);
             $("#fkpratica_documento").text(fkPratica);
             $("#registratoda_documento").val(registratoDa);
             $("#data_documento").val(convertDate(data));
@@ -687,8 +668,10 @@ function fire_ajax_submit() {
             });
         }
 
-        function submitDocumento(){
+        function submitDocumento(){                     //TODO è proprio questo il famigerato multiform!
             //raccolta dati e chiamata AJAX
+
+
             $.ajax({
                url: '/update/documento',
                type: "POST",
@@ -724,14 +707,12 @@ function fire_ajax_submit() {
             $("#form_cliente").show();
         }
         function nuovaPratica(){
-            //var fkCliente = fk;
             emptyForms();
             $("#form_pratica").show();
             $("#fkcliente_pratica").text(fkcliente);
             console.log("FKCLIENTE: " + fkcliente);
         }
         function nuovoDocumento(){
-            //var fkPratica = fk;
             emptyForms();
             $("#form_documento").show();
             $("#fkpratica_documento").text(fkpratica);
@@ -766,6 +747,11 @@ function fire_ajax_submit() {
             updatingId='';
             fkcliente='';
             fkpratica='';
+            $("#file_upload_cliente").val('');
+            $("#file_upload_pratica").val('');
+            $("#file_upload_step").val('');
+            $("#file_upload_documento").val('');
+            $('.container input[type="file"]').val('');
 
         }
         
@@ -784,7 +770,8 @@ function fire_ajax_submit() {
             $(".hidden_form").hide();
             $(".submit").show();
             updatingId='';
-            //fk='';
+
+            $('.container input[type="file"]').val('');
 
         }
 
