@@ -2,11 +2,14 @@
 <html>
 <head>
     <title>Gestic</title>
-    <link rel="icon" href="https://cdn2.iconfinder.com/data/icons/web/512/Global_Connections-512.png">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.0/css/bulma.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="icon" type="image/png" href="./img/page-icon.png"><!--href="https://cdn2.iconfinder.com/data/icons/web/512/Global_Connections-512.png"> -->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script> -->
+    <script src="./js/jquery-3.3.1.min.js"></script>
+    <script src="./js/fontawesome.js"></script>
+    <!--<script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script> -->
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.0/css/bulma.css"> -->
+    <link rel="stylesheet" type="text/css" href="./css/bulma.css">
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
     <style>
         input[type='text']{height:35px; width:500px;}
         input[type='password']{height:35px; width:300px;}
@@ -67,8 +70,10 @@
     <p>    EMAIL: <b>   <a href="mailto:info@icnews.it" target="_top">info@icnews.it</a></b></p>
 
     <p>
-        <a class='fa fa-facebook fa-2x has-text-info' target="_blank" href="https://www.facebook.com/impresaconsulting/"></a>
-        SEGUICI SU FACEBOOK PER NEWS!
+        <a target="_blank" href="https://www.facebook.com/impresaconsulting/">
+            <i class="fab fa-facebook-f fa-2x has-text-info"></i>
+            SEGUICI SU FACEBOOK PER NEWS!
+        </a>
     </p>
 
 
@@ -343,6 +348,7 @@
     <button class="modal-close is-large" aria-label="close" onclick="chiudiModalNuovaScadenza()"></button>
 
 </div>
+
 
 <footer class="box has-text-centered">
     <section style="font-size:10px">
@@ -1100,7 +1106,7 @@
         // inserire un piccolo sistema di log
         // inserire le dipendenze per mysql
         // aggiustare le application.properties
-        // aumentare limite upload file
+        // v----------- aumentare limite upload file
         // v----------- cancellazione scadenze vecchie automatiche
         // v----------- modificare le date a date e non a input="text"
         // v----------- inserire l'aggiornamento di registratoDa anche per le scadenze
