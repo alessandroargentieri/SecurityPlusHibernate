@@ -23,6 +23,7 @@
 
 <body style="margin:20px;padding-top:20px;" class="container">
 
+<!--
 <button class="button navbar-burger" data-target="navMenu">
     <span></span>
     <span></span>
@@ -36,7 +37,7 @@
     <a class="navbar-item" onclick="scadenzeTabClick()">Scadenze</a>
     <a class="navbar-item" onclick="contattiTabClick()">Contatti</a>
 </div>
-
+-->
 <a class="button is-outlined is-info" onclick="logoutClick()" style="float: right">Esci</a>
 <a class="button is-white" id="mionome" onclick="utentiTabClick()" style="float:right;"></a>
 
@@ -988,8 +989,8 @@
             $("#file_upload_step").val('');
             $("#file_upload_documento").val('');
             $('.container input[type="file"]').val('');
-            $(".navbar-menu").removeClass("is-active");
-            $(".navbar-burger").removeClass("is-active")
+            //$(".navbar-menu").removeClass("is-active");
+            //$(".navbar-burger").removeClass("is-active")
 
         }
         
@@ -1010,8 +1011,8 @@
             updatingId='';
 
             $('.container input[type="file"]').val('');
-            $(".navbar-menu").removeClass("is-active");
-            $(".navbar-burger").removeClass("is-active")
+            //$(".navbar-menu").removeClass("is-active");
+            //$(".navbar-burger").removeClass("is-active")
 
         }
 
@@ -1065,24 +1066,19 @@
         }
 
         //per il "burger menu' visibile nei dispositivi mobili"
-        document.addEventListener('DOMContentLoaded', function () {
-            // Get all "navbar-burger" elements
+        /*document.addEventListener('DOMContentLoaded', function () {
             var $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
-            // Check if there are any navbar burgers
             if ($navbarBurgers.length > 0) {
-                // Add a click event on each of them
                 $navbarBurgers.forEach(function ($el) {
                     $el.addEventListener('click', function () {
-                        // Get the target from the "data-target" attribute
                         var target = $el.dataset.target;
                         var $target = document.getElementById(target);
-                        // Toggle the class on both the "navbar-burger" and the "navbar-menu"
                         $el.classList.toggle('is-active');
                         $target.classList.toggle('is-active');
                     });
                 });
             }
-        });
+        });*/
 
         // v----------- al click su un ID di elemento di tabella deve visualizzare il form compilato e disabilitato.
         // v----------- in corrispondenza del form ci deve essere un pulsantino che modifichi i dati per risalvarli

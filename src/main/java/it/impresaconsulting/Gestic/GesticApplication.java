@@ -12,6 +12,7 @@ import it.impresaconsulting.Gestic.utilities.EncryptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 
 import javax.annotation.PostConstruct;
 import java.util.Date;
@@ -30,6 +31,7 @@ public class GesticApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(GesticApplication.class, args);
 	}
+
 
 	//TODO rimuovere perche' usato per riempire il database a titolo di esempio
 	@PostConstruct
