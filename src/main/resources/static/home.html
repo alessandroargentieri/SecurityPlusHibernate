@@ -111,7 +111,7 @@
     <div class="field has-addons">
         <p style="padding-top:5px;"> Cerca in anagrafica per: &nbsp &nbsp &nbsp</p>
         <select id="cercaClientiSelect" style="height:35px;">
-            <option value="nominativo">Nominativo</option>
+            <option value="nominativo">Cognome Nome</option>
             <option value="ragionesociale">Ragione sociale</option>
             <option value="attivita">Attivita'</option>
             <option value="segnalatore">Segnalatore</option>
@@ -235,7 +235,7 @@
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Indirizzo: </b></span><input type="text" id="indirizzo_utente" placeholder="Indirizzo"><br />
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Telefono: </b></span><input type="text" id="telefono_utente" placeholder="Telefono"><br />
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>E-mail: </b></span><input type="text" id="email_utente" placeholder="E-mail"><br />
-    <span style="display: inline-block;width:400px;padding-top:5px;"><b>Data di nascita: </b></span><input type="text" id="natoil_utente" placeholder="Data di nascita"><br />
+    <span style="display: inline-block;width:400px;padding-top:5px;"><b>Data di nascita: </b></span><input type="text" id="natoil_utente" placeholder="gg/mm/aaaa"><br />
     <br /><a class="button is-primary is-medium submit" onclick="submitUtente()">Submit</a>
     <a class="button is-primary is-warning is-medium hidden_form only_admin modifica" onclick="modificaClick('utente')">Modifica</a>
 </div>
@@ -253,12 +253,12 @@
     <h3 class="subtitle has-text-centered"><b>Contatto</b></h3>
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>P.Iva / Codice Fiscale: </b></span><input type="text" id="idcliente_cliente" placeholder="P. Iva / Codice Fiscale"><br />
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Ragione sociale: </b></span><input type="text" id="ragionesociale_cliente" placeholder="Ragione sociale"><br />
-    <span style="display: inline-block;width:400px;padding-top:5px;"><b>Nominativo: </b></span><input type="text" id="nominativo_cliente" placeholder="Nominativo"><br />
+    <span style="display: inline-block;width:400px;padding-top:5px;"><b>Nominativo: </b></span><input type="text" id="nominativo_cliente" placeholder="Cognome Nome"><br />
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Indirizzo: </b></span><input type="text" id="indirizzo_cliente" placeholder="Indirizzo"><br />
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Telefono: </b></span><input type="text" id="telefono_cliente" placeholder="Telefono"><br />
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>E-mail: </b></span><input type="text" id="email_cliente" placeholder="E-mail"><br />
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Sito: </b></span><input type="text" id="sito_cliente" placeholder="Sito"><br />
-    <span style="display: inline-block;width:400px;padding-top:5px;"><b>Segnalatore: </b></span><input type="text" id="segnalatore_cliente" placeholder="Segnalatore"><br />
+    <span style="display: inline-block;width:400px;padding-top:5px;"><b>Segnalatore: </b></span><input type="text" id="segnalatore_cliente" placeholder="Cognome Nome"><br />
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Attivita': </b></span><input type="text" id="attivita_cliente" placeholder="Attivita"><br />
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Interessato a: </b></span><input type="text" id="interessatoa_cliente" placeholder="Interessato a..."><br />
     <span style="display: inline-block;width:400px;padding-top:5px;"><b>Note: </b></span><input type="text" id="note_cliente" placeholder="Note"><br />
@@ -330,7 +330,7 @@
         <h3 class="subtitle has-text-centered"><b>Crea nuova scadenza</b></h3>
 
         <span style="display: inline-block;width:400px;padding-top:5px;"><b>Descrizione: </b></span><input type="text" id="descrizione_scadenza" placeholder="Descrizione"><br />
-        <span style="display: inline-block;width:400px;padding-top:5px;"><b>Scadenza: </b></span><input type="text" id="datascadenza_scadenza" placeholder="dd/mm/aaaa"><br />
+        <span style="display: inline-block;width:400px;padding-top:5px;"><b>Scadenza: </b></span><input type="text" id="datascadenza_scadenza" placeholder="gg/mm/aaaa"><br />
         <span style="display: inline-block;width:400px;padding-top:5px;"><b>Avviso a partire da: </b></span>
         <select id="avvisoDaSelect" style="height:35px;">
            <option value="giorno_stesso">Giorno stesso</option>
@@ -361,10 +361,6 @@
 
 <script>
 
-
-
-
-
         var updatingId='';
         var fkcliente='';
         var fkpratica='';
@@ -392,7 +388,6 @@
             }
            });
         }
-
 
         $("#btnSubmit").click(function (event) {
              event.preventDefault();
@@ -429,7 +424,6 @@
                     $("#btnSubmit").prop("disabled", false);
                 }
             });
-
         }
 
         function downloadClick(){
@@ -453,8 +447,6 @@
                });
             }
         }
-
-
 
         function showUtenti(){
            $.ajax({
@@ -557,17 +549,13 @@
            showClienti('/get/cliente/id/' + fkCliente);
         }
 
-
         function cercaClienti(){
-
             var parametroRicerca = $("#cercaClientiInput").val();
             var tipoRicerca = $("#cercaClientiSelect").val();
             var urlComposto = '/get/cliente';
-
             emptyForms();
             $("#tabella_pratiche").hide();
             $("#tabella_documenti").hide();
-
             if(tipoRicerca == 'nominativo'){
                 urlComposto = '/get/cliente/nominativo/' + parametroRicerca;
             }else if(tipoRicerca == 'ragionesociale'){
@@ -581,10 +569,8 @@
             }else if(tipoRicerca == 'id'){
                 urlComposto = '/get/cliente/id/' + parametroRicerca;
             }
-
             showClienti(urlComposto);
         }
-
 
         function showClienti(urlComposto){
            $.ajax({
@@ -652,7 +638,6 @@
            });
         }
 
-
         function cambioPassword(){
             emptyForms();
             $("#form_cambia_password_utente").show();
@@ -700,7 +685,6 @@
             $(".submit").hide();   //hide submit and show with modificaclick() con cui si riabilitano tutti gli input text
             $('.container input[type="text"]').prop('disabled', true);
             $("#form_pratica").show();
-
             $("#idpratica_pratica").val(idPratica);
             $("#descrizione_pratica").val(descrizione);
             $("#note_pratica").val(note);
@@ -716,7 +700,6 @@
             $(".submit").hide();   //hide submit and show with modificaclick() con cui si riabilitano tutti gli input text
             $('.container input[type="text"]').prop('disabled', true);
             $("#form_documento").show();
-
             $("#iddocumento_documento").text(idDocumento);
             $("#descrizione_documento").val(descrizione);
             $("#note_documento").val(note);
@@ -745,18 +728,6 @@
 
         function submitUtente(){
             //raccolta dati e chiamata AJAX
-
-            console.log("------------------------");
-            console.log($("#codicefiscale_utente").val());
-            console.log($("#nominativo_utente").val());
-            console.log($("#indirizzo_utente").val());
-            console.log($("#telefono_utente").val());
-            console.log($("#email_utente").val());
-            console.log($("#natoil_utente").val());
-            console.log('1234');
-            console.log("------------------------");
-
-
             $.ajax({
                url: '/update/utente',
                type: "POST",
@@ -817,9 +788,7 @@
         }
 
         function submitCliente(){
-
             //raccolta dati e chiamata AJAX
-
             $.ajax({
                url: '/update/cliente',
                type: "POST",
@@ -983,7 +952,6 @@
             $('.container input[type="text"]').val('');
             $('.container input[type="password"]').val('');
             $('.container label').text('');
-
             $(".hidden_form").hide();
             $('.container input[type="text"]').prop('disabled', false);
             $(".submit").show();
@@ -997,7 +965,6 @@
             $('.container input[type="file"]').val('');
             //$(".navbar-menu").removeClass("is-active");
             //$(".navbar-burger").removeClass("is-active")
-
         }
         
         function emptyForms(){
@@ -1009,17 +976,13 @@
             $('.container input[type="text"]').val('');
             $('.container input[type="password"]').val('');
             $('.container label').text('');
-
             $('.container input[type="text"]').prop('disabled', false);
-
             $(".hidden_form").hide();
             $(".submit").show();
             updatingId='';
-
             $('.container input[type="file"]').val('');
             //$(".navbar-menu").removeClass("is-active");
             //$(".navbar-burger").removeClass("is-active")
-
         }
 
         
@@ -1086,36 +1049,12 @@
             }
         });*/
 
-        // v----------- al click su un ID di elemento di tabella deve visualizzare il form compilato e disabilitato.
-        // v----------- in corrispondenza del form ci deve essere un pulsantino che modifichi i dati per risalvarli
-
-        // v----------- togliere elimina dalle tabelle
-        // v----------- togliere fk dalle tabelle visualizzate
-        // v----------- sostituire il termine "Clienti" con "Anagrafica"
-        // v----------- togliere registratoDa dalla visualizzazione tabelle
-        // v----------- cercare nell'anagrafica per RAG.SOC, NOMINATIVO, ATTIVITA', SEGNALATORE (nominativo), INTERESSATOA tramite tendina
         // nella ricerca per segnalatore rendere possibile l'inversione del nome e del cognome
-        // v----------- valutare se inserire una descrizione breve da visualizzare in tabella ed una lunga
-        // v----------- la pratica ha un ID da inserire manualmente e non è autogenerato
-        // v----------- quando inserisco un documento devo (tramite tendina) selezionare lo step della pratica
-        // v----------- aggiungere lo step pratica nel file Documento.class
-        // v----------- quando carico un documento devo creare le cartelle dove salvarlo idcliente/idpratica/presentazione||ammissione||rendicontazione||collaudo
-        // v----------- scadenziario: id, descrizione, scadenza, registratoda, fkCliente, quando (stesso giorno, giorno prima, 5 gg, 10 gg)
-        // v----------- controllare le date se sono salvate e visualizzate correttamente
-        // aggiustare il path del salvataggio file
         // inserire un piccolo sistema di log
         // inserire le dipendenze per mysql
         // aggiustare le application.properties
-        // v----------- aumentare limite upload file
-        // v----------- cancellazione scadenze vecchie automatiche
-        // v----------- modificare le date a date e non a input="text"
-        // v----------- inserire l'aggiornamento di registratoDa anche per le scadenze
-        // scaricare i file javascript e rimuoevere i CVN nel caso in cui il server non fosse sempre connesso a internet
-
-
-
-
-
+        // vedere se è possibile utilizzare un form di login custom, anche a costo di usare un altro controller
+        // dopo un inserimento corretto provare a non chiudere tutti i tab
 
 
     </script>

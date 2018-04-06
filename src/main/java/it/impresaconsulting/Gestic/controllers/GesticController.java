@@ -47,7 +47,8 @@ public class GesticController {
     private static final String DOCUMENTO_AGGIORNATO    = "Aggiornamento documentazione avvenuto con successo!";
     private static final String SELEZIONA_UN_FILE       = "Seleziona il file da allegare";
 
-    private static String UPLOADED_FOLDER = "/Users/alessandroargentieri/Desktop/logback/";//"./documentazione";
+    //private static String UPLOADED_FOLDER = "/Users/alessandroargentieri/Desktop/logback/";//"./documentazione";
+    private static String UPLOADED_FOLDER = "./documentazione";
 
     @Autowired UtenteDao       utenteDao;
     @Autowired ClienteDao      clienteDao;
@@ -423,7 +424,7 @@ public class GesticController {
         } catch (IOException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity(UPLOADED_FOLDER + cliente + "/" + pratica + "/" + step + "/" + uploadedFileName, HttpStatus.OK);
+        return new ResponseEntity(UPLOADED_FOLDER + "/" + cliente + "/" + pratica + "/" + step + "/" + uploadedFileName, HttpStatus.OK);
     }
 
     //save file
@@ -433,8 +434,12 @@ public class GesticController {
                 continue;
             }
             byte[] bytes = file.getBytes();
-            String dinamicFolder = UPLOADED_FOLDER + cliente + "/";
-            File directory = new File(String.valueOf(dinamicFolder));
+            File directory = new File(String.valueOf(UPLOADED_FOLDER));
+            if(!directory.exists()) {
+                directory.mkdir();
+            }
+            String dinamicFolder = UPLOADED_FOLDER + "/" + cliente + "/";
+            directory = new File(String.valueOf(dinamicFolder));
             if(!directory.exists()) {
                 directory.mkdir();
             }
