@@ -175,6 +175,30 @@
 
 
 
+<div class="box has-text-centered" id="tabella_scadenze">
+    <h3 class="subtitle"><b>Prossime scadenze</b></h3>
+    <table class="table is-striped" style="margin: 0px auto;">
+        <thead>
+        <tr>
+            <th>DESCRIZIONE</th>
+            <td>SCADENZA</td>
+            <td>CONTATTO</td>
+            <td>ELIMINA</td>
+        </tr>
+        </thead>
+        <tbody id="body_tabella_scadenze">
+        <tr>
+            <th></th>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        </tbody>
+    </table>
+    <br /><br />
+    <br /><a class="button is-primary is-medium" onclick="visualizzaTutteScadenze()">Visualizza tutte le scadenze</a>
+</div>
+
 
 <!--  ************************************************************* -->
 <div class="box" id="form_utente">
@@ -282,10 +306,10 @@
         <span style="display: inline-block;width:400px;padding-top:5px;"><b>Scadenza: </b></span><input type="text" id="datascadenza_scadenza" placeholder="dd/mm/aaaa"><br />
         <span style="display: inline-block;width:400px;padding-top:5px;"><b>Avviso a partire da: </b></span>
         <select id="avvisoDaSelect" style="height:35px;">
-           <option value="giorno stesso">Giorno stesso</option>
-           <option value="giorno prima">Giorno prima</option>
-           <option value="cinque giorni prima">5 giorni prima</option>
-           <option value="dieci giorni prima">10 giorni prima</option>
+           <option value="giorno_stesso">Giorno stesso</option>
+           <option value="giorno_prima">Giorno prima</option>
+           <option value="cinque_giorni_prima">5 giorni prima</option>
+           <option value="dieci_giorni_prima">10 giorni prima</option>
         </select><br />
         <span style="display: inline-block;width:400px;padding-top:5px;"><b>Per il contatto: </b></span>
         <label id="fkcliente_scadenza"></label>
@@ -376,6 +400,7 @@
         $(document).ready(function(){
           homeTabClick();
           userOrAdmin();
+          updateScadenze();
         });
 
         function userOrAdmin(){
@@ -411,6 +436,75 @@
                 console.log(result);
             }
            });
+        }
+
+        function showScadenze(){
+           $.ajax({
+            url: '/get/scadenza',
+            type: "GET",
+            success: function (data, status, xhr) {
+                console.log(data);
+                $("#body_tabella_scadenze").empty();
+                jQuery.each(data, function(i, val) {
+                    $("#body_tabella_scadenze").append("<tr class='" + val.avvisoDa + "'><th>" + val.descrizione + "</th><td>" + convertDate(val.dataScadenza) + "</td><td class='finger' onclick='goToCliente(\"" + val.fkCliente + "\")'>" + val.fkCliente + "</td><td><p class='delete' onclick='deleteScadenza(" + val.idScadenza + ")'></p></td></tr>");
+                });
+            },
+            error: function(result) {
+                alert("Errore: " + result.responseJSON.error);
+                console.log(result);
+            }
+           });
+        }
+
+        function visualizzaTutteScadenze(){
+            $.ajax({
+                url: '/get/all/scadenza',
+                type: "GET",
+                success: function (data, status, xhr) {
+                    console.log(data);
+                    $("#body_tabella_scadenze").empty();
+                    jQuery.each(data, function(i, val) {
+                        $("#body_tabella_scadenze").append("<tr class='" + val.avvisoDa + "'><th>" + val.descrizione + "</th><td>" + convertDate(val.dataScadenza) + "</td><td class='finger' onclick='goToCliente(\"" + val.fkCliente + "\")'>" + val.fkCliente + "</td><td><p class='delete' onclick='deleteScadenza(" + val.idScadenza + ")'></p></td></tr>");
+                    });
+                },
+                error: function(result) {
+                    alert("Errore: " + result.responseJSON.error);
+                    console.log(result);
+                }
+           });
+        }
+
+        function deleteScadenza(idScadenza){
+            $.ajax({
+            url: '/delete/scadenza/' + idScadenza,
+            type: "GET",
+            success: function (data, status, xhr) {
+                console.log(data);
+                showScadenze();
+            },
+            error: function(result) {
+                alert("Errore: " + result.responseJSON.error);
+                console.log(result);
+            }
+           });
+        }
+
+        function updateScadenze(){
+            $.ajax({
+                url: '/delete/old/scadenza',
+                type: "GET",
+                success: function (data, status, xhr) {
+                    console.log(data);
+                },
+                error: function(result) {
+                    console.log(result);
+                }
+           });
+        }
+
+        function goToCliente(fkCliente){
+           clientiTabClick();
+           showClienti('/get/cliente/id/' + fkCliente);
         }
 
 
@@ -820,6 +914,7 @@
             $("#home_div").hide();
             $("#contatti_div").hide();
             $("#tabella_utenti").hide();
+            $("#tabella_scadenze").hide();
             $("#tabella_clienti").hide();
             $("#tabella_pratiche").hide();
             $("#tabella_documenti").hide();
@@ -830,6 +925,7 @@
             $("#form_documento").hide();
             $(".tab").removeClass("is-active");
             $("#body_tabella_utenti").empty();
+            $("#body_tabella_scadenze").empty();
             $("#body_tabella_clienti").empty();
             $("#body_tabella_pratiche").empty();
             $("#body_tabella_documenti").empty();
@@ -883,6 +979,12 @@
             $("#utenti_tab").addClass("is-active");
             showUtenti();
             $("#tabella_utenti").show();
+        }
+        function scadenzeTabClick(){
+            resetFormsAndTables();
+            $("#scadenze_tab").addClass("is-active");
+            showScadenze();
+            $("#tabella_scadenze").show();
         }
         function clientiTabClick(){
             resetFormsAndTables();
@@ -939,6 +1041,7 @@
         // cancellazione scadenze vecchie automatiche
         // modificare le date a date e non a input="text"
         // inserire l'aggiornamento di registratoDa anche per le scadenze
+        // scaricare i file javascript e rimuoevere i CVN nel caso in cui il server non fosse sempre connesso a internet
 
 
 

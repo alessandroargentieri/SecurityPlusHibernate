@@ -4,6 +4,7 @@ import it.impresaconsulting.Gestic.utilities.EncryptionUtils;
 import it.impresaconsulting.Gestic.utilities.SecurityImpl;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
@@ -28,7 +29,7 @@ public class Utente {
     private String telefono;
     @Column(name="email") @Email
     private String email;
-    @Column(name="natoil") @Past
+    @Column(name="natoil") @Past @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date natoIl;
     @Column(name="ruolo")
     private String ruolo;               //USER_ROLE  / ADMIN_ROLE

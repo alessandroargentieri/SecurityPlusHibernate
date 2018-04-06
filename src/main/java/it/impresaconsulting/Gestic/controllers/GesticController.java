@@ -481,37 +481,42 @@ public class GesticController {
         scadenzaDao.deleteById(id);
     }
 
-    @RequestMapping("delete/old/scadenza")
+    @RequestMapping("/delete/old/scadenza")
     public void deleteScadenzeVecchie(){
         Calendar now = Calendar.getInstance();
         List<Scadenza> scadenze = scadenzaDao.findAll();
         for(Scadenza s: scadenze){
-            if(now.after(s.getDataScadenza())){
+            if(now.getTimeInMillis() - s.getDataScadenza().getTime() > 0){
                 scadenzaDao.delete(s);
             }
         }
     }
 
-    @RequestMapping("get/scadenza")
+    @RequestMapping("/get/all/scadenza")
+    public List<Scadenza> allScadenze(){
+        return scadenzaDao.findAll();
+    }
+
+    @RequestMapping("/get/scadenza")
     public List<Scadenza> ciSonoScadenze(){
         Date now = new Date();
         List<Scadenza> scadenze = scadenzaDao.findAll();
         List<Scadenza> tabellaScadenze = new ArrayList<>();
         for(Scadenza s: scadenze){
             if(Scadenza.DIECI_GIORNI.equals(s.getAvvisoDa())){
-                if(getDifferenceDays(s.getDataScadenza(), now) <= 10){
+                if(getDifferenceDays(now, s.getDataScadenza()) <= 10){
                     tabellaScadenze.add(s);
                 }
             }else if(Scadenza.CINQUE_GIORNI.equals(s.getAvvisoDa())){
-                if(getDifferenceDays(s.getDataScadenza(), now) <= 5){
+                if(getDifferenceDays(now, s.getDataScadenza()) <= 5){
                     tabellaScadenze.add(s);
                 }
             }else if(Scadenza.GIORNO_PRIMA.equals(s.getAvvisoDa())){
-                if(getDifferenceDays(s.getDataScadenza(), now) <= 1){
+                if(getDifferenceDays(now, s.getDataScadenza()) <= 1){
                     tabellaScadenze.add(s);
                 }
             }else if(Scadenza.GIORNO_STESSO.equals(s.getAvvisoDa())){
-                if(getDifferenceDays(s.getDataScadenza(), now) < 1){
+                if(getDifferenceDays(now, s.getDataScadenza()) < 1){
                     tabellaScadenze.add(s);
                 }
             }
@@ -520,7 +525,16 @@ public class GesticController {
     }
 
     public static long getDifferenceDays(Date d1, Date d2) {
-        long diff = d2.getTime() - d1.getTime();
+
+        Calendar cal = Calendar.getInstance(); // locale-specific
+        cal.setTime(d1);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        long timenow = cal.getTimeInMillis();
+
+        long diff = d2.getTime() - timenow;
         return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
     }
 
