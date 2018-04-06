@@ -81,6 +81,16 @@ public class GesticController {
 
     //************************************************* UTENTE
 
+    @RequestMapping("/get/mio/nome")
+    public String getMioNome(UsernamePasswordAuthenticationToken token){
+        Optional<Utente> optionalUtente = utenteDao.findById(token.getName());
+        if(optionalUtente.isPresent()){
+            return optionalUtente.get().getNominativo();
+        }else{
+            return "";
+        }
+    }
+
     @RequestMapping("get/utente")
     public List<Utente> getUtenti(){
         return utenteDao.findAll();
@@ -157,6 +167,12 @@ public class GesticController {
                     d.setRegistratoDa(utente.getCodiceFiscale());  //setto il nuovo profilo
                     documentoDao.deleteById(d.getIdDocumento());       //elimino il vecchio dal DB
                     documentoDao.save(d);                            //salvo il nuovo
+                }
+                List<Scadenza> scadenze = scadenzaDao.findByRegistratoDa(oldId);
+                for(Scadenza s : scadenze){
+                    s.setRegistratoDa(utente.getCodiceFiscale());  //setto il nuovo profilo
+                    scadenzaDao.deleteById(s.getIdScadenza());       //elimino il vecchio dal DB
+                    scadenzaDao.save(s);                            //salvo il nuovo
                 }
                 if(utenteDao.findById(oldId).isPresent()){
                     utenteDao.deleteById(oldId);
