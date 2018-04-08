@@ -33,7 +33,7 @@ public class Utente {
     private Date natoIl;
     @Column(name="ruolo")
     private String ruolo;               //USER_ROLE  / ADMIN_ROLE
-    @Column(name="password") @NotBlank
+    @Column(name="password")
     private String password;
 
     public Utente(@NotBlank String codiceFiscale, @NotBlank String nominativo, String indirizzo, String telefono, String email, @Past Date natoIl, String ruolo, @NotBlank String password) {

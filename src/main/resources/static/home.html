@@ -329,8 +329,8 @@
 
         <h3 class="subtitle has-text-centered"><b>Crea nuova scadenza</b></h3>
 
-        <span style="display: inline-block;width:400px;padding-top:5px;"><b>Descrizione: </b></span><input type="text" id="descrizione_scadenza" placeholder="Descrizione"><br />
-        <span style="display: inline-block;width:400px;padding-top:5px;"><b>Scadenza: </b></span><input type="text" id="datascadenza_scadenza" placeholder="gg/mm/aaaa"><br />
+        <span style="display: inline-block;width:400px;padding-top:5px;"><b>Descrizione: </b></span><input type="text" id="descrizione_scadenza" class="always_enabled" placeholder="Descrizione"><br />
+        <span style="display: inline-block;width:400px;padding-top:5px;"><b>Scadenza: </b></span><input type="text" id="datascadenza_scadenza" class="always_enabled" placeholder="gg/mm/aaaa"><br />
         <span style="display: inline-block;width:400px;padding-top:5px;"><b>Avviso a partire da: </b></span>
         <select id="avvisoDaSelect" style="height:35px;">
            <option value="giorno_stesso">Giorno stesso</option>
@@ -920,6 +920,7 @@
         }
 
         function nuovaScadenza(fkCliente){      //apre il modal per inserire la nuova scadenza
+            $(".always_enabled").prop("disabled", false);
             $("#fkcliente_scadenza").text(fkCliente);
             $("#modal_nuova_scadenza").addClass("is-active");
         }

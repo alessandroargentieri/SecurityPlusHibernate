@@ -21,6 +21,8 @@ public class UtenteServiceImpl implements UtenteService{
 
     @Override
     public Utente updateUtente(String registratoDa, String oldId, Utente utente){
+        String password = "";
+        String ruolo = "";
         if(oldId !=null && !"".equals(oldId) && !utente.getCodiceFiscale().equals(oldId)){
             //stiamo aggiornando l'utente cambiandogli proprio la primary Key!
             List<Cliente> clienti = clienteDao.findByRegistratoDa(oldId);
@@ -48,15 +50,24 @@ public class UtenteServiceImpl implements UtenteService{
                 scadenzaDao.save(s);                            //salvo il nuovo
             }
             if(utenteDao.findById(oldId).isPresent()){
+                password = utenteDao.findById(oldId).get().getPassword(); //è un update: è recuperata la vecchia password criptata
+                ruolo = utenteDao.findById(oldId).get().getRuolo();       //è un update: è recuperato il ruolo
                 utenteDao.deleteById(oldId);
             }
         }
 
         if(utenteDao.findById(utente.getCodiceFiscale()).isPresent()){
+            password = utenteDao.findById(utente.getCodiceFiscale()).get().getPassword(); //è un update: è recuperata la vecchia password criptata
+            ruolo = utenteDao.findById(oldId).get().getRuolo();       //è un update: è recuperato il ruolo
             utenteDao.deleteById(utente.getCodiceFiscale());
         }
-
-        utente.setPassword(encryptionUtils.encrypt(utente.getPassword()));
+        if("".equals(password)){ //non è un update ma un inserimento viene criptata la password di default '1234'
+            password = encryptionUtils.encrypt(utente.getPassword());
+        }
+        utente.setPassword(password);
+        if(!"".equals(ruolo)){//è un update e lasciamo il ruolo preesistente invece che lasciarlo settare a 'ROLE_USER'
+            utente.setRuolo(ruolo);
+        }
         return utenteDao.save(utente);
     }
 
