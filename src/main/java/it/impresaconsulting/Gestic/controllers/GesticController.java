@@ -2,7 +2,9 @@ package it.impresaconsulting.Gestic.controllers;
 
 import it.impresaconsulting.Gestic.daos.*;
 import it.impresaconsulting.Gestic.entities.*;
+import it.impresaconsulting.Gestic.services.*;
 import it.impresaconsulting.Gestic.utilities.EncryptionUtils;
+import it.impresaconsulting.Gestic.utilities.FileUtils;
 import it.impresaconsulting.Gestic.utilities.SecurityImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import javax.websocket.server.PathParam;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -44,18 +47,13 @@ public class GesticController {
     private static final String TEST                    = "<h1>Benvenuti in Gestic</h1><p>Il gestionale di Impresa Consulting s.r.l.</p>";
     private static final String PRATICA_AGGIORNATA      = "Aggiornamento pratiche avvenuto con successo!";
     private static final String CLIENTE_AGGIORNATO      = "Aggiornamento contatti avvenuto con successo!";
-    private static final String DOCUMENTO_AGGIORNATO    = "Aggiornamento documentazione avvenuto con successo!";
-    private static final String SELEZIONA_UN_FILE       = "Seleziona il file da allegare";
 
-    //private static String UPLOADED_FOLDER = "/Users/alessandroargentieri/Desktop/logback/";//"./documentazione";
-    private static String UPLOADED_FOLDER = "./documentazione";
-
-    @Autowired UtenteDao       utenteDao;
-    @Autowired ClienteDao      clienteDao;
-    @Autowired PraticaDao      praticaDao;
-    @Autowired DocumentoDao    documentoDao;
-    @Autowired ScadenzaDao     scadenzaDao;
-    @Autowired EncryptionUtils encryptionUtils;
+    @Autowired ScadenzaService  scadenzaService;
+    @Autowired FileUtils        fileUtils;
+    @Autowired DocumentoService documentoService;
+    @Autowired PraticaService   praticaService;
+    @Autowired ClienteService   clienteService;
+    @Autowired UtenteService    utenteService;
 
 
     //************************************************* TEST
@@ -65,7 +63,6 @@ public class GesticController {
         return TEST;
     }
 
-    //@PreAuthorize("hasRole('ROLE_USER')")
     @RequestMapping("/hello")
     public String getResponse(UsernamePasswordAuthenticationToken token){
         return String.format(LOGGATO, token.getName());
@@ -84,479 +81,238 @@ public class GesticController {
 
     @RequestMapping("/get/mio/nome")
     public String getMioNome(UsernamePasswordAuthenticationToken token){
-        Optional<Utente> optionalUtente = utenteDao.findById(token.getName());
-        if(optionalUtente.isPresent()){
-            return optionalUtente.get().getNominativo();
-        }else{
-            return "";
-        }
+        return utenteService.getMioNome(token.getName());
     }
 
     @RequestMapping("get/utente")
     public List<Utente> getUtenti(){
-        return utenteDao.findAll();
+        return utenteService.getAll();
     }
 
     @RequestMapping("get/utente/{codicefiscale}")
     public Utente getUtenteByCodFisc(@PathVariable(name = "codicefiscale") String codiceFiscale){
-        Optional<Utente> utenteOptional = utenteDao.findById(codiceFiscale);
-        if(utenteOptional.isPresent()){
-            return utenteOptional.get();
-        } else {
-            return null;
-        }
+        return utenteService.getUtenteByCodiceFiscale(codiceFiscale);
     }
 
     @RequestMapping("/password")
     public String cambiaPassword(UsernamePasswordAuthenticationToken token, @RequestParam(name = "vecchiapassword") String vecchiaPassword, @RequestParam(name = "nuovapassword") String nuovaPassword) {
-        Optional<Utente> utenteOptional = utenteDao.findById(token.getName());
-        if(utenteOptional.isPresent()){
-            Utente utente = utenteOptional.get();
-            if(vecchiaPassword.equals(encryptionUtils.decrypt(utente.getPassword()))){
-                utenteDao.deleteById(token.getName());
-                utente.setPassword(encryptionUtils.encrypt(nuovaPassword));
-                utenteDao.save(utente);
-                return PASSWORD_CAMBIATA;
-            }
+        boolean success = utenteService.cambiaPassword(token.getName(), vecchiaPassword, nuovaPassword);
+        if(success){
+            return PASSWORD_CAMBIATA;
+        }else{
+            throw new RuntimeException(PASSWORD_NON_CAMBIATA);
         }
-        throw new RuntimeException(PASSWORD_NON_CAMBIATA);
     }
 
     @RequestMapping("/save/utente")
     public String saveUtente(UsernamePasswordAuthenticationToken token, @Valid Utente utente){
         if(token.getAuthorities().contains(new SimpleGrantedAuthority(ROLE_ADMIN))){
-            utente.setPassword(encryptionUtils.encrypt(utente.getPassword()));
-            utenteDao.save(utente);
-            return NUOVO_UTENTE;
+            utenteService.saveUtente(utente);
         } else {
             return NON_AUTORIZZATO;
         }
+        return NUOVO_UTENTE;
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    //@PreAuthorize("hasRole('ROLE_ADMIN')")
     @RequestMapping("/delete/utente/{codicefiscale}")
     public String deleteUtente(UsernamePasswordAuthenticationToken token, @PathVariable(name="codicefiscale") String codicefiscale){
         if(token.getAuthorities().contains(new SimpleGrantedAuthority(ROLE_ADMIN))){
-            utenteDao.deleteById(codicefiscale);
-            return UTENTE_ELIMINATO;
+            utenteService.deleteUtente(codicefiscale);
         } else {
             return NON_AUTORIZZATO;
         }
+        return UTENTE_ELIMINATO;
     }
 
     //@PreAuthorize("hasRole('ROLE_ADMIN')")
     @RequestMapping("/update/utente")
     public String updateUtente(UsernamePasswordAuthenticationToken token, @RequestParam(name = "oldId") String oldId, @Valid Utente utente) throws RuntimeException{
         if(token.getAuthorities().contains(new SimpleGrantedAuthority(ROLE_ADMIN))){
-
-            if(oldId !=null && !"".equals(oldId) && !utente.getCodiceFiscale().equals(oldId)){
-                //stiamo aggiornando l'utente cambiandogli proprio la primary Key!
-                List<Cliente> clienti = clienteDao.findByRegistratoDa(oldId);
-                for(Cliente c : clienti){
-                    c.setRegistratoDa(utente.getCodiceFiscale());  //setto il nuovo profilo
-                    clienteDao.deleteById(c.getIdCliente());       //elimino il vecchio dal DB
-                    clienteDao.save(c);                            //salvo il nuovo
-                }
-                List<Pratica> pratiche = praticaDao.findByRegistratoDa(oldId);
-                for(Pratica p : pratiche){
-                    p.setRegistratoDa(utente.getCodiceFiscale());  //setto il nuovo profilo
-                    praticaDao.deleteById(p.getIdPratica());       //elimino il vecchio dal DB
-                    praticaDao.save(p);                            //salvo il nuovo
-                }
-                List<Documento> documenti = documentoDao.findByRegistratoDa(oldId);
-                for(Documento d : documenti){
-                    d.setRegistratoDa(utente.getCodiceFiscale());  //setto il nuovo profilo
-                    documentoDao.deleteById(d.getIdDocumento());       //elimino il vecchio dal DB
-                    documentoDao.save(d);                            //salvo il nuovo
-                }
-                List<Scadenza> scadenze = scadenzaDao.findByRegistratoDa(oldId);
-                for(Scadenza s : scadenze){
-                    s.setRegistratoDa(utente.getCodiceFiscale());  //setto il nuovo profilo
-                    scadenzaDao.deleteById(s.getIdScadenza());       //elimino il vecchio dal DB
-                    scadenzaDao.save(s);                            //salvo il nuovo
-                }
-                if(utenteDao.findById(oldId).isPresent()){
-                    utenteDao.deleteById(oldId);
-                }
-            }
-
-            if(utenteDao.findById(utente.getCodiceFiscale()).isPresent()){
-                utenteDao.deleteById(utente.getCodiceFiscale());
-            }
-
-            utente.setPassword(encryptionUtils.encrypt(utente.getPassword()));
-            utenteDao.save(utente);
-            return UTENTE_AGGIORNATO;
+            utenteService.updateUtente(token.getName(), oldId, utente);
         } else {
             throw new RuntimeException(NON_AUTORIZZATO);
         }
+        return UTENTE_AGGIORNATO;
     }
-
-
 
     //************************************************* CLIENTE
 
     @RequestMapping("/get/cliente")
     public List<Cliente> getClienti(){
-        return clienteDao.findAll();
+        return clienteService.getAll();
     }
 
     @RequestMapping("get/cliente/{id}")
     public Cliente getClienteById(@PathVariable(name = "id") String id){
-        Optional<Cliente> clienteOptional = clienteDao.findById(id);
-        if(clienteOptional.isPresent()){
-            return clienteOptional.get();
-        } else {
-            return null;
-        }
+        return clienteService.findClienteById(id);
     }
 
     @RequestMapping("get/cliente/id/{id}")
     public List<Cliente> getPseudoListClienteById(@PathVariable(name = "id") String id){
-        List<Cliente> pseudoList = new ArrayList<>();
-        Optional<Cliente> clienteOptional = clienteDao.findById(id);
-        if(clienteOptional.isPresent()){
-            pseudoList.add(clienteOptional.get());
-        }
-        return pseudoList;
+        return clienteService.findClienteByIdWithAPseudoList(id);
     }
 
     @RequestMapping("get/cliente/ragionesociale/{ragionesociale}")
     public List<Cliente> getClienteByRagioneSociale(@PathVariable(name = "ragionesociale") String ragioneSociale){
-        return clienteDao.findByRagioneSociale(ragioneSociale);
+        return clienteService.findClienteByRagioneSociale(ragioneSociale);
     }
 
     @RequestMapping("get/cliente/nominativo/{nominativo}")
     public List<Cliente> getClienteByNominativo(@PathVariable(name = "nominativo") String nominativo){
-        return clienteDao.findByNominativo(nominativo);
+        return clienteService.findClienteByNominativo(nominativo);
     }
 
     @RequestMapping("get/cliente/attivita/{attivita}")
     public List<Cliente> getClienteByAttivita(@PathVariable(name = "attivita") String attivita){
-        return clienteDao.findByAttivita(attivita);
-
+        return clienteService.findClienteByAttivita(attivita);
     }
 
     @RequestMapping("get/cliente/segnalatore/{segnalatore}")
     public List<Cliente> getClienteBySegnalatore(@PathVariable(name = "segnalatore") String segnalatore){
-        return clienteDao.findBySegnalatore(segnalatore);
+        return clienteService.findClienteBySegnalatore(segnalatore);
     }
 
     @RequestMapping("get/cliente/interessatoa/{interessatoa}")
     public List<Cliente> getClienteByInteressatoA(@PathVariable(name = "interessatoa") String interessatoA){
-        return clienteDao.findByInteressatoA(interessatoA);
+        return clienteService.findClienteByInteressatoA(interessatoA);
     }
 
 
     @RequestMapping("/update/cliente")
     public String updateCliente(UsernamePasswordAuthenticationToken token,  @RequestParam(name = "oldId") String oldId, @Valid Cliente cliente){
-        cliente.setRegistratoDa(token.getName());
-
-        if(oldId !=null && !"".equals(oldId) && !cliente.getIdCliente().equals(oldId)) {
-            //stiamo aggiornando il cliente cambiandogli proprio la primary Key!
-            List<Pratica> pratiche = praticaDao.findByFkCliente(oldId);
-            for(Pratica p : pratiche){
-                p.setFkCliente(cliente.getIdCliente());
-                praticaDao.deleteById(p.getIdPratica());
-                praticaDao.save(p);
-            }
-            if(clienteDao.findById(oldId).isPresent()){
-                clienteDao.deleteById(oldId);
-            }
-        }
-
-        if(clienteDao.findById(cliente.getIdCliente()).isPresent()){
-            clienteDao.deleteById(cliente.getIdCliente());
-        }
-
-        clienteDao.save(cliente);
+        clienteService.updateCliente(token.getName(), oldId, cliente);
         return CLIENTE_AGGIORNATO;
     }
 
     @RequestMapping("/save/cliente")
     public Cliente saveCliente(UsernamePasswordAuthenticationToken token, @Valid Cliente cliente){
-       cliente.setRegistratoDa(token.getName());
-       return clienteDao.save(cliente);
+       return clienteService.saveCliente(token.getName(), cliente);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    //@PreAuthorize("hasRole('ROLE_ADMIN')")
     @RequestMapping("delete/cliente/{idcliente}")
     public String deleteCliente(UsernamePasswordAuthenticationToken token, @PathVariable(name = "idcliente") String idcliente){
         if(token.getAuthorities().contains(new SimpleGrantedAuthority(ROLE_ADMIN))){
-            clienteDao.deleteById(idcliente);
-            List<Pratica> pratiche = praticaDao.findByFkCliente(idcliente);
-            for(Pratica pratica : pratiche){
-                documentoDao.deleteDocumentiPerPratica(pratica.getIdPratica());
-            }
-            praticaDao.deletePraticaPerCliente(idcliente);
+            clienteService.deleteClienteAndRelativePraticheAndDocumentiByIdCliente(idcliente);
         } else {
             return NON_AUTORIZZATO;
         }
         return CLIENTE_ELIMINATO;
     }
 
-
     //************************************************* PRATICA
-
 
     @RequestMapping("get/pratica")
     public List<Pratica> getPratiche(){
-        return praticaDao.findAll();
+        return praticaService.getAll();
     }
 
     @RequestMapping("get/pratica/{id}")
-    public Pratica getPraticaById(@PathVariable(name = "id") String id){
-        Optional<Pratica> praticaOptional = praticaDao.findById(id);
-        if(praticaOptional.isPresent()){
-            return praticaOptional.get();
-        } else {
-            return null;
-        }
+    public Pratica getPraticaPerId(@PathVariable(name = "id") String idPratica){
+        return praticaService.getPraticaById(idPratica);
     }
 
     @RequestMapping("get/pratica/cliente/{idcliente}")
     public List<Pratica> getPratichePerCliente(@PathVariable(name="idcliente") String idcliente){
-        return praticaDao.findByFkCliente(idcliente);
+        return praticaService.findPraticaPerFkCliente(idcliente);
     }
 
     @RequestMapping("/update/pratica")
-    public String updatePratica(UsernamePasswordAuthenticationToken token,  @RequestParam(name = "oldId") String oldId, @Valid Pratica pratica){
-        pratica.setRegistratoDa(token.getName());
-
-        if(oldId !=null && !"".equals(oldId) && !pratica.getIdPratica().equals(oldId)) {
-            //stiamo aggiornando il cliente cambiandogli proprio la primary Key!
-            List<Documento> documenti = documentoDao.findByFkPratica(oldId);
-            for(Documento d : documenti){
-                d.setFkPratica(pratica.getIdPratica());
-                documentoDao.deleteById(d.getIdDocumento());
-                documentoDao.save(d);
-            }
-            if(praticaDao.findById(oldId).isPresent()){
-                praticaDao.deleteById(oldId);
-            }
-        }
-
-        if(praticaDao.findById(pratica.getIdPratica()).isPresent()){
-            praticaDao.deleteById(pratica.getIdPratica());
-        }
-        praticaDao.save(pratica);
+    public String updatePratica(UsernamePasswordAuthenticationToken token, @RequestParam(name = "oldId") String oldId, @Valid Pratica pratica){
+        praticaService.updatePratica(token.getName(), oldId, pratica);
         return PRATICA_AGGIORNATA;
     }
 
     @RequestMapping("/save/pratica")
     public Pratica savePratica(UsernamePasswordAuthenticationToken token, @Valid Pratica pratica){
-       pratica.setRegistratoDa(token.getName());
-       return praticaDao.save(pratica);
+       return praticaService.savePratica(token.getName(), pratica);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    //@PreAuthorize("hasRole('ROLE_ADMIN')")
     @RequestMapping("/delete/pratica/{idpratica}")
     public String deletePratica(UsernamePasswordAuthenticationToken token, @PathVariable(name="idpratica") String idpratica){
         if(token.getAuthorities().contains(new SimpleGrantedAuthority(ROLE_ADMIN))){
-            praticaDao.deleteById(idpratica);
-            documentoDao.deleteDocumentiPerPratica(idpratica);
-            return PRATICHE_ELIMINATE;
+            praticaService.deletePraticaAndRelativiDocumentiPerIdPratica(idpratica);
         } else {
              throw new RuntimeException(NON_AUTORIZZATO);
         }
-
+        return PRATICHE_ELIMINATE;
     }
 
     //************************************************* DOCUMENTO
 
-
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @RequestMapping("get/documento")
     public List<Documento> getDocumenti(){
-        return documentoDao.findAll();
+        return documentoService.getAllDocumenti();
     }
 
     @RequestMapping("get/documento/{id}")
     public Documento getDocumentoById(@PathVariable(name = "id") String id){
-        Optional<Documento> documentoOptional = documentoDao.findById(id);
-        if(documentoOptional.isPresent()){
-            return documentoOptional.get();
-        } else {
-            return null;
-        }
+        return documentoService.getDocumentoById(id);
     }
 
     @RequestMapping("get/documento/pratica/{idpratica}")
     public List<Documento> getDocumentiPerPratica(@PathVariable(name="idpratica") String idpratica){
-        return documentoDao.findByFkPratica(idpratica);
+        return documentoService.getDocumentiByPratica(idpratica);
     }
 
     @RequestMapping("/save/documento")
-    public Documento saveDocumento(UsernamePasswordAuthenticationToken token, @Valid Documento documento){
-        documento.setRegistratoDa(token.getName());
-        return documentoDao.save(documento);
+    public Documento salvaDocumento(UsernamePasswordAuthenticationToken token, @Valid Documento documento){
+        return documentoService.saveDocumento(token.getName(), documento);
     }
 
     @RequestMapping("/update/documento")
-    public String updateDocumento(UsernamePasswordAuthenticationToken token, @Valid Documento documento){
-        documento.setRegistratoDa(token.getName());
-        if(documentoDao.findById(documento.getIdDocumento()).isPresent()){
-            documentoDao.deleteById(documento.getIdDocumento());
-        }
-        documentoDao.save(documento);
-        return DOCUMENTO_AGGIORNATO;
+    public String aggiornaDocumento(UsernamePasswordAuthenticationToken token, @Valid Documento documento){
+        return documentoService.updateDocumento(token.getName(), documento);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @RequestMapping("/delete/documento/{iddocumento}")
     public void deleteDocumento(@PathVariable(name="iddocumento") String id){
-        documentoDao.deleteById(id);
+        documentoService.deleteDocumentoById(id);
     }
-
 
     //**************** UPLOAD FILE ********************************************
 
-
     @PostMapping("/api/upload")
     public ResponseEntity<?> uploadFileMulti(@RequestParam("cliente") String cliente, @RequestParam("pratica") String pratica, @RequestParam("step") String step, @RequestParam("files") MultipartFile[] uploadfiles) {
-        String uploadedFileName = Arrays.stream(uploadfiles).map(x -> x.getOriginalFilename())
-                .filter(x -> !StringUtils.isEmpty(x)).collect(Collectors.joining(" , "));
-        if (StringUtils.isEmpty(uploadedFileName)) {
-            return new ResponseEntity(SELEZIONA_UN_FILE, HttpStatus.OK);
-        }
-        try {
-            saveUploadedFiles(Arrays.asList(uploadfiles), cliente, pratica, step);
-        } catch (IOException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        return new ResponseEntity(UPLOADED_FOLDER + "/" + cliente + "/" + pratica + "/" + step + "/" + uploadedFileName, HttpStatus.OK);
-    }
-
-    //save file
-    private void saveUploadedFiles(List<MultipartFile> files, String cliente, String pratica, String step) throws IOException {
-        for (MultipartFile file : files) {
-            if (file.isEmpty()) {
-                continue;
-            }
-            byte[] bytes = file.getBytes();
-            File directory = new File(String.valueOf(UPLOADED_FOLDER));
-            if(!directory.exists()) {
-                directory.mkdir();
-            }
-            String dinamicFolder = UPLOADED_FOLDER + "/" + cliente + "/";
-            directory = new File(String.valueOf(dinamicFolder));
-            if(!directory.exists()) {
-                directory.mkdir();
-            }
-            dinamicFolder = dinamicFolder + pratica + "/";
-            directory = new File(String.valueOf(dinamicFolder));
-            if(!directory.exists()) {
-                directory.mkdir();
-            }
-            dinamicFolder = dinamicFolder + step + "/";
-            directory = new File(String.valueOf(dinamicFolder));
-            if(!directory.exists()) {
-                directory.mkdir();
-            }
-
-            Path path = Paths.get(dinamicFolder + file.getOriginalFilename());
-            Files.write(path, bytes);
-        }
+        return fileUtils.uploadFileOnServer(cliente, pratica, step, uploadfiles);
     }
 
     //*************************** DOWNLOAD FILE *******************************
 
     @RequestMapping(value="/getfile", method=RequestMethod.GET)
-    public ResponseEntity<byte[]> getPDF(@RequestParam("filename") String filename) throws IOException{
-        HttpHeaders headers = new HttpHeaders();
-        if(filename.endsWith(".pdf")) {
-            headers.setContentType(MediaType.parseMediaType("application/pdf"));
-        }else if(filename.endsWith(".docx")) {
-            headers.setContentType(MediaType.parseMediaType("application/docx"));
-        }else if(filename.endsWith(".doc")) {
-            headers.setContentType(MediaType.parseMediaType("application/doc"));
-        }else if(filename.endsWith(".xlsx")) {
-            headers.setContentType(MediaType.parseMediaType("application/xlsx"));
-        }else if(filename.endsWith(".xls")) {
-            headers.setContentType(MediaType.parseMediaType("application/xls"));
-        }else if(filename.endsWith(".ppt")) {
-            headers.setContentType(MediaType.parseMediaType("application/ppt"));
-        }else if(filename.endsWith(".pptx")) {
-            headers.setContentType(MediaType.parseMediaType("application/pptx"));
-        }
-        headers.add("content-disposition", "inline;filename=" + filename);
-        headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
-
-        Path path = Paths.get(filename);
-        byte[] data = Files.readAllBytes(path);
-        ResponseEntity<byte[]> response = new ResponseEntity<byte[]>(data, headers, HttpStatus.OK);
-        return response;
+    public ResponseEntity<byte[]> getFile(@RequestParam("filename") String filename) throws IOException{
+        return fileUtils.getFile(filename);
     }
-
 
     //*************************** SCADENZE *******************************
 
     @RequestMapping("save/scadenza")
     public Scadenza creaNuovaScadenza(UsernamePasswordAuthenticationToken token, @Valid Scadenza scadenza){
-        scadenza.setRegistratoDa(token.getName());
-        return scadenzaDao.save(scadenza);
+        return scadenzaService.salvaScadenza(token.getName(), scadenza);
     }
 
     @RequestMapping("delete/scadenza/{idscadenza}")
     public void deleteScadenza(@PathVariable("idscadenza") Integer id){
-        scadenzaDao.deleteById(id);
+        scadenzaService.deleteScandenzaById(id);
     }
 
     @RequestMapping("/delete/old/scadenza")
     public void deleteScadenzeVecchie(){
-        Calendar now = Calendar.getInstance();
-        List<Scadenza> scadenze = scadenzaDao.findAll();
-        for(Scadenza s: scadenze){
-            if(now.getTimeInMillis() - s.getDataScadenza().getTime() > 0){
-                scadenzaDao.delete(s);
-            }
-        }
+        scadenzaService.deleteOldScadenze();
     }
 
     @RequestMapping("/get/all/scadenza")
     public List<Scadenza> allScadenze(){
-        return scadenzaDao.findAll();
+        return scadenzaService.getAllScadenze();
     }
 
     @RequestMapping("/get/scadenza")
     public List<Scadenza> ciSonoScadenze(){
-        Date now = new Date();
-        List<Scadenza> scadenze = scadenzaDao.findAll();
-        List<Scadenza> tabellaScadenze = new ArrayList<>();
-        for(Scadenza s: scadenze){
-            if(Scadenza.DIECI_GIORNI.equals(s.getAvvisoDa())){
-                if(getDifferenceDays(now, s.getDataScadenza()) <= 10){
-                    tabellaScadenze.add(s);
-                }
-            }else if(Scadenza.CINQUE_GIORNI.equals(s.getAvvisoDa())){
-                if(getDifferenceDays(now, s.getDataScadenza()) <= 5){
-                    tabellaScadenze.add(s);
-                }
-            }else if(Scadenza.GIORNO_PRIMA.equals(s.getAvvisoDa())){
-                if(getDifferenceDays(now, s.getDataScadenza()) <= 1){
-                    tabellaScadenze.add(s);
-                }
-            }else if(Scadenza.GIORNO_STESSO.equals(s.getAvvisoDa())){
-                if(getDifferenceDays(now, s.getDataScadenza()) < 1){
-                    tabellaScadenze.add(s);
-                }
-            }
-        }
-        return tabellaScadenze;
-    }
-
-    public static long getDifferenceDays(Date d1, Date d2) {
-
-        Calendar cal = Calendar.getInstance(); // locale-specific
-        cal.setTime(d1);
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-        long timenow = cal.getTimeInMillis();
-
-        long diff = d2.getTime() - timenow;
-        return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+        return scadenzaService.getScadenze();
     }
 
 
