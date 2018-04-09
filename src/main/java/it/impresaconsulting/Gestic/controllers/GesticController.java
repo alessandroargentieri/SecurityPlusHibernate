@@ -1,37 +1,23 @@
 package it.impresaconsulting.Gestic.controllers;
 
-import it.impresaconsulting.Gestic.daos.*;
 import it.impresaconsulting.Gestic.entities.*;
 import it.impresaconsulting.Gestic.services.*;
-import it.impresaconsulting.Gestic.utilities.EncryptionUtils;
 import it.impresaconsulting.Gestic.utilities.FileUtils;
 import it.impresaconsulting.Gestic.utilities.SecurityImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import javax.websocket.server.PathParam;
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import static it.impresaconsulting.Gestic.utilities.SecurityImpl.ROLE_ADMIN;
 
-@CrossOrigin
 @RestController
 public class GesticController {
 
