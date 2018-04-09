@@ -77,15 +77,12 @@ public class SecurityImpl extends WebSecurityConfigurerAdapter implements Authen
         return auth.equals(UsernamePasswordAuthenticationToken.class);
     }
 
-
-
     /* websecurity adapter part: erase it if you don't want login alert but default spring login web page */
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(this); //this because it is either a WebSecurityAdapter than an AuthenticationProvider
     }
-
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -103,8 +100,6 @@ public class SecurityImpl extends WebSecurityConfigurerAdapter implements Authen
                 .logoutSuccessUrl("/test")    //deve esistere nel controller
                 .deleteCookies("JSESSIONID")
                 .invalidateHttpSession(true);
-
-
     }
 
     /*  per non filtrare con il login alcuni path  */

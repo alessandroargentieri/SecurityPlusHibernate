@@ -66,7 +66,41 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     public List<Cliente> findClienteBySegnalatore(String segnalatore){
-        return clienteDao.findBySegnalatore(segnalatore);
+        if(segnalatore.contains("%20")){
+            segnalatore = segnalatore.replaceAll("%20"," ");
+        }
+        String[] splited = segnalatore.split("\\s+");
+        List<Cliente> result;
+        if(splited.length == 2){
+            result = clienteDao.findBySegnalatore(splited[0] + " " + splited[1]);
+            if(result == null || result.size() == 0){
+                result = clienteDao.findBySegnalatore(splited[1] + " " + splited[0]);
+            }
+        }else if(splited.length == 3){
+            result = clienteDao.findBySegnalatore(splited[0] + " " + splited[1] + " " + splited[2]);
+            if(result == null || result.size() == 0){
+                result = clienteDao.findBySegnalatore(splited[0] + " " + splited[2] + " " + splited[1]);
+            }
+            if(result == null || result.size() == 0){
+                result = clienteDao.findBySegnalatore(splited[1] + " " + splited[0] + " " + splited[2]);
+            }
+            if(result == null || result.size() == 0){
+                result = clienteDao.findBySegnalatore(splited[1] + " " + splited[2] + " " + splited[0]);
+            }
+            if(result == null || result.size() == 0){
+                result = clienteDao.findBySegnalatore(splited[2] + " " + splited[0] + " " + splited[1]);
+            }
+            if(result == null || result.size() == 0){
+                result = clienteDao.findBySegnalatore(splited[2] + " " + splited[1] + " " + splited[0]);
+            }
+        }else{
+            result = clienteDao.findBySegnalatore(segnalatore);
+        }
+        return result;
+
+
+
+
     }
 
     @Override
@@ -76,7 +110,37 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     public List<Cliente> findClienteByNominativo(String nominativo){
-        return clienteDao.findByNominativo(nominativo);
+        if(nominativo.contains("%20")){
+            nominativo = nominativo.replaceAll("%20"," ");
+        }
+        String[] splited = nominativo.split("\\s+");
+        List<Cliente> result;
+        if(splited.length == 2){
+            result = clienteDao.findByNominativo(splited[0] + " " + splited[1]);
+            if(result == null || result.size() == 0){
+                result = clienteDao.findByNominativo(splited[1] + " " + splited[0]);
+            }
+        }else if(splited.length == 3){
+            result = clienteDao.findByNominativo(splited[0] + " " + splited[1] + " " + splited[2]);
+            if(result == null || result.size() == 0){
+                result = clienteDao.findByNominativo(splited[0] + " " + splited[2] + " " + splited[1]);
+            }
+            if(result == null || result.size() == 0){
+                result = clienteDao.findByNominativo(splited[1] + " " + splited[0] + " " + splited[2]);
+            }
+            if(result == null || result.size() == 0){
+                result = clienteDao.findByNominativo(splited[1] + " " + splited[2] + " " + splited[0]);
+            }
+            if(result == null || result.size() == 0){
+                result = clienteDao.findByNominativo(splited[2] + " " + splited[0] + " " + splited[1]);
+            }
+            if(result == null || result.size() == 0){
+                result = clienteDao.findByNominativo(splited[2] + " " + splited[1] + " " + splited[0]);
+            }
+        }else{
+            result = clienteDao.findByNominativo(nominativo);
+        }
+        return result;
     }
 
     @Override
