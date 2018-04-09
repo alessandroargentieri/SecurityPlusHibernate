@@ -50,7 +50,7 @@
         <li id="utenti_tab"   class="tab"><a onclick="utentiTabClick()">Utenti</a></li>
         <li id="clienti_tab"  class="tab"><a onclick="clientiTabClick()">Anagrafica</a></li>
         <li id="scadenze_tab" class="tab"><a onclick="scadenzeTabClick()">Scadenze</a></li>
-        <li id="contatti_tab" class="tab"><a onclick="contattiTabClick()">Contatti</a></li>
+        <li id="contatti_tab" class="tab"><a onclick="contattiTabClick()">Contattaci</a></li>
     </ul>
 </div>
 
@@ -370,7 +370,17 @@
           getMioNome();
           userOrAdmin();
           updateScadenze();
+          changeUrl("gestic","/gestic");
         });
+
+        function changeUrl(title, url) {
+            if (typeof (history.pushState) != "undefined") {
+               var obj = { Title: title, Url: url };
+               history.pushState(obj, obj.Title, obj.Url);
+            } else {
+               alert("Browser does not support HTML5.");
+            }
+        }
 
         function userOrAdmin(){
             $.ajax({
@@ -991,28 +1001,33 @@
             resetFormsAndTables();
             $("#home_tab").addClass("is-active");
             $("#home_div").show();
+            changeUrl("gestic","/gestic");
         }
         function utentiTabClick(){
             resetFormsAndTables();
             $("#utenti_tab").addClass("is-active");
             showUtenti();
             $("#tabella_utenti").show();
+            changeUrl("gestic/utenti","/utenti");
         }
         function scadenzeTabClick(){
             resetFormsAndTables();
             $("#scadenze_tab").addClass("is-active");
             showScadenze();
             $("#tabella_scadenze").show();
+            changeUrl("gestic/scadenze","/scadenze");
         }
         function clientiTabClick(){
             resetFormsAndTables();
             $("#clienti_tab").addClass("is-active");
             $("#tabella_clienti").show();
+            changeUrl("gestic/anagrafica","/anagrafica");
         }
         function contattiTabClick(){
             resetFormsAndTables();
             $("#contatti_tab").addClass("is-active");
             $("#contatti_div").show();
+            changeUrl("gestic/contact-us","/contact-us");
         }
         function convertDate(inputFormat) {
             function pad(s) { return (s < 10) ? '0' + s : s; }

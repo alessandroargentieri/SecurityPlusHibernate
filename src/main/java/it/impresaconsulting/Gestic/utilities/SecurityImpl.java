@@ -95,7 +95,7 @@ public class SecurityImpl extends WebSecurityConfigurerAdapter implements Authen
                 .authorizeRequests()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin()  //.loginPage("/signin.html")
+                .formLogin()  //.loginPage("/login") //.loginPage("/signin.html")
                 .and()
                 .httpBasic()
                 .and()

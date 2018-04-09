@@ -63,7 +63,7 @@ public class GesticController {
         return TEST;
     }
 
-    @RequestMapping("/hello")
+    @RequestMapping("/hellox")
     public String getResponse(UsernamePasswordAuthenticationToken token){
         return String.format(LOGGATO, token.getName());
     }
