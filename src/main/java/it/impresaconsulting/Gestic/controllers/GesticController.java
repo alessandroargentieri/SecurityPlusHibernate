@@ -296,7 +296,7 @@ public class GesticController {
     }
 
     @RequestMapping("delete/scadenza/{idscadenza}")
-    public void deleteScadenza(@PathVariable("idscadenza") Integer id){
+    public void deleteScadenza(@PathVariable("idscadenza") Long id){
         scadenzaService.deleteScandenzaById(id);
     }
 

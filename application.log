@@ -1,0 +1,241 @@
+2018-04-09 14:39:59.316 ERROR 22811 --- [restartedMain] o.s.boot.SpringApplication               : Application run failed
+
+org.springframework.boot.context.properties.bind.BindException: Failed to bind properties under 'logging.level' to java.util.Map<java.lang.String, java.lang.String>
+	at org.springframework.boot.context.properties.bind.Binder.handleBindError(Binder.java:250) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.properties.bind.Binder.bind(Binder.java:226) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.properties.bind.Binder.bind(Binder.java:210) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.properties.bind.Binder.bind(Binder.java:166) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.logging.LoggingApplicationListener.setLogLevels(LoggingApplicationListener.java:307) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.logging.LoggingApplicationListener.initializeFinalLoggingLevels(LoggingApplicationListener.java:290) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.logging.LoggingApplicationListener.initialize(LoggingApplicationListener.java:238) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.logging.LoggingApplicationListener.onApplicationEnvironmentPreparedEvent(LoggingApplicationListener.java:200) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.logging.LoggingApplicationListener.onApplicationEvent(LoggingApplicationListener.java:173) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.doInvokeListener(SimpleApplicationEventMulticaster.java:172) ~[spring-context-5.0.4.RELEASE.jar:5.0.4.RELEASE]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.invokeListener(SimpleApplicationEventMulticaster.java:165) ~[spring-context-5.0.4.RELEASE.jar:5.0.4.RELEASE]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:139) ~[spring-context-5.0.4.RELEASE.jar:5.0.4.RELEASE]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:127) ~[spring-context-5.0.4.RELEASE.jar:5.0.4.RELEASE]
+	at org.springframework.boot.context.event.EventPublishingRunListener.environmentPrepared(EventPublishingRunListener.java:74) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.SpringApplicationRunListeners.environmentPrepared(SpringApplicationRunListeners.java:54) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.SpringApplication.prepareEnvironment(SpringApplication.java:351) [spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:317) [spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1246) [spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1234) [spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at it.impresaconsulting.Gestic.GesticApplication.main(GesticApplication.java:32) [classes/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_141]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_141]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_141]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_141]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:49) [spring-boot-devtools-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+Caused by: org.springframework.core.convert.ConverterNotFoundException: No converter found capable of converting from type [java.lang.String] to type [java.util.Map<java.lang.String, java.lang.String>]
+	at org.springframework.core.convert.support.GenericConversionService.handleConverterNotFound(GenericConversionService.java:321) ~[spring-core-5.0.4.RELEASE.jar:5.0.4.RELEASE]
+	at org.springframework.core.convert.support.GenericConversionService.convert(GenericConversionService.java:194) ~[spring-core-5.0.4.RELEASE.jar:5.0.4.RELEASE]
+	at org.springframework.boot.context.properties.bind.BindConverter$CompositeConversionService.convert(BindConverter.java:162) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.properties.bind.BindConverter.convert(BindConverter.java:96) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.properties.bind.BindConverter.convert(BindConverter.java:88) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.properties.bind.MapBinder.bindAggregate(MapBinder.java:66) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.properties.bind.AggregateBinder.bind(AggregateBinder.java:58) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.properties.bind.Binder.lambda$bindAggregate$2(Binder.java:306) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.properties.bind.Binder$Context.withIncreasedDepth(Binder.java:439) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.properties.bind.Binder$Context.access$100(Binder.java:379) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.properties.bind.Binder.bindAggregate(Binder.java:305) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.properties.bind.Binder.bindObject(Binder.java:263) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.properties.bind.Binder.bind(Binder.java:221) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	... 23 common frames omitted
+
+2018-04-09 14:40:06.527 ERROR 22817 --- [restartedMain] o.s.boot.SpringApplication               : Application run failed
+
+org.springframework.boot.context.properties.bind.BindException: Failed to bind properties under 'logging.level' to java.util.Map<java.lang.String, java.lang.String>
+	at org.springframework.boot.context.properties.bind.Binder.handleBindError(Binder.java:250) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.properties.bind.Binder.bind(Binder.java:226) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.properties.bind.Binder.bind(Binder.java:210) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.properties.bind.Binder.bind(Binder.java:166) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.logging.LoggingApplicationListener.setLogLevels(LoggingApplicationListener.java:307) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.logging.LoggingApplicationListener.initializeFinalLoggingLevels(LoggingApplicationListener.java:290) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.logging.LoggingApplicationListener.initialize(LoggingApplicationListener.java:238) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.logging.LoggingApplicationListener.onApplicationEnvironmentPreparedEvent(LoggingApplicationListener.java:200) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.logging.LoggingApplicationListener.onApplicationEvent(LoggingApplicationListener.java:173) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.doInvokeListener(SimpleApplicationEventMulticaster.java:172) ~[spring-context-5.0.4.RELEASE.jar:5.0.4.RELEASE]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.invokeListener(SimpleApplicationEventMulticaster.java:165) ~[spring-context-5.0.4.RELEASE.jar:5.0.4.RELEASE]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:139) ~[spring-context-5.0.4.RELEASE.jar:5.0.4.RELEASE]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:127) ~[spring-context-5.0.4.RELEASE.jar:5.0.4.RELEASE]
+	at org.springframework.boot.context.event.EventPublishingRunListener.environmentPrepared(EventPublishingRunListener.java:74) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.SpringApplicationRunListeners.environmentPrepared(SpringApplicationRunListeners.java:54) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.SpringApplication.prepareEnvironment(SpringApplication.java:351) [spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:317) [spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1246) [spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1234) [spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at it.impresaconsulting.Gestic.GesticApplication.main(GesticApplication.java:32) [classes/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_141]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_141]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_141]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_141]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:49) [spring-boot-devtools-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+Caused by: org.springframework.core.convert.ConverterNotFoundException: No converter found capable of converting from type [java.lang.String] to type [java.util.Map<java.lang.String, java.lang.String>]
+	at org.springframework.core.convert.support.GenericConversionService.handleConverterNotFound(GenericConversionService.java:321) ~[spring-core-5.0.4.RELEASE.jar:5.0.4.RELEASE]
+	at org.springframework.core.convert.support.GenericConversionService.convert(GenericConversionService.java:194) ~[spring-core-5.0.4.RELEASE.jar:5.0.4.RELEASE]
+	at org.springframework.boot.context.properties.bind.BindConverter$CompositeConversionService.convert(BindConverter.java:162) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.properties.bind.BindConverter.convert(BindConverter.java:96) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.properties.bind.BindConverter.convert(BindConverter.java:88) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.properties.bind.MapBinder.bindAggregate(MapBinder.java:66) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.properties.bind.AggregateBinder.bind(AggregateBinder.java:58) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.properties.bind.Binder.lambda$bindAggregate$2(Binder.java:306) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.properties.bind.Binder$Context.withIncreasedDepth(Binder.java:439) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.properties.bind.Binder$Context.access$100(Binder.java:379) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.properties.bind.Binder.bindAggregate(Binder.java:305) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.properties.bind.Binder.bindObject(Binder.java:263) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.properties.bind.Binder.bind(Binder.java:221) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	... 23 common frames omitted
+
+2018-04-09 14:40:25.709 ERROR 22820 --- [restartedMain] o.s.boot.SpringApplication               : Application run failed
+
+org.springframework.boot.context.properties.bind.BindException: Failed to bind properties under 'logging.level' to java.util.Map<java.lang.String, java.lang.String>
+	at org.springframework.boot.context.properties.bind.Binder.handleBindError(Binder.java:250) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.properties.bind.Binder.bind(Binder.java:226) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.properties.bind.Binder.bind(Binder.java:210) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.properties.bind.Binder.bind(Binder.java:166) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.logging.LoggingApplicationListener.setLogLevels(LoggingApplicationListener.java:307) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.logging.LoggingApplicationListener.initializeFinalLoggingLevels(LoggingApplicationListener.java:290) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.logging.LoggingApplicationListener.initialize(LoggingApplicationListener.java:238) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.logging.LoggingApplicationListener.onApplicationEnvironmentPreparedEvent(LoggingApplicationListener.java:200) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.logging.LoggingApplicationListener.onApplicationEvent(LoggingApplicationListener.java:173) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.doInvokeListener(SimpleApplicationEventMulticaster.java:172) ~[spring-context-5.0.4.RELEASE.jar:5.0.4.RELEASE]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.invokeListener(SimpleApplicationEventMulticaster.java:165) ~[spring-context-5.0.4.RELEASE.jar:5.0.4.RELEASE]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:139) ~[spring-context-5.0.4.RELEASE.jar:5.0.4.RELEASE]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:127) ~[spring-context-5.0.4.RELEASE.jar:5.0.4.RELEASE]
+	at org.springframework.boot.context.event.EventPublishingRunListener.environmentPrepared(EventPublishingRunListener.java:74) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.SpringApplicationRunListeners.environmentPrepared(SpringApplicationRunListeners.java:54) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.SpringApplication.prepareEnvironment(SpringApplication.java:351) [spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:317) [spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1246) [spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1234) [spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at it.impresaconsulting.Gestic.GesticApplication.main(GesticApplication.java:32) [classes/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_141]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_141]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_141]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_141]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:49) [spring-boot-devtools-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+Caused by: org.springframework.core.convert.ConverterNotFoundException: No converter found capable of converting from type [java.lang.String] to type [java.util.Map<java.lang.String, java.lang.String>]
+	at org.springframework.core.convert.support.GenericConversionService.handleConverterNotFound(GenericConversionService.java:321) ~[spring-core-5.0.4.RELEASE.jar:5.0.4.RELEASE]
+	at org.springframework.core.convert.support.GenericConversionService.convert(GenericConversionService.java:194) ~[spring-core-5.0.4.RELEASE.jar:5.0.4.RELEASE]
+	at org.springframework.boot.context.properties.bind.BindConverter$CompositeConversionService.convert(BindConverter.java:162) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.properties.bind.BindConverter.convert(BindConverter.java:96) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.properties.bind.BindConverter.convert(BindConverter.java:88) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.properties.bind.MapBinder.bindAggregate(MapBinder.java:66) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.properties.bind.AggregateBinder.bind(AggregateBinder.java:58) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.properties.bind.Binder.lambda$bindAggregate$2(Binder.java:306) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.properties.bind.Binder$Context.withIncreasedDepth(Binder.java:439) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.properties.bind.Binder$Context.access$100(Binder.java:379) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.properties.bind.Binder.bindAggregate(Binder.java:305) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.properties.bind.Binder.bindObject(Binder.java:263) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	at org.springframework.boot.context.properties.bind.Binder.bind(Binder.java:221) ~[spring-boot-2.0.0.RELEASE.jar:2.0.0.RELEASE]
+	... 23 common frames omitted
+
+2018-04-09 14:41:10.928  WARN 22824 --- [restartedMain] aWebConfiguration$JpaWebMvcConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2018-04-09 14:41:11.145  WARN 22824 --- [restartedMain] ion$DefaultTemplateResolverConfiguration : Cannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration)
+2018-04-09 14:42:47.480  WARN 22824 --- [Thread-9] o.s.b.f.support.DisposableBeanAdapter    : Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLException: Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-196]
+2018-04-09 14:42:55.651  WARN 22831 --- [restartedMain] aWebConfiguration$JpaWebMvcConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2018-04-09 14:42:55.874  WARN 22831 --- [restartedMain] ion$DefaultTemplateResolverConfiguration : Cannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration)
+2018-04-09 14:45:15.128  WARN 22831 --- [Thread-9] o.s.b.f.support.DisposableBeanAdapter    : Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLException: Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-196]
+2018-04-09 14:45:18.108  INFO 22907 --- [restartedMain] i.i.Gestic.GesticApplication             : Starting GesticApplication on Alessandros-MacBook-Pro.local with PID 22907 (/Users/alessandroargentieri/Downloads/Gestic/target/classes started by alessandroargentieri in /Users/alessandroargentieri/Downloads/Gestic)
+2018-04-09 14:45:18.109  INFO 22907 --- [restartedMain] i.i.Gestic.GesticApplication             : No active profile set, falling back to default profiles: default
+2018-04-09 14:45:18.189  INFO 22907 --- [restartedMain] ConfigServletWebServerApplicationContext : Refreshing org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext@9f0f1b7: startup date [Mon Apr 09 14:45:18 CEST 2018]; root of context hierarchy
+2018-04-09 14:45:19.500  INFO 22907 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$f9e1de3a] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-04-09 14:45:19.547  INFO 22907 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.config.annotation.configuration.ObjectPostProcessorConfiguration' of type [org.springframework.security.config.annotation.configuration.ObjectPostProcessorConfiguration$$EnhancerBySpringCGLIB$$928fa674] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-04-09 14:45:19.554  INFO 22907 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'objectPostProcessor' of type [org.springframework.security.config.annotation.configuration.AutowireBeanFactoryObjectPostProcessor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-04-09 14:45:19.555  INFO 22907 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@70883f55' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-04-09 14:45:19.559  INFO 22907 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration' of type [org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration$$EnhancerBySpringCGLIB$$b7644926] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-04-09 14:45:19.568  INFO 22907 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-04-09 14:45:19.965  INFO 22907 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8384 (http)
+2018-04-09 14:45:19.989  INFO 22907 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2018-04-09 14:45:19.989  INFO 22907 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet Engine: Apache Tomcat/8.5.28
+2018-04-09 14:45:19.998  INFO 22907 --- [localhost-startStop-1] o.a.catalina.core.AprLifecycleListener   : The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: [/Users/alessandroargentieri/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:.]
+2018-04-09 14:45:20.126  INFO 22907 --- [localhost-startStop-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2018-04-09 14:45:20.127  INFO 22907 --- [localhost-startStop-1] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 1938 ms
+2018-04-09 14:45:20.316  INFO 22907 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'characterEncodingFilter' to: [/*]
+2018-04-09 14:45:20.317  INFO 22907 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'hiddenHttpMethodFilter' to: [/*]
+2018-04-09 14:45:20.317  INFO 22907 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'httpPutFormContentFilter' to: [/*]
+2018-04-09 14:45:20.317  INFO 22907 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'requestContextFilter' to: [/*]
+2018-04-09 14:45:20.318  INFO 22907 --- [localhost-startStop-1] .s.DelegatingFilterProxyRegistrationBean : Mapping filter: 'springSecurityFilterChain' to: [/*]
+2018-04-09 14:45:20.318  INFO 22907 --- [localhost-startStop-1] o.s.b.w.servlet.ServletRegistrationBean  : Servlet dispatcherServlet mapped to [/]
+2018-04-09 14:45:20.319  INFO 22907 --- [localhost-startStop-1] o.s.b.w.servlet.ServletRegistrationBean  : Servlet webServlet mapped to [/h2-console/*]
+2018-04-09 14:45:20.467  INFO 22907 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2018-04-09 14:45:20.624  INFO 22907 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2018-04-09 14:45:20.679  INFO 22907 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Building JPA container EntityManagerFactory for persistence unit 'default'
+2018-04-09 14:45:20.698  INFO 22907 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+2018-04-09 14:45:20.762  INFO 22907 --- [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate Core {5.2.14.Final}
+2018-04-09 14:45:20.763  INFO 22907 --- [restartedMain] org.hibernate.cfg.Environment            : HHH000206: hibernate.properties not found
+2018-04-09 14:45:20.795  INFO 22907 --- [restartedMain] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+2018-04-09 14:45:20.924  INFO 22907 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.H2Dialect
+2018-04-09 14:45:21.520  INFO 22907 --- [restartedMain] o.h.t.schema.internal.SchemaCreatorImpl  : HHH000476: Executing import script 'org.hibernate.tool.schema.internal.exec.ScriptSourceInputNonExistentImpl@4c055b5b'
+2018-04-09 14:45:21.525  INFO 22907 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2018-04-09 14:45:22.646  INFO 22907 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: Ant [pattern='/test'], []
+2018-04-09 14:45:22.727  INFO 22907 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: org.springframework.security.web.util.matcher.AnyRequestMatcher@1, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@4d54c62c, org.springframework.security.web.context.SecurityContextPersistenceFilter@5f0af252, org.springframework.security.web.header.HeaderWriterFilter@6cbe9ed6, org.springframework.security.web.authentication.logout.LogoutFilter@157e09a2, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@3b4a5c15, org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter@3c661b07, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@73c0dc70, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@14de4601, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@51b4cdc5, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@7bf70c01, org.springframework.security.web.session.SessionManagementFilter@2178081c, org.springframework.security.web.access.ExceptionTranslationFilter@5f335a34, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@2de11594]
+2018-04-09 14:45:23.302  INFO 22907 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerAdapter : Looking for @ControllerAdvice: org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext@9f0f1b7: startup date [Mon Apr 09 14:45:18 CEST 2018]; root of context hierarchy
+2018-04-09 14:45:23.362  WARN 22907 --- [restartedMain] aWebConfiguration$JpaWebMvcConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2018-04-09 14:45:23.400  INFO 22907 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/getfile],methods=[GET]}" onto public org.springframework.http.ResponseEntity<byte[]> it.impresaconsulting.Gestic.controllers.GesticController.getFile(java.lang.String) throws java.io.IOException
+2018-04-09 14:45:23.401  INFO 22907 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/test]}" onto public java.lang.String it.impresaconsulting.Gestic.controllers.GesticController.testSistema()
+2018-04-09 14:45:23.401  INFO 22907 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/hellox]}" onto public java.lang.String it.impresaconsulting.Gestic.controllers.GesticController.getResponse(org.springframework.security.authentication.UsernamePasswordAuthenticationToken)
+2018-04-09 14:45:23.401  INFO 22907 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/user/or/admin]}" onto public java.lang.String it.impresaconsulting.Gestic.controllers.GesticController.isAdminOrIsUser(org.springframework.security.authentication.UsernamePasswordAuthenticationToken)
+2018-04-09 14:45:23.401  INFO 22907 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/get/mio/nome]}" onto public java.lang.String it.impresaconsulting.Gestic.controllers.GesticController.getMioNome(org.springframework.security.authentication.UsernamePasswordAuthenticationToken)
+2018-04-09 14:45:23.401  INFO 22907 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/get/utente]}" onto public java.util.List<it.impresaconsulting.Gestic.entities.Utente> it.impresaconsulting.Gestic.controllers.GesticController.getUtenti()
+2018-04-09 14:45:23.401  INFO 22907 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/get/utente/{codicefiscale}]}" onto public it.impresaconsulting.Gestic.entities.Utente it.impresaconsulting.Gestic.controllers.GesticController.getUtenteByCodFisc(java.lang.String)
+2018-04-09 14:45:23.402  INFO 22907 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/password]}" onto public java.lang.String it.impresaconsulting.Gestic.controllers.GesticController.cambiaPassword(org.springframework.security.authentication.UsernamePasswordAuthenticationToken,java.lang.String,java.lang.String)
+2018-04-09 14:45:23.402  INFO 22907 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/save/utente]}" onto public java.lang.String it.impresaconsulting.Gestic.controllers.GesticController.saveUtente(org.springframework.security.authentication.UsernamePasswordAuthenticationToken,it.impresaconsulting.Gestic.entities.Utente)
+2018-04-09 14:45:23.402  INFO 22907 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/delete/utente/{codicefiscale}]}" onto public java.lang.String it.impresaconsulting.Gestic.controllers.GesticController.deleteUtente(org.springframework.security.authentication.UsernamePasswordAuthenticationToken,java.lang.String)
+2018-04-09 14:45:23.402  INFO 22907 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/update/utente]}" onto public java.lang.String it.impresaconsulting.Gestic.controllers.GesticController.updateUtente(org.springframework.security.authentication.UsernamePasswordAuthenticationToken,java.lang.String,it.impresaconsulting.Gestic.entities.Utente) throws java.lang.RuntimeException
+2018-04-09 14:45:23.402  INFO 22907 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/get/cliente]}" onto public java.util.List<it.impresaconsulting.Gestic.entities.Cliente> it.impresaconsulting.Gestic.controllers.GesticController.getClienti()
+2018-04-09 14:45:23.402  INFO 22907 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/get/cliente/{id}]}" onto public it.impresaconsulting.Gestic.entities.Cliente it.impresaconsulting.Gestic.controllers.GesticController.getClienteById(java.lang.String)
+2018-04-09 14:45:23.403  INFO 22907 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/get/cliente/id/{id}]}" onto public java.util.List<it.impresaconsulting.Gestic.entities.Cliente> it.impresaconsulting.Gestic.controllers.GesticController.getPseudoListClienteById(java.lang.String)
+2018-04-09 14:45:23.403  INFO 22907 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/get/cliente/ragionesociale/{ragionesociale}]}" onto public java.util.List<it.impresaconsulting.Gestic.entities.Cliente> it.impresaconsulting.Gestic.controllers.GesticController.getClienteByRagioneSociale(java.lang.String)
+2018-04-09 14:45:23.403  INFO 22907 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/get/cliente/nominativo/{nominativo}]}" onto public java.util.List<it.impresaconsulting.Gestic.entities.Cliente> it.impresaconsulting.Gestic.controllers.GesticController.getClienteByNominativo(java.lang.String)
+2018-04-09 14:45:23.403  INFO 22907 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/get/cliente/attivita/{attivita}]}" onto public java.util.List<it.impresaconsulting.Gestic.entities.Cliente> it.impresaconsulting.Gestic.controllers.GesticController.getClienteByAttivita(java.lang.String)
+2018-04-09 14:45:23.403  INFO 22907 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/get/cliente/segnalatore/{segnalatore}]}" onto public java.util.List<it.impresaconsulting.Gestic.entities.Cliente> it.impresaconsulting.Gestic.controllers.GesticController.getClienteBySegnalatore(java.lang.String)
+2018-04-09 14:45:23.403  INFO 22907 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/get/cliente/interessatoa/{interessatoa}]}" onto public java.util.List<it.impresaconsulting.Gestic.entities.Cliente> it.impresaconsulting.Gestic.controllers.GesticController.getClienteByInteressatoA(java.lang.String)
+2018-04-09 14:45:23.403  INFO 22907 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/update/cliente]}" onto public java.lang.String it.impresaconsulting.Gestic.controllers.GesticController.updateCliente(org.springframework.security.authentication.UsernamePasswordAuthenticationToken,java.lang.String,it.impresaconsulting.Gestic.entities.Cliente)
+2018-04-09 14:45:23.404  INFO 22907 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/save/cliente]}" onto public it.impresaconsulting.Gestic.entities.Cliente it.impresaconsulting.Gestic.controllers.GesticController.saveCliente(org.springframework.security.authentication.UsernamePasswordAuthenticationToken,it.impresaconsulting.Gestic.entities.Cliente)
+2018-04-09 14:45:23.404  INFO 22907 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/delete/cliente/{idcliente}]}" onto public java.lang.String it.impresaconsulting.Gestic.controllers.GesticController.deleteCliente(org.springframework.security.authentication.UsernamePasswordAuthenticationToken,java.lang.String)
+2018-04-09 14:45:23.404  INFO 22907 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/get/pratica]}" onto public java.util.List<it.impresaconsulting.Gestic.entities.Pratica> it.impresaconsulting.Gestic.controllers.GesticController.getPratiche()
+2018-04-09 14:45:23.404  INFO 22907 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/get/pratica/{id}]}" onto public it.impresaconsulting.Gestic.entities.Pratica it.impresaconsulting.Gestic.controllers.GesticController.getPraticaPerId(java.lang.String)
+2018-04-09 14:45:23.404  INFO 22907 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/get/pratica/cliente/{idcliente}]}" onto public java.util.List<it.impresaconsulting.Gestic.entities.Pratica> it.impresaconsulting.Gestic.controllers.GesticController.getPratichePerCliente(java.lang.String)
+2018-04-09 14:45:23.404  INFO 22907 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/update/pratica]}" onto public java.lang.String it.impresaconsulting.Gestic.controllers.GesticController.updatePratica(org.springframework.security.authentication.UsernamePasswordAuthenticationToken,java.lang.String,it.impresaconsulting.Gestic.entities.Pratica)
+2018-04-09 14:45:23.405  INFO 22907 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/save/pratica]}" onto public it.impresaconsulting.Gestic.entities.Pratica it.impresaconsulting.Gestic.controllers.GesticController.savePratica(org.springframework.security.authentication.UsernamePasswordAuthenticationToken,it.impresaconsulting.Gestic.entities.Pratica)
+2018-04-09 14:45:23.405  INFO 22907 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/delete/pratica/{idpratica}]}" onto public java.lang.String it.impresaconsulting.Gestic.controllers.GesticController.deletePratica(org.springframework.security.authentication.UsernamePasswordAuthenticationToken,java.lang.String)
+2018-04-09 14:45:23.405  INFO 22907 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/get/documento]}" onto public java.util.List<it.impresaconsulting.Gestic.entities.Documento> it.impresaconsulting.Gestic.controllers.GesticController.getDocumenti()
+2018-04-09 14:45:23.405  INFO 22907 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/get/documento/{id}]}" onto public it.impresaconsulting.Gestic.entities.Documento it.impresaconsulting.Gestic.controllers.GesticController.getDocumentoById(java.lang.String)
+2018-04-09 14:45:23.405  INFO 22907 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/get/documento/pratica/{idpratica}]}" onto public java.util.List<it.impresaconsulting.Gestic.entities.Documento> it.impresaconsulting.Gestic.controllers.GesticController.getDocumentiPerPratica(java.lang.String)
+2018-04-09 14:45:23.405  INFO 22907 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/save/documento]}" onto public it.impresaconsulting.Gestic.entities.Documento it.impresaconsulting.Gestic.controllers.GesticController.salvaDocumento(org.springframework.security.authentication.UsernamePasswordAuthenticationToken,it.impresaconsulting.Gestic.entities.Documento)
+2018-04-09 14:45:23.406  INFO 22907 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/update/documento]}" onto public java.lang.String it.impresaconsulting.Gestic.controllers.GesticController.aggiornaDocumento(org.springframework.security.authentication.UsernamePasswordAuthenticationToken,it.impresaconsulting.Gestic.entities.Documento)
+2018-04-09 14:45:23.406  INFO 22907 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/delete/documento/{iddocumento}]}" onto public void it.impresaconsulting.Gestic.controllers.GesticController.deleteDocumento(java.lang.String)
+2018-04-09 14:45:23.406  INFO 22907 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/api/upload],methods=[POST]}" onto public org.springframework.http.ResponseEntity<?> it.impresaconsulting.Gestic.controllers.GesticController.uploadFileMulti(java.lang.String,java.lang.String,java.lang.String,org.springframework.web.multipart.MultipartFile[])
+2018-04-09 14:45:23.406  INFO 22907 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/save/scadenza]}" onto public it.impresaconsulting.Gestic.entities.Scadenza it.impresaconsulting.Gestic.controllers.GesticController.creaNuovaScadenza(org.springframework.security.authentication.UsernamePasswordAuthenticationToken,it.impresaconsulting.Gestic.entities.Scadenza)
+2018-04-09 14:45:23.407  INFO 22907 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/delete/scadenza/{idscadenza}]}" onto public void it.impresaconsulting.Gestic.controllers.GesticController.deleteScadenza(java.lang.Integer)
+2018-04-09 14:45:23.407  INFO 22907 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/delete/old/scadenza]}" onto public void it.impresaconsulting.Gestic.controllers.GesticController.deleteScadenzeVecchie()
+2018-04-09 14:45:23.407  INFO 22907 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/get/all/scadenza]}" onto public java.util.List<it.impresaconsulting.Gestic.entities.Scadenza> it.impresaconsulting.Gestic.controllers.GesticController.allScadenze()
+2018-04-09 14:45:23.407  INFO 22907 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/get/scadenza]}" onto public java.util.List<it.impresaconsulting.Gestic.entities.Scadenza> it.impresaconsulting.Gestic.controllers.GesticController.ciSonoScadenze()
+2018-04-09 14:45:23.408  INFO 22907 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/utenti]}" onto public java.lang.String it.impresaconsulting.Gestic.controllers.UrlPathController.goUtenti()
+2018-04-09 14:45:23.408  INFO 22907 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/gestic]}" onto public java.lang.String it.impresaconsulting.Gestic.controllers.UrlPathController.goHome()
+2018-04-09 14:45:23.408  INFO 22907 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/anagrafica]}" onto public java.lang.String it.impresaconsulting.Gestic.controllers.UrlPathController.goAnagrafica()
+2018-04-09 14:45:23.408  INFO 22907 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/scadenze]}" onto public java.lang.String it.impresaconsulting.Gestic.controllers.UrlPathController.goScadenze()
+2018-04-09 14:45:23.408  INFO 22907 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/contact-us]}" onto public java.lang.String it.impresaconsulting.Gestic.controllers.UrlPathController.goContatti()
+2018-04-09 14:45:23.411  INFO 22907 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/error]}" onto public org.springframework.http.ResponseEntity<java.util.Map<java.lang.String, java.lang.Object>> org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController.error(javax.servlet.http.HttpServletRequest)
+2018-04-09 14:45:23.412  INFO 22907 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/error],produces=[text/html]}" onto public org.springframework.web.servlet.ModelAndView org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController.errorHtml(javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse)
+2018-04-09 14:45:23.477  INFO 22907 --- [restartedMain] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped URL path [/webjars/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2018-04-09 14:45:23.477  INFO 22907 --- [restartedMain] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped URL path [/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2018-04-09 14:45:23.539  INFO 22907 --- [restartedMain] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped URL path [/**/favicon.ico] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2018-04-09 14:45:23.597  WARN 22907 --- [restartedMain] ion$DefaultTemplateResolverConfiguration : Cannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration)
+2018-04-09 14:45:23.834  INFO 22907 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2018-04-09 14:45:23.889  INFO 22907 --- [restartedMain] o.s.j.e.a.AnnotationMBeanExporter        : Registering beans for JMX exposure on startup
+2018-04-09 14:45:23.890  INFO 22907 --- [restartedMain] o.s.j.e.a.AnnotationMBeanExporter        : Bean with name 'dataSource' has been autodetected for JMX exposure
+2018-04-09 14:45:23.895  INFO 22907 --- [restartedMain] o.s.j.e.a.AnnotationMBeanExporter        : Located MBean 'dataSource': registering with JMX server as MBean [com.zaxxer.hikari:name=dataSource,type=HikariDataSource]
+2018-04-09 14:45:23.931  INFO 22907 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8384 (http) with context path ''
+2018-04-09 14:45:23.934  INFO 22907 --- [restartedMain] i.i.Gestic.GesticApplication             : Started GesticApplication in 6.368 seconds (JVM running for 6.902)
+2018-04-09 14:50:55.548  INFO 22907 --- [Thread-9] ConfigServletWebServerApplicationContext : Closing org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext@9f0f1b7: startup date [Mon Apr 09 14:45:18 CEST 2018]; root of context hierarchy
+2018-04-09 14:50:55.552  INFO 22907 --- [Thread-9] o.s.j.e.a.AnnotationMBeanExporter        : Unregistering JMX-exposed beans on shutdown
+2018-04-09 14:50:55.552  INFO 22907 --- [Thread-9] o.s.j.e.a.AnnotationMBeanExporter        : Unregistering JMX-exposed beans
+2018-04-09 14:50:55.558  INFO 22907 --- [Thread-9] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2018-04-09 14:50:55.558  INFO 22907 --- [Thread-9] .SchemaDropperImpl$DelayedDropActionImpl : HHH000477: Starting delayed drop of schema as part of SessionFactory shut-down'
+2018-04-09 14:50:55.568  WARN 22907 --- [Thread-9] o.s.b.f.support.DisposableBeanAdapter    : Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLException: Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-196]
+2018-04-09 14:50:55.568  INFO 22907 --- [Thread-9] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2018-04-09 14:50:55.570  INFO 22907 --- [Thread-9] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

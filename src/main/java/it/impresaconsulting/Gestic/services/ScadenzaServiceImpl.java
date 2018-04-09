@@ -60,7 +60,7 @@ public class ScadenzaServiceImpl implements ScadenzaService{
     }
 
     @Override
-    public void deleteScandenzaById(Integer id){
+    public void deleteScandenzaById(Long id){
         scadenzaDao.deleteById(id);
     }
 

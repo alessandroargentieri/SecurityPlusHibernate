@@ -9,7 +9,7 @@ public interface ScadenzaService {
     List<Scadenza> getScadenze();
     List<Scadenza> getAllScadenze();
     void deleteOldScadenze();
-    void deleteScandenzaById(Integer id);
+    void deleteScandenzaById(Long id);
     Scadenza salvaScadenza(String registratoDa, Scadenza scadenza);
 
 

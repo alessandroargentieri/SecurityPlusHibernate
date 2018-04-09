@@ -21,8 +21,8 @@ public class Scadenza {
     public static final String DIECI_GIORNI   = "dieci_giorni_prima";
 
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="idscadenza")
-    private Integer idScadenza;
+    @Column(name="idscadenza", columnDefinition = "INT(11) UNSIGNED")
+    private Long idScadenza;
     @Column(name="descrizione") @NotBlank
     private String descrizione;
     @Column(name="datascadenza") @DateTimeFormat(pattern = "dd/MM/yyyy") @Future @NotNull
