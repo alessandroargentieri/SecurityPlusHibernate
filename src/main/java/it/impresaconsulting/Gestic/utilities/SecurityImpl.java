@@ -92,7 +92,7 @@ public class SecurityImpl extends WebSecurityConfigurerAdapter implements Authen
                 .authorizeRequests()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin()  //.loginPage("/login") //.loginPage("/signin.html")
+                .formLogin()
                 .and()
                 .httpBasic()
                 .and()
@@ -106,8 +106,6 @@ public class SecurityImpl extends WebSecurityConfigurerAdapter implements Authen
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/test");
-       // web.ignoring().antMatchers("/resources/**");
-       // web.ignoring().antMatchers("/test", "/signin.html");
     }
 
 
