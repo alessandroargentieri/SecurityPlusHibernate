@@ -10,6 +10,12 @@
           updateScadenze();
         });
 
+
+        function aphostrofeReplace(str){
+            //return str.replace(/'/g, '\'');
+            return str.replace(/'/g, "&rsquo;")
+        }
+
         function userOrAdmin(){
             $.ajax({
             url: '/user/or/admin',
@@ -94,7 +100,7 @@
                 console.log(data);
                 $("#body_tabella_utenti").empty();
                 jQuery.each(data, function(i, val) {
-                    $("#body_tabella_utenti").append("<tr><th class='finger' onclick='seeUtente(\"" + val.codiceFiscale + "\", \"" + val.nominativo + "\", \"" + val.indirizzo + "\", \"" + val.telefono + "\", \"" + val.email + "\", \"" + val.natoIl + "\", \"" + val.ruolo + "\")'><a href='#form_utente'>" + val.codiceFiscale + "</a></th><td>" + val.nominativo + "</td><td class='column'>" + val.email + "</td><td>" + val.ruolo + "</td></tr>");
+                    $("#body_tabella_utenti").append("<tr><th class='finger' onclick='seeUtente(\"" + val.codiceFiscale + "\", \"" + aphostrofeReplace(val.nominativo) + "\", \"" + aphostrofeReplace(val.indirizzo) + "\", \"" + val.telefono + "\", \"" + val.email + "\", \"" + val.natoIl + "\", \"" + val.ruolo + "\")'><a href='#form_utente'>" + val.codiceFiscale + "</a></th><td>" + val.nominativo + "</td><td>" + val.email + "</td><td>" + val.ruolo + "</td></tr>");
                 });
             },
             error: function(result) {
@@ -218,7 +224,9 @@
                 console.log(data);
                 $("#body_tabella_clienti").empty();
                 jQuery.each(data, function(i, val) {
-                    $("#body_tabella_clienti").append("<tr id='istanza_cliente_" + val.idCliente + "' class='generic_cliente'><th  class='finger' onclick='seeCliente(\"" + val.idCliente + "\", \"" + val.ragioneSociale + "\", \"" + val.nominativo + "\", \"" + val.indirizzo + "\", \"" + val.telefono + "\", \"" + val.email + "\", \"" + val.sito + "\", \"" + val.segnalatore + "\", \"" + val.attivita + "\", \"" + val.interessatoA + "\", \"" + val.registratoDa + "\", \"" + val.data + "\", \"" + val.note + "\")'><a href='#form_cliente'>" + val.idCliente + "</a></th><td>" + val.ragioneSociale + "</td><td>" + val.nominativo + "</td><td>" + val.attivita + "</td><td class='finger' style='text-align: center;'><i class='fa fa-folder fa-2x has-text-info' onclick='showPratiche(\"" + val.idCliente + "\")'></i></td><td class='finger' style='text-align: center;'><i class='far fa-calendar-alt fa-2x has-text-warning' onclick='nuovaScadenza(\"" + val.idCliente + "\")'></i></td></tr>");
+                    console.log("NATURAL: " + val.ragioneSociale);
+                    console.log("TREATED: " + aphostrofeReplace(val.ragioneSociale));
+                    $("#body_tabella_clienti").append("<tr id='istanza_cliente_" + val.idCliente + "' class='generic_cliente'><th  class='finger' onclick='seeCliente(\"" + val.idCliente + "\", \"" + aphostrofeReplace(val.ragioneSociale) + "\", \"" + aphostrofeReplace(val.nominativo) + "\", \"" + aphostrofeReplace(val.indirizzo) + "\", \"" + val.telefono + "\", \"" + val.email + "\", \"" + val.sito + "\", \"" + aphostrofeReplace(val.segnalatore) + "\", \"" + aphostrofeReplace(val.attivita) + "\", \"" + aphostrofeReplace(val.interessatoA) + "\", \"" + val.registratoDa + "\", \"" + val.data + "\", \"" + aphostrofeReplace(val.note) + "\")'><a href='#form_cliente'>" + val.idCliente + "</a></th><td>" + val.ragioneSociale + "</td><td>" + val.nominativo + "</td><td>" + val.attivita + "</td><td class='finger' style='text-align: center;'><i class='fa fa-folder fa-2x has-text-info' onclick='showPratiche(\"" + val.idCliente + "\")'></i></td><td class='finger' style='text-align: center;'><i class='far fa-calendar-alt fa-2x has-text-warning' onclick='nuovaScadenza(\"" + val.idCliente + "\")'></i></td></tr>");
                 });
             },
             error: function(result) {
@@ -242,7 +250,7 @@
                 console.log(data);
                 $("#body_tabella_pratiche").empty();
                 jQuery.each(data, function(i, val) {
-                    $("#body_tabella_pratiche").append("<tr id='istanza_pratica_" + i + "' class='generic_pratica'><th  class='finger' onclick='seePratica(\"" + val.idPratica + "\", \"" + val.descrizione + "\", \"" + val.note + "\", \"" + val.data +"\", \"" + val.fkCliente + "\", \"" + val.registratoDa + "\")'><a href='#form_pratica'>" + val.idPratica + "</a></th><td>" + val.descrizione + "</td><td>" + convertDate(val.data) + "</td><td  class='finger' style='text-align: center;'><i class='fa fa-folder fa-2x has-text-success' onclick='showDocumenti(\"" + val.idPratica + "\", \"" + i + "\")'> </i></td></tr>");
+                    $("#body_tabella_pratiche").append("<tr id='istanza_pratica_" + i + "' class='generic_pratica'><th  class='finger' onclick='seePratica(\"" + val.idPratica + "\", \"" + aphostrofeReplace(val.descrizione) + "\", \"" + aphostrofeReplace(val.note) + "\", \"" + val.data +"\", \"" + val.fkCliente + "\", \"" + val.registratoDa + "\")'><a href='#form_pratica'>" + val.idPratica + "</a></th><td>" + val.descrizione + "</td><td>" + convertDate(val.data) + "</td><td  class='finger' style='text-align: center;'><i class='fa fa-folder fa-2x has-text-success' onclick='showDocumenti(\"" + val.idPratica + "\", \"" + i + "\")'> </i></td></tr>");
                 });
             },
             error: function(result) {
@@ -266,7 +274,7 @@
                 console.log(data);
                 $("#body_tabella_documenti").empty();
                 jQuery.each(data, function(i, val) {
-                    $("#body_tabella_documenti").append("<tr><th  class='finger' onclick='seeDocumento(\"" + val.idDocumento + "\", \"" + val.descrizione + "\", \"" + val.percorsoFile + "\", \"" + val.note + "\", \"" + val.stepPratica + "\", \"" + val.fkPratica + "\", \"" + val.registratoDa + "\", \"" + val.data + "\")'><a href='#form_documento'>" + val.descrizione + "</a></th><td>" + val.stepPratica + "</td><td>" + convertDate(val.data) + "</td></tr>");
+                    $("#body_tabella_documenti").append("<tr><th  class='finger' onclick='seeDocumento(\"" + val.idDocumento + "\", \"" + aphostrofeReplace(val.descrizione) + "\", \"" + val.percorsoFile + "\", \"" + aphostrofeReplace(val.note) + "\", \"" + val.stepPratica + "\", \"" + val.fkPratica + "\", \"" + val.registratoDa + "\", \"" + val.data + "\")'><a href='#form_documento'>" + val.descrizione + "</a></th><td>" + val.stepPratica + "</td><td>" + convertDate(val.data) + "</td></tr>");
                 });
             },
             error: function(result) {
