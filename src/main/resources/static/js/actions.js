@@ -697,8 +697,5 @@
 
         // inserire un piccolo sistema di log
         // inserire le dipendenze per mysql
-        // vedere se è possibile utilizzare un form di login custom, anche a costo di usare un altro controller
-        // dopo un inserimento corretto provare a non chiudere tutti i tab
-        // spostare il javascript in un file dedicato
 
 
