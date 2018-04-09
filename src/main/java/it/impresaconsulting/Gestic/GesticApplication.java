@@ -46,9 +46,9 @@ public class GesticApplication {
 
 		//******
 
-		Cliente cliente1 = new Cliente("IDCLIENTE_1", "RAGIONESOCIALE_1", "NOMINATIVO_1", "INDIRIZZO_1", "TELEFONO_1", "EMAIL_1@email.it", "SITO_1", "SEGNALATORE_1", "ATTIVITA_1", "INTERESSATOA_1",  "RGNLSN87H13D761R", null, "NOTE_1");
-		Cliente cliente2 = new Cliente("IDCLIENTE_2", "RAGIONESOCIALE_2", "NOMINATIVO_2", "INDIRIZZO_2", "TELEFONO_2", "EMAIL_2@email.it", "SITO_2", "SEGNALATORE_2", "ATTIVITA_2", "INTERESSATOA_2", "RGNLSN87H13D761R", null, "NOTE_2");
-		Cliente cliente3 = new Cliente("IDCLIENTE_3", "RAGIONESOCIALE_3", "NOMINATIVO_3", "INDIRIZZO_3", "TELEFONO_3", "EMAIL_3@email.it", "SITO_3", "SEGNALATORE_3", "ATTIVITA_3", "INTERESSATOA_3", "RGNLSN87H13D761R", null, "NOTE_3");
+		Cliente cliente1 = new Cliente("08652300156", "S.S.C. Società Sviluppo Commerciale s.r.l", "Francesco Manelli", "Milano, via Caldera 21", "3986532132", "info@sncc.com", "www.ccns.it", "Maurizio Iurlaro", "Ricerca e sviluppo", "Bando provinciale",  "RGNLSN87H13D761R", null, "Da confermare le competenze territoriali.");
+		Cliente cliente2 = new Cliente("12683790153", "GS S.p.A.", "Lucia Distante", "Lecce, via dei mille 24", "3276534212", "info@gscommercial.com", "www.gs.com", "Candida Fornaro", "Edilizia", "Bando europeo", "RGNLSN87H13D761R", null, "La sede commerciale e' in via dei Giovi 21.");
+		Cliente cliente3 = new Cliente("12002340151", "DI PER DI s.r.l. (a socio unico)", "Marco Viola", "Lucca, viale Monza 32", "3658795678", "info@diperdi.it", "www.diperdi.it", "Ottavio Luppoli", "Commercio", "Bando Horizon 2020", "RGNLSN87H13D761R", null, "Valutare l'inserimento in altri settori produttivi.");
 
 		clienteDao.save(cliente1);
 		clienteDao.save(cliente2);
@@ -56,12 +56,12 @@ public class GesticApplication {
 
 		//******
 
-		Pratica p1 = new Pratica("ID_PRATICA_1", "DESCRIZIONE_1", "NOTE_1", null, "IDCLIENTE_1", "RGNLSN87H13D761R");
-		Pratica p2 = new Pratica("ID_PRATICA_2", "DESCRIZIONE_2", "NOTE_2", null, "IDCLIENTE_1", "RGNLSN87H13D761R");
-		Pratica p3 = new Pratica("ID_PRATICA_3", "DESCRIZIONE_3", "NOTE_3", null, "IDCLIENTE_2", "RGNLSN87H13D761R");
-		Pratica p4 = new Pratica("ID_PRATICA_4", "DESCRIZIONE_4", "NOTE_4", null, "IDCLIENTE_2", "RGNLSN87H13D761R");
-		Pratica p5 = new Pratica("ID_PRATICA_5", "DESCRIZIONE_5", "NOTE_5", null, "IDCLIENTE_3", "RGNLSN87H13D761R");
-		Pratica p6 = new Pratica("ID_PRATICA_6", "DESCRIZIONE_6", "NOTE_6", null,"IDCLIENTE_3", "RGNLSN87H13D761R");
+		Pratica p1 = new Pratica("rk235646332", "Rifacimento sezioni", "nota a caso", null, "08652300156", "RGNLSN87H13D761R");
+		Pratica p2 = new Pratica("rh235646367", "Bandi regionali", "nota a caso", null, "08652300156", "RGNLSN87H13D761R");
+		Pratica p3 = new Pratica("rl235612308", "Business Plan aziendale", "nota a caso", null, "12683790153", "RGNLSN87H13D761R");
+		Pratica p4 = new Pratica("rs243435452", "Ottenimento fondo", "nota a caso", null, "12683790153", "RGNLSN87H13D761R");
+		Pratica p5 = new Pratica("rm343221337", "Valutazione rischi", "nota a caso", null, "12002340151", "RGNLSN87H13D761R");
+		Pratica p6 = new Pratica("rj235646454", "Vecchi bandi", "nota a caso", null,"12002340151", "RGNLSN87H13D761R");
 
 		praticaDao.save(p1);
 		praticaDao.save(p2);
@@ -72,23 +72,23 @@ public class GesticApplication {
 
 		//******
 
-		documentoDao.save(new Documento(null, "DESCRIZIONE_1", "PATH_1", "NOTE_1", Pratica.STEP_AMMISSIONE, p1.getIdPratica(), "RGNLSN87H13D761R", null));
-		documentoDao.save(new Documento(null, "DESCRIZIONE_2", "PATH_2", "NOTE_2", Pratica.STEP_AMMISSIONE, p1.getIdPratica(), "RGNLSN87H13D761R", null));
+		documentoDao.save(new Documento(null, "Documento di presentazione", "/documentazione/08652300156/rk235646332/documento.pdf", "NOTE_1", Pratica.STEP_AMMISSIONE, p1.getIdPratica(), "RGNLSN87H13D761R", null));
+		documentoDao.save(new Documento(null, "Valutazione rischi", "/documentazione/08652300156/rk235646332/documento.pdf", "NOTE_2", Pratica.STEP_AMMISSIONE, p1.getIdPratica(), "RGNLSN87H13D761R", null));
 
-		documentoDao.save(new Documento(null, "DESCRIZIONE_3", "PATH_3", "NOTE_3", Pratica.STEP_COLLAUDO, p2.getIdPratica(), "RGNLSN87H13D761R", null));
-		documentoDao.save(new Documento(null, "DESCRIZIONE_4", "PATH_4", "NOTE_4", Pratica.STEP_PRESENTAZIONE,  p2.getIdPratica(), "RGNLSN87H13D761R", null));
+		documentoDao.save(new Documento(null, "Calcolo fatturati", "/documentazione/08652300156/rh235646367/documento.pdf", "NOTE_3", Pratica.STEP_COLLAUDO, p2.getIdPratica(), "RGNLSN87H13D761R", null));
+		documentoDao.save(new Documento(null, "Esenzione tasse", "/documentazione/08652300156/rh235646367/documento.pdf", "NOTE_4", Pratica.STEP_PRESENTAZIONE,  p2.getIdPratica(), "RGNLSN87H13D761R", null));
 
-		documentoDao.save(new Documento(null, "DESCRIZIONE_5", "PATH_5", "NOTE_5", Pratica.STEP_RENDICONTAZIONE, p3.getIdPratica(), "RGNLSN87H13D761R", null));
-		documentoDao.save(new Documento(null, "DESCRIZIONE_6", "PATH_6", "NOTE_6", Pratica.STEP_COLLAUDO, p3.getIdPratica(), "RGNLSN87H13D761R", null));
+		documentoDao.save(new Documento(null, "Calcolo redditi", "/documentazione/12683790153/rl235612308/documento.pdf", "NOTE_5", Pratica.STEP_RENDICONTAZIONE, p3.getIdPratica(), "RGNLSN87H13D761R", null));
+		documentoDao.save(new Documento(null, "Bilancio in corso", "/documentazione/12683790153/rl235612308/documento.pdf",  "NOTE_6", Pratica.STEP_COLLAUDO, p3.getIdPratica(), "RGNLSN87H13D761R", null));
 
-		documentoDao.save(new Documento(null, "DESCRIZIONE_7", "PATH_7", "NOTE_7", Pratica.STEP_RENDICONTAZIONE, p4.getIdPratica(), "RGNLSN87H13D761R", null));
-		documentoDao.save(new Documento(null, "DESCRIZIONE_8", "PATH_8", "NOTE_8", Pratica.STEP_PRESENTAZIONE, p4.getIdPratica(), "RGNLSN87H13D761R", null));
+		documentoDao.save(new Documento(null, "Rimborso spese", "/documentazione/12683790153/rs243435452/documento.pdf",  "NOTE_7", Pratica.STEP_RENDICONTAZIONE, p4.getIdPratica(), "RGNLSN87H13D761R", null));
+		documentoDao.save(new Documento(null, "Processi produttivi", "/documentazione/12683790153/rs243435452/documento.pdf",  "NOTE_8", Pratica.STEP_PRESENTAZIONE, p4.getIdPratica(), "RGNLSN87H13D761R", null));
 
-		documentoDao.save(new Documento(null, "DESCRIZIONE_9", "PATH_9", "NOTE_9", Pratica.STEP_AMMISSIONE, p5.getIdPratica(), "RGNLSN87H13D761R", null));
-		documentoDao.save(new Documento(null, "DESCRIZIONE_10", "PATH_10", "NOTE_10", Pratica.STEP_COLLAUDO, p5.getIdPratica(), "RGNLSN87H13D761R", null));
+		documentoDao.save(new Documento(null, "Business Plan", "/documentazione/12002340151/rm343221337/documento.pdf", "NOTE_9", Pratica.STEP_AMMISSIONE, p5.getIdPratica(), "RGNLSN87H13D761R", null));
+		documentoDao.save(new Documento(null, "Progettazione sistema", "/documentazione/12002340151/rm343221337/documento.pdf", "NOTE_10", Pratica.STEP_COLLAUDO, p5.getIdPratica(), "RGNLSN87H13D761R", null));
 
-		documentoDao.save(new Documento(null, "DESCRIZIONE_11", "PATH_11", "NOTE_11", Pratica.STEP_PRESENTAZIONE, p6.getIdPratica(), "RGNLSN87H13D761R", null));
-		documentoDao.save(new Documento(null, "DESCRIZIONE_12", "PATH_12", "NOTE_12", Pratica.STEP_AMMISSIONE, p6.getIdPratica(), "RGNLSN87H13D761R", null));
+		documentoDao.save(new Documento(null, "Collocazione immobili", "/documentazione/12002340151/rj235646454/documento.pdf", "NOTE_11", Pratica.STEP_PRESENTAZIONE, p6.getIdPratica(), "RGNLSN87H13D761R", null));
+		documentoDao.save(new Documento(null, "Parametri di valutazione", "/documentazione/12002340151/rj235646454/documento.pdf", "NOTE_12", Pratica.STEP_AMMISSIONE, p6.getIdPratica(), "RGNLSN87H13D761R", null));
 	}
 }
 
