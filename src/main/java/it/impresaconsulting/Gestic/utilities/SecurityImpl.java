@@ -105,7 +105,7 @@ public class SecurityImpl extends WebSecurityConfigurerAdapter implements Authen
     /*  per non filtrare con il login alcuni path  */
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/test");
+        web.ignoring().antMatchers("/test", "/encrypt/**");
     }
 
 

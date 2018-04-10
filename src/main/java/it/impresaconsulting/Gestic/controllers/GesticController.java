@@ -2,6 +2,7 @@ package it.impresaconsulting.Gestic.controllers;
 
 import it.impresaconsulting.Gestic.entities.*;
 import it.impresaconsulting.Gestic.services.*;
+import it.impresaconsulting.Gestic.utilities.EncryptionUtils;
 import it.impresaconsulting.Gestic.utilities.FileUtils;
 import it.impresaconsulting.Gestic.utilities.SecurityImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,7 @@ public class GesticController {
     @Autowired PraticaService   praticaService;
     @Autowired ClienteService   clienteService;
     @Autowired UtenteService    utenteService;
+    @Autowired EncryptionUtils  encryptionUtils;
 
 
     //************************************************* TEST
@@ -49,9 +51,14 @@ public class GesticController {
         return TEST;
     }
 
-    @RequestMapping("/hellox")
+    @RequestMapping("/hello")
     public String getResponse(UsernamePasswordAuthenticationToken token){
         return String.format(LOGGATO, token.getName());
+    }
+
+    @RequestMapping("/encrypt/{password}")
+    public String encryptPassword(@PathVariable(name="password") String password){
+        return encryptionUtils.encrypt(password);
     }
 
     @RequestMapping("/user/or/admin")
